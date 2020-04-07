@@ -1,114 +1,112 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import axios from "axios";
+import {
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  Form,
+  FormGroup,
+  Label,
+  Input,
+  NavLink,
+  Alert,
+} from "reactstrap";
 
-export class register extends Component {
-  constructor(props) {
-    super(props);
+export const Register = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordConfirm, setpasswordConfirm] = useState("");
+  const [modal, setModal] = useState(false);
 
-    this.state = {
-      name: "",
-      email: "",
-      password: "",
-      passwordConfirm: ""
-    };
-  }
-
-  onChangeName = e => {
-    this.setState({
-      name: e.target.value
-    });
+  const toggle = () => {
+    setModal(!modal);
   };
 
-  onChangeEmail = e => {
-    this.setState({
-      email: e.target.value
-    });
+  const onChangeName = (e) => {
+    setName(e.target.value);
   };
 
-  onChangePassword = e => {
-    this.setState({
-      password: e.target.value
-    });
+  const onChangeEmail = (e) => {
+    setEmail(e.target.value);
   };
 
-  onChangePasswordConfirm = e => {
-    this.setState({
-      passwordConfirm: e.target.value
-    });
+  const onChangePassword = (e) => {
+    setPassword(e.target.value);
   };
 
-  onSubmit = e => {
+  const onChangePasswordConfirm = (e) => {
+    setpasswordConfirm(e.target.value);
+  };
+
+  const onSubmit = (e) => {
     e.preventDefault();
 
-    if (this.state.password === this.state.passwordConfirm) {
+    if (password === passwordConfirm) {
       const newUser = {
-        name: this.state.name,
-        email: this.state.email,
-        password: this.state.password
+        name,
+        email,
+        password,
       };
 
       console.log(newUser);
-      axios.post("/api/v1/user", newUser).then(res => console.log(res.data));
-
-      window.location = "/";
+      axios.post("/api/v1/users", newUser).then((res) => console.log(res.data));
     } else {
       alert("password not match");
     }
   };
 
-  render() {
-    return (
-      <div>
-        <form onSubmit={this.onSubmit}>
-          <div className="form-group">
-            <label>Name</label>
-            <input
-              type="text"
-              required
-              className="form-control"
-              value={this.state.name}
-              onChange={this.onChangeName}
-            />
-          </div>
-          <div className="form-group">
-            <label>Email</label>
-            <input
-              type="email"
-              required
-              className="form-control"
-              value={this.state.email}
-              onChange={this.onChangeEmail}
-            />
-          </div>
-          <div className="form-group">
-            <label>Password</label>
-            <input
-              type="password"
-              required
-              className="form-control"
-              autoComplete="off"
-              value={this.state.password}
-              onChange={this.onChangePassword}
-            />
-          </div>
-          <div className="form-group">
-            <label>Confirm Password</label>
-            <input
-              type="password"
-              required
-              className="form-control"
-              autoComplete="off"
-              value={this.state.passwordConfirm}
-              onChange={this.onChangePasswordConfirm}
-            />
-          </div>
-          <div className="form-group">
-            <input type="submit" className="btn btn-primary" value="Login" />
-          </div>
-        </form>
-      </div>
-    );
-  }
-}
+  return (
+    <div>
+      <NavLink onClick={toggle} href="#">
+        SIGN UP
+      </NavLink>
 
-export default register;
+      <Modal isOpen={modal} toggle={toggle}>
+        <ModalHeader toggle={toggle}>Register</ModalHeader>
+        <ModalBody>
+          <Form onSubmit={onSubmit}>
+            <FormGroup>
+              <Label for="Name">Name</Label>
+              <Input
+                type="text"
+                id="name"
+                placeholder="Name"
+                className="mb-3"
+                onChange={onChangeName}
+              />
+              <Label for="Email">Email</Label>
+              <Input
+                type="email"
+                id="email"
+                placeholder="Email"
+                className="mb-3"
+                onChange={onChangeEmail}
+              />
+              <Label for="password">Password</Label>
+              <Input
+                type="password"
+                id="password"
+                placeholder="Password"
+                className="mb-3"
+                onChange={onChangePassword}
+              />
+              <Label for="Password">password Confirm</Label>
+              <Input
+                type="password"
+                id="passwordConfirm"
+                placeholder="Password Confirm"
+                className="mb-3"
+                onChange={onChangePasswordConfirm}
+              />
+              <Button color="dark" style={{ marginTop: "2rem" }}>
+                Register
+              </Button>
+            </FormGroup>
+          </Form>
+        </ModalBody>
+      </Modal>
+    </div>
+  );
+};

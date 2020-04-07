@@ -1,3 +1,7 @@
+const bcrypt = require("bcryptjs");
+const config = require("config");
+const jwt = require("jsonwebtoken");
+
 const User = require("../models/Users");
 
 // @desc Get all user
@@ -10,28 +14,53 @@ exports.getUsers = async (req, res, next) => {
     return res.status(200).json({
       success: true,
       count: user.length,
-      data: user
+      data: user,
     });
   } catch (err) {
     return res.status(500).json({
       success: false,
-      error: user
+      error: user,
     });
   }
 };
 
 // @desc Add user
-// @route Post /api/v1/user
+// @route Post /api/v1/users
 // @access Public
 exports.addUser = async (req, res, next) => {
   try {
-    //const { name, email, password } = req.body;
+    const { name, email, password } = req.body;
 
-    const user = await User.create(req.body);
+    if (!name || !email || !password) {
+      return res.status(400).json({
+        success: false,
+        error: "Empty field(s)",
+      });
+    }
+
+    const hashedPassword = await new Promise((resolve, reject) => {
+      bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(password, salt, (err, hash) => {
+          if (err) reject(err);
+          resolve(hash);
+        });
+      });
+    });
+
+    const user = await User.create({ name, email, password: hashedPassword });
+
+    const token = jwt.sign({ id: user.id }, config.get("jwtSecret"), {
+      expiresIn: "10d",
+    });
 
     return res.status(201).json({
       success: true,
-      data: user
+      token,
+      data: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      },
     });
   } catch (err) {
     if (err.name === "MongoError") {
@@ -39,12 +68,13 @@ exports.addUser = async (req, res, next) => {
 
       return res.status(400).json({
         success: false,
-        error: messages
+        error: messages,
       });
     } else {
+      console.log(err);
       return res.status(500).json({
         success: false,
-        error: user
+        error: "Something went wrong",
       });
     }
   }
@@ -60,7 +90,7 @@ exports.deleteUser = async (req, res, next) => {
     if (!user) {
       return res.status(404).json({
         success: false,
-        error: "No user found"
+        error: "No user found",
       });
     }
 
@@ -68,12 +98,12 @@ exports.deleteUser = async (req, res, next) => {
 
     return res.status(200).json({
       success: true,
-      data: {}
+      data: {},
     });
   } catch (err) {
     return res.status(500).json({
       success: false,
-      error: "Server Error"
+      error: "Server Error",
     });
   }
 };

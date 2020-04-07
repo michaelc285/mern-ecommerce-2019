@@ -1,70 +1,78 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
+import {
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  Form,
+  FormGroup,
+  Label,
+  Input,
+  NavLink,
+  Alert,
+} from "reactstrap";
+export const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [modal, setModal] = useState(false);
 
-export class login extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      email: "",
-      password: ""
-    };
-  }
-
-  onChangeEmail = e => {
-    this.setState({
-      email: e.target.value
-    });
+  const toggle = () => {
+    setModal(!modal);
   };
 
-  onChangePassword = e => {
-    this.setState({
-      password: e.target.value
-    });
+  const onChangeEmail = (e) => {
+    setEmail(e.target.value);
   };
 
-  onSubmit = e => {
+  const onChangePassword = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const onSubmit = (e) => {
     e.preventDefault();
 
     const loginUser = {
-      email: this.state.email,
-      password: this.state.password
+      email,
+      password,
     };
 
     console.log(loginUser);
   };
 
-  render() {
-    return (
-      <div>
-        <form onSubmit={this.onSubmit}>
-          <div className="form-group">
-            <label>Email</label>
-            <input
-              type="email"
-              required
-              className="form-control"
-              value={this.state.email}
-              onChange={this.onChangeEmail}
-            />
-          </div>
-          <div className="form-group">
-            <label>Password</label>
-            <input
-              type="password"
-              required
-              className="form-control"
-              autoComplete="off"
-              value={this.state.password}
-              onChange={this.onChangePassword}
-            />
-          </div>
-          <div className="form-group">
-            <input type="submit" className="btn btn-primary" value="Login" />
-          </div>
-        </form>
-      </div>
-    );
-  }
-}
+  return (
+    <div>
+      <NavLink onClick={toggle} href="#">
+        SIGN IN
+      </NavLink>
 
-export default login;
+      <Modal isOpen={modal} toggle={toggle}>
+        <ModalHeader toggle={toggle}>Login</ModalHeader>
+        <ModalBody>
+          <Form onSubmit={onSubmit}>
+            <FormGroup>
+              <Label for="Email">Email</Label>
+              <Input
+                type="email"
+                id="email"
+                placeholder="Email"
+                className="mb-3"
+                onChange={onChangeEmail}
+              />
+              <Label for="password">Password</Label>
+              <Input
+                type="password"
+                id="password"
+                placeholder="Password"
+                className="mb-3"
+                onChange={onChangePassword}
+              />
+              <Button color="dark" style={{ marginTop: "2rem" }}>
+                Login
+              </Button>
+            </FormGroup>
+          </Form>
+        </ModalBody>
+      </Modal>
+    </div>
+  );
+};
