@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useState, useContext } from "react";
+import { AuthContext } from "../../context/actions/AuthAction";
 import {
   Button,
   Modal,
@@ -14,10 +14,11 @@ import {
 } from "reactstrap";
 
 export const Register = () => {
+  const { register } = useContext(AuthContext);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [passwordConfirm, setpasswordConfirm] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [modal, setModal] = useState(false);
 
   const toggle = () => {
@@ -36,22 +37,21 @@ export const Register = () => {
     setPassword(e.target.value);
   };
 
-  const onChangePasswordConfirm = (e) => {
-    setpasswordConfirm(e.target.value);
+  const onChangeConfirmPassword = (e) => {
+    setConfirmPassword(e.target.value);
   };
 
   const onSubmit = (e) => {
     e.preventDefault();
 
-    if (password === passwordConfirm) {
+    if (password === confirmPassword) {
       const newUser = {
         name,
         email,
         password,
       };
 
-      console.log(newUser);
-      axios.post("/api/v1/users", newUser).then((res) => console.log(res.data));
+      register(newUser);
     } else {
       alert("password not match");
     }
@@ -95,10 +95,10 @@ export const Register = () => {
               <Label for="Password">password Confirm</Label>
               <Input
                 type="password"
-                id="passwordConfirm"
-                placeholder="Password Confirm"
+                id="confirmPassword"
+                placeholder="Confirm Password"
                 className="mb-3"
-                onChange={onChangePasswordConfirm}
+                onChange={onChangeConfirmPassword}
               />
               <Button color="dark" style={{ marginTop: "2rem" }}>
                 Register

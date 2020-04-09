@@ -1,5 +1,5 @@
-import React, { Fragment, useState } from "react";
-
+import React, { Fragment, useState, useContext, useEffect } from "react";
+import { AuthContext } from "../context/actions/AuthAction";
 import {
   Collapse,
   Navbar,
@@ -12,13 +12,31 @@ import {
 
 import { Login } from "./auth/Login";
 import { Register } from "./auth/Register";
+import { Logout } from "./auth/Logout";
 
 export const AppNavbar = () => {
-  const [open, setOpen] = useState(false);
+  const { isAuthenticated, user, loadUser } = useContext(AuthContext);
+  const [isOpen, setIsPoen] = useState(false);
+
+  useEffect(() => {
+    loadUser();
+  }, []);
 
   const toggle = () => {
-    setOpen(!open);
+    setIsPoen(!isOpen);
   };
+  const userLinks = (
+    <Fragment>
+      <NavItem>
+        <span className="navbar-text mr-3">
+          <strong>{user ? `Welcome ${user.data.name}` : ""}</strong>
+        </span>
+      </NavItem>
+      <NavItem>
+        <Logout />
+      </NavItem>
+    </Fragment>
+  );
 
   const guestLinks = (
     <Fragment>
@@ -37,9 +55,9 @@ export const AppNavbar = () => {
         <Container>
           <NavbarBrand href="/">Home</NavbarBrand>
           <NavbarToggler onClick={toggle} />
-          <Collapse isOpen={open} navbar>
+          <Collapse isOpen={isOpen} navbar>
             <Nav className="ml-auto" navbar>
-              {guestLinks}
+              {isAuthenticated ? userLinks : guestLinks}
             </Nav>
           </Collapse>
         </Container>

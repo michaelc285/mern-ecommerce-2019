@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { AuthContext } from "../../context/actions/AuthAction";
+
 import {
   Button,
   Modal,
@@ -11,7 +13,9 @@ import {
   NavLink,
   Alert,
 } from "reactstrap";
+
 export const Login = () => {
+  const { login } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [modal, setModal] = useState(false);
@@ -36,7 +40,7 @@ export const Login = () => {
       password,
     };
 
-    console.log(loginUser);
+    login(loginUser);
   };
 
   return (
