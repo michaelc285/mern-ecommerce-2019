@@ -9,7 +9,14 @@ import {
   REGISTER_SUCCESS,
 } from "../types";
 
-export default (state, action) => {
+const initialState = {
+  token: localStorage.getItem("token"),
+  isAuthenticated: null,
+  isLoading: false,
+  user: null,
+};
+
+export default (state = initialState, action) => {
   switch (action.type) {
     case USER_LOADING:
       return {
@@ -29,7 +36,7 @@ export default (state, action) => {
       localStorage.setItem("token", action.payload.token);
       return {
         ...state,
-        ...action.payload,
+        user: action.payload,
         isAuthenticated: true,
         isLoading: false,
         error: null,

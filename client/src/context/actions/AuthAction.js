@@ -1,7 +1,7 @@
-import React, { createContext, useReducer } from "react";
-import AuthReducer from "../reducers/AuthReducer";
 import axios from "axios";
+import { returnErrors } from "./ErrorActions";
 
+//Constant
 import {
   USER_LOADED,
   USER_LOADING,
@@ -13,26 +13,18 @@ import {
   REGISTER_SUCCESS,
 } from "../types";
 
-//Initial State
-const initialState = {
-  token: localStorage.getItem("token"),
-  isAuthenticated: null,
-  isLoading: false,
-  user: null,
-  error: null,
-};
+export const tokenConfig = (getState) => {
+  // Get token from localstorage
+  const token = getState().auth.token;
 
-const tokenConfig = (state) => {
-  //Get token from localStorage
-  const token = state.token;
-
+  // Headers
   const config = {
     headers: {
       "Content-type": "application/json",
     },
   };
 
-  //If token exists, add to headers
+  // If token, add to headers
   if (token) {
     config.headers["x-auth-token"] = token;
   }
@@ -40,99 +32,74 @@ const tokenConfig = (state) => {
   return config;
 };
 
-export const AuthContext = createContext(initialState);
+// Load User
+export const loadUser = () => (dispatch, getState) => {
+  //Loading
+  console.log("Loading");
+  dispatch({ type: USER_LOADING });
 
-export const AuthProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(AuthReducer, initialState);
-
-  // Load User & Check token
-  const loadUser = async () => {
-    try {
-      // User Loading
-      dispatch({ type: USER_LOADING });
-
-      const res = await axios.get("/api/auth/user", tokenConfig(state));
-
+  console.log("Axios");
+  //Loaded
+  axios
+    .get("/api/auth/user", tokenConfig(getState))
+    .then((res) =>
       dispatch({
         type: USER_LOADED,
         payload: res.data,
-      });
-    } catch (err) {
-      dispatch({
-        type: AUTH_ERROR,
-        payload: err.message,
-      });
-    }
+      })
+    )
+    .catch((err) => {
+      dispatch(returnErrors(err.response.data, err.response.status));
+      dispatch({ type: AUTH_ERROR });
+    });
+  console.log("Process done");
+};
+
+// Register User
+export const register = ({ name, email, password }) => (dispatch) => {
+  //Headers
+  const config = {
+    headers: {
+      "Content-type": "application/json",
+    },
   };
 
-  // Login
-  const login = async (user) => {
-    // Header
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
+  const newUser = JSON.stringify({ name, email, password });
 
-    try {
-      const res = await axios.post("/api/auth/login", user, config);
+  axios
+    .post("/api/auth/register", newUser, config)
+    .then((res) => dispatch({ type: REGISTER_SUCCESS, payload: res.data }))
+    .catch((err) => {
+      dispatch(
+        returnErrors(err.response.data, err.response.status, "REGISTER_FAIL")
+      );
+      dispatch({ type: REGISTER_FAIL });
+    });
+};
 
-      dispatch({
-        type: LOGIN_SUCCESS,
-        payload: res.data,
-      });
-      console.log(res.data.token);
-    } catch (err) {
-      dispatch({
-        type: LOGIN_FAIL,
-        payload: err,
-      });
-    }
+// Login User
+export const login = ({ email, password }) => (dispatch) => {
+  //Headers
+  const config = {
+    headers: {
+      "Content-type": "application/json",
+    },
   };
 
-  // Logout user
-  const logout = () => {
-    dispatch({ type: LOGOUT_SUCCESS });
-  };
+  const user = JSON.stringify({ email, password });
 
-  // Register user
-  const register = async (newUser) => {
-    //Headers
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
+  axios
+    .post("/api/auth/login", user, config)
+    .then((res) => dispatch({ type: LOGIN_SUCCESS, payload: res.data }))
+    .catch((err) => {
+      dispatch(
+        returnErrors(err.response.data, err.response.status, "LOGIN_FAIL")
+      );
+      dispatch({ type: LOGIN_FAIL });
+    });
+};
 
-    try {
-      const res = await axios.post("/api/auth/register", newUser, config);
-
-      dispatch({
-        type: REGISTER_SUCCESS,
-        payload: res.data,
-      });
-    } catch (err) {
-      dispatch({
-        type: REGISTER_FAIL,
-        payload: err,
-      });
-    }
-  };
-
-  return (
-    <AuthContext.Provider
-      value={{
-        isAuthenticated: state.isAuthenticated,
-        isLoading: state.isLoading,
-        error: state.error,
-        user: state.user,
-        login,
-        loadUser,
-        logout,
-        register,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
+// Logout User
+export const logout = () => {
+  return { type: LOGOUT_SUCCESS };
 };

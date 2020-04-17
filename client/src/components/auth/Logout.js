@@ -1,10 +1,9 @@
-import React, { Fragment, useContext } from "react";
+import React, { Fragment } from "react";
+import { connect } from "react-redux";
+import { logout } from "../../context/actions/AuthAction";
 import { NavLink } from "reactstrap";
-import { AuthContext } from "../../context/actions/AuthAction";
 
-export const Logout = () => {
-  const { logout } = useContext(AuthContext);
-
+const Logout = ({ logout }) => {
   return (
     <Fragment>
       <NavLink onClick={logout} href="#">
@@ -13,3 +12,5 @@ export const Logout = () => {
     </Fragment>
   );
 };
+
+export default connect(null, { logout })(Logout);

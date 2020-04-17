@@ -1,5 +1,6 @@
-import React, { useState, useContext } from "react";
-import { AuthContext } from "../../context/actions/AuthAction";
+import React, { useState } from "react";
+import { connect } from "react-redux";
+import { login } from "../../context/actions/AuthAction";
 
 import {
   Button,
@@ -14,8 +15,7 @@ import {
   Alert,
 } from "reactstrap";
 
-export const Login = () => {
-  const { login } = useContext(AuthContext);
+const Login = ({ isAuthenticated, login }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [modal, setModal] = useState(false);
@@ -80,3 +80,9 @@ export const Login = () => {
     </div>
   );
 };
+
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
+});
+
+export default connect(mapStateToProps, { login })(Login);
