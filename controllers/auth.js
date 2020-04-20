@@ -49,7 +49,7 @@ exports.loginUser = async (req, res, next) => {
   } catch (err) {
     return res.status(500).json({
       success: false,
-      error: err.message,
+      msg: err.message,
     });
   }
 };
@@ -96,14 +96,11 @@ exports.registerUser = async (req, res, next) => {
     });
   } catch (err) {
     if (err.name === "MongoError") {
-      const messages = "Email already exsit";
-
       return res.status(400).json({
         success: false,
-        error: messages,
+        error: "Email already exsit",
       });
     } else {
-      console.log(err);
       return res.status(500).json({
         success: false,
         error: "Something went wrong",

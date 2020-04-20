@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { connect } from "react-redux";
 import { register } from "../../context/actions/AuthAction";
+import { clearErrors } from "../../context/actions/ErrorActions";
 
 import {
   Button,
@@ -15,16 +16,18 @@ import {
   Alert,
 } from "reactstrap";
 
-const Register = ({ isAuthenticated, register }) => {
+const Register = ({ isAuthenticated, register, error, clearErrors }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [modal, setModal] = useState(false);
+  const [message, setMessage] = useState(null);
 
-  const toggle = () => {
+  const toggle = useCallback(() => {
+    clearErrors();
     setModal(!modal);
-  };
+  }, [clearErrors, modal]);
 
   const onChangeName = (e) => {
     setName(e.target.value);
@@ -58,6 +61,20 @@ const Register = ({ isAuthenticated, register }) => {
     }
   };
 
+  useEffect(() => {
+    if (error.id === "REGISTER_FAIL") {
+      setMessage(error.msg.msg);
+    } else {
+      setMessage(null);
+    }
+
+    if (modal) {
+      if (isAuthenticated) {
+        toggle();
+      }
+    }
+  }, [error, toggle, isAuthenticated, modal]);
+
   return (
     <div>
       <NavLink onClick={toggle} href="#">
@@ -67,6 +84,7 @@ const Register = ({ isAuthenticated, register }) => {
       <Modal isOpen={modal} toggle={toggle}>
         <ModalHeader toggle={toggle}>Register</ModalHeader>
         <ModalBody>
+          {message ? <Alert color="danger">{message}</Alert> : null}
           <Form onSubmit={onSubmit}>
             <FormGroup>
               <Label for="Name">Name</Label>
@@ -111,7 +129,10 @@ const Register = ({ isAuthenticated, register }) => {
     </div>
   );
 };
+
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
+  error: state.error,
 });
-export default connect(mapStateToProps, { register })(Register);
+
+export default connect(mapStateToProps, { register, clearErrors })(Register);

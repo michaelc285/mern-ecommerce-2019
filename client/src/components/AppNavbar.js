@@ -1,5 +1,6 @@
 import React, { Fragment, useState } from "react";
 import { connect } from "react-redux";
+
 import {
   Collapse,
   Navbar,
@@ -8,6 +9,7 @@ import {
   Nav,
   NavItem,
   Container,
+  NavLink,
 } from "reactstrap";
 
 import Login from "./auth/Login";
@@ -49,6 +51,9 @@ const AppNavbar = ({ auth }) => {
       <Navbar color="dark" dark expand="sm" className="mb-5">
         <Container>
           <NavbarBrand href="/">Home</NavbarBrand>
+          <NavLink href="/market" style={{ color: "gray" }}>
+            Market
+          </NavLink>
           <NavbarToggler onClick={toggle} />
           <Collapse isOpen={isOpen} navbar>
             <Nav className="ml-auto" navbar>

@@ -35,10 +35,8 @@ export const tokenConfig = (getState) => {
 // Load User
 export const loadUser = () => (dispatch, getState) => {
   //Loading
-  console.log("Loading");
   dispatch({ type: USER_LOADING });
 
-  console.log("Axios");
   //Loaded
   axios
     .get("/api/auth/user", tokenConfig(getState))
@@ -52,7 +50,6 @@ export const loadUser = () => (dispatch, getState) => {
       dispatch(returnErrors(err.response.data, err.response.status));
       dispatch({ type: AUTH_ERROR });
     });
-  console.log("Process done");
 };
 
 // Register User
