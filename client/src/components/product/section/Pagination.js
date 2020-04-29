@@ -1,25 +1,10 @@
 import React from "react";
+import MaterialUIPagination from "@material-ui/lab/Pagination";
 
-const Pagination = ({ productPerPage, totalProduct, paginate }) => {
-  const pageNumbers = [];
+const Pagination = ({ productsPerPage, totalProducts, paginate }) => {
+  const pageCount = Math.ceil(totalProducts / productsPerPage);
 
-  for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
-    pageNumbers.push(i);
-  }
-
-  return (
-    <nav>
-      <ul className="pagination">
-        {pageNumbers.map((number) => (
-          <li key={number} className="page-item">
-            <a onClick={() => paginate(number)} href="!#" className="page-link">
-              {number}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </nav>
-  );
+  return <MaterialUIPagination count={pageCount} onChange={paginate} />;
 };
 
 export default Pagination;

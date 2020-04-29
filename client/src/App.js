@@ -4,11 +4,16 @@ import { Provider } from "react-redux";
 import store from "./context/store";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Container from "@material-ui/core/Container";
+
+import { loadUser } from "./context/actions/AuthAction";
 
 import AppNavbar from "./components/AppNavbar";
-import { loadUser } from "./context/actions/AuthAction";
-import ProdcutPage from "./components/product/ProductPage";
+import AppFooter from "./components/AppFooter";
 
+import ErrorPage from "./components/ErrorPage";
+import ProdcutPage from "./components/product/ProductPage";
+import ProductCreate from "./components/product/ProductCreate";
 const App = () => {
   useEffect(() => {
     store.dispatch(loadUser());
@@ -19,9 +24,16 @@ const App = () => {
       <Provider store={store}>
         <div>
           <AppNavbar />
-          <Switch>
-            <Route path="/market" exact component={ProdcutPage} />
-          </Switch>
+
+          <Container maxWidth="lg" style={{ minHeight: "100vh" }}>
+            <Switch>
+              <Route path="/" exact component={ProdcutPage} />
+              <Route path="/market" exact component={ProdcutPage} />
+              <Route path="/productcreate" exact component={ProductCreate} />
+              <Route component={ErrorPage} />
+            </Switch>
+          </Container>
+          <AppFooter />
         </div>
       </Provider>
     </BrowserRouter>

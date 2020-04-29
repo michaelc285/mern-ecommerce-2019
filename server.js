@@ -3,18 +3,23 @@ const express = require("express");
 const dotenv = require("dotenv");
 const colors = require("colors");
 const morgan = require("morgan");
+const cookieParser = require("cookie-parser");
 const connectDB = require("./config/db");
-
 dotenv.config({ path: "./config/config.env" });
 
 connectDB();
 
 const users = require("./routes/api/users");
 const auth = require("./routes/api/auth");
+const product = require("./routes/api/product");
 
+// Init app
 const app = express();
 
+// Middleware
 app.use(express.json());
+app.use(cookieParser());
+app.use(express.static("./public"));
 
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
@@ -23,6 +28,7 @@ if (process.env.NODE_ENV === "development") {
 // Routes
 app.use("/api/users", users);
 app.use("/api/auth", auth);
+app.use("/api/product", product);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));

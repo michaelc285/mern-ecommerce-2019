@@ -1,5 +1,6 @@
 import React, { Fragment, useState } from "react";
 import { connect } from "react-redux";
+import { makeStyles } from "@material-ui/core/styles";
 
 import {
   Collapse,
@@ -15,6 +16,8 @@ import {
 import Login from "./auth/Login";
 import Register from "./auth/Register";
 import Logout from "./auth/Logout";
+
+const useStyles = makeStyles((theme) => ({}));
 
 const AppNavbar = ({ auth }) => {
   const [isOpen, setIsPoen] = useState(false);
@@ -51,11 +54,15 @@ const AppNavbar = ({ auth }) => {
       <Navbar color="dark" dark expand="sm" className="mb-5">
         <Container>
           <NavbarBrand href="/">Home</NavbarBrand>
-          <NavLink href="/market" style={{ color: "gray" }}>
-            Market
-          </NavLink>
+
           <NavbarToggler onClick={toggle} />
           <Collapse isOpen={isOpen} navbar>
+            <NavLink href="/market" style={{ color: "gray" }}>
+              Market
+            </NavLink>
+            <NavLink href="/productcreate" style={{ color: "gray" }}>
+              Product Create
+            </NavLink>
             <Nav className="ml-auto" navbar>
               {auth && auth.isAuthenticated ? userLinks : guestLinks}
             </Nav>

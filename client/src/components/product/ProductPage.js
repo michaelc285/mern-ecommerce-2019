@@ -1,10 +1,7 @@
 import React, { useState } from "react";
-
-import { Grid } from "@material-ui/core";
-import { Pagination, PageItem } from "react-bootstrap";
-
-import Product from "./ProductBox";
-import ProductMenu from "./ProductMenu";
+import ProductMenu from "../product/menu/ProductMenu";
+import ProductsPerPage from "./section/ProductsPerPage";
+import Pagination from "./section/Pagination";
 
 const ProductPage = () => {
   const [product, setProduct] = useState([
@@ -25,6 +22,18 @@ const ProductPage = () => {
       title: "Product",
       desc: "Description",
       price: 80,
+    },
+    {
+      image: "https://www.w3schools.com/howto/img_forest.jpg",
+      title: "Product",
+      desc: "Description",
+      price: 80,
+    },
+    {
+      image: "https://www.w3schools.com/howto/img_forest.jpg",
+      title: "Product",
+      desc: "Description",
+      price: 40,
     },
     {
       image: "https://www.w3schools.com/howto/img_forest.jpg",
@@ -81,55 +90,50 @@ const ProductPage = () => {
       price: 80,
     },
   ]);
-  let active = 1;
-  let items = [];
+  const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [productsPerPage] = useState(6);
 
-  for (let number = 1; number <= 2; number++) {
-    items.push(
-      <Pagination.Item key={number} active={number === active}>
-        {number}
-      </Pagination.Item>
-    );
-  }
+  // Get current product
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProduct = product.slice(indexOfFirstProduct, indexOfLastProduct);
 
-  const paginationBasic = (
-    <div>
-      <Pagination size="sm">{items}</Pagination>
-    </div>
-  );
-
-  // Display Products
-  const displayProducts = product.map((product) => {
-    return (
-      <Grid item xs={4}>
-        <Product
-          image={product.image}
-          title={product.title}
-          desc={product.desc}
-          price={product.price}
-        />
-      </Grid>
-    );
-  });
+  // Change page
+  const paginate = (event, pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <div style={{ display: "flex" }}>
-      <div style={{ flex: "2", border: "1px solid red", height: "80vh" }}>
+      {/* Menu */}
+      <div style={{ flex: "2", height: "80vh" }}>
         <ProductMenu />
       </div>
+      {/* Content */}
+
       <div
         style={{
           flex: "8",
-          border: "1px solid blue",
           height: "80vh",
-          padding: "1em",
         }}
       >
-        <div>
-          <Grid container spacing={3}>
-            {displayProducts}
-          </Grid>
-          {paginationBasic}
+        <span style={{ fontSize: "20px" }}>Result: {product.length}</span>
+        <div style={{ marginTop: "1em" }}>
+          {/* Products */}
+          <ProductsPerPage products={currentProduct} loading={loading} />
+          {/* Pagination */}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              padding: "3em",
+            }}
+          >
+            <Pagination
+              productsPerPage={productsPerPage}
+              totalProducts={product.length}
+              paginate={paginate}
+            />
+          </div>
         </div>
       </div>
     </div>

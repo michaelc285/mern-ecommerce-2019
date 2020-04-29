@@ -2,8 +2,8 @@ const mongoose = require("mongoose");
 
 const ProductSchema = new mongoose.Schema(
   {
-    writer: {
-      type: Schema.Types.ObjectId,
+    creator: {
+      type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
     title: {

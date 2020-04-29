@@ -12,8 +12,8 @@
 # config
 /config/default.json
 
-
-
+# Image file
+/public
 # testing
 /coverage
 

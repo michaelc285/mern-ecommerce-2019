@@ -2,64 +2,36 @@ import React, { useState, useCallback, useEffect } from "react";
 import { connect } from "react-redux";
 import { register } from "../../context/actions/AuthAction";
 import { clearErrors } from "../../context/actions/ErrorActions";
-
+import { TextField, Button, FormControl } from "@material-ui/core";
+import { useFormik } from "formik";
 import {
-  Button,
   Modal,
   ModalHeader,
   ModalBody,
   Form,
-  FormGroup,
-  Label,
-  Input,
   NavLink,
   Alert,
 } from "reactstrap";
 
 const Register = ({ isAuthenticated, register, error, clearErrors }) => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [modal, setModal] = useState(false);
   const [message, setMessage] = useState(null);
+
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      email: "",
+      password: "",
+    },
+    onSubmit: (newUser) => {
+      register(newUser);
+    },
+  });
 
   const toggle = useCallback(() => {
     clearErrors();
     setModal(!modal);
   }, [clearErrors, modal]);
-
-  const onChangeName = (e) => {
-    setName(e.target.value);
-  };
-
-  const onChangeEmail = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const onChangePassword = (e) => {
-    setPassword(e.target.value);
-  };
-
-  const onChangeConfirmPassword = (e) => {
-    setConfirmPassword(e.target.value);
-  };
-
-  const onSubmit = (e) => {
-    e.preventDefault();
-
-    if (password === confirmPassword) {
-      const newUser = {
-        name,
-        email,
-        password,
-      };
-
-      register(newUser);
-    } else {
-      alert("password not match");
-    }
-  };
 
   useEffect(() => {
     if (error.id === "REGISTER_FAIL") {
@@ -82,47 +54,54 @@ const Register = ({ isAuthenticated, register, error, clearErrors }) => {
       </NavLink>
 
       <Modal isOpen={modal} toggle={toggle}>
-        <ModalHeader toggle={toggle}>Register</ModalHeader>
+        <ModalHeader toggle={toggle}>Sign Up</ModalHeader>
         <ModalBody>
           {message ? <Alert color="danger">{message}</Alert> : null}
-          <Form onSubmit={onSubmit}>
-            <FormGroup>
-              <Label for="Name">Name</Label>
-              <Input
-                type="text"
+          <Form onSubmit={formik.handleSubmit}>
+            <FormControl fullWidth>
+              <TextField
                 id="name"
-                placeholder="Name"
+                label="Name"
+                variant="outlined"
+                name="name"
                 className="mb-3"
-                onChange={onChangeName}
+                value={formik.values.name}
+                onChange={formik.handleChange}
               />
-              <Label for="Email">Email</Label>
-              <Input
-                type="email"
+            </FormControl>
+            <FormControl fullWidth>
+              <TextField
                 id="email"
-                placeholder="Email"
+                name="email"
+                label="Email Address"
+                variant="outlined"
                 className="mb-3"
-                onChange={onChangeEmail}
+                value={formik.values.email}
+                onChange={formik.handleChange}
               />
-              <Label for="password">Password</Label>
-              <Input
+            </FormControl>
+            <FormControl fullWidth>
+              <TextField
                 type="password"
                 id="password"
-                placeholder="Password"
+                label="Password"
+                variant="outlined"
+                name="password"
                 className="mb-3"
-                onChange={onChangePassword}
+                value={formik.values.password}
+                onChange={formik.handleChange}
               />
-              <Label for="Password">password Confirm</Label>
-              <Input
-                type="password"
-                id="confirmPassword"
-                placeholder="Confirm Password"
-                className="mb-3"
-                onChange={onChangeConfirmPassword}
-              />
-              <Button color="dark" style={{ marginTop: "2rem" }}>
-                Register
+            </FormControl>
+            <FormControl fullWidth>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                size="large"
+              >
+                Sign Up
               </Button>
-            </FormGroup>
+            </FormControl>
           </Form>
         </ModalBody>
       </Modal>

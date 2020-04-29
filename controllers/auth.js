@@ -1,75 +1,97 @@
 const bcrypt = require("bcryptjs");
 const config = require("config");
 const jwt = require("jsonwebtoken");
-
+const {
+  createAccessToken,
+  createRefreshToken,
+  sendAccessToken,
+  sendRefreshToken,
+} = require("../token.js");
+const {
+  MISSING_NAME,
+  MISSING_EMAIL,
+  MISSING_PASSWORD,
+  EMAIL_EXIST,
+  INVALID_PASSWORD,
+  USER_NOT_FOUND,
+  TOKEN_NOT_MATCH,
+} = require("../constant/types.js");
+const REFRESH_TOKEN_COOKIE_PATH = require("../constant/path.js");
+const REFRESH_JWT_SECRET = config.get("REFRESH_JWT_TOKEN_SECRET");
 // Model
 const User = require("../models/Users");
 
-// JWT properties
-const EXPIRE = "1d";
-const JWT_SECRET = config.get("jwtSecret");
-
 /**
  * @desc   Login User
- * @route  /api/auth/login
+ * @route  POST /api/auth/login
  * @access Public
  * */
 exports.loginUser = async (req, res, next) => {
   const { email, password } = req.body;
   //Check fields
   if (!email || !password) {
+    let warningLabelArr = [];
+    if (!email) warningLabelArr.push(MISSING_EMAIL);
+    if (!password) warningLabelArr.push(MISSING_PASSWORD);
+
     return res.status(400).json({
       success: false,
+      warningLabel: warningLabelArr,
       error: "Empty field(s)",
     });
   }
 
   try {
-    //Check existing
+    // Check existing user
     const user = await User.findOne({ email });
-    if (!user) throw Error("User does not exist");
+    if (!user) throw Error(USER_NOT_FOUND);
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) throw Error("Invalid password");
+    // Check password
+    const passwordIsMatch = await bcrypt.compare(password, user.password);
+    if (!passwordIsMatch) throw Error(INVALID_PASSWORD);
 
-    const token = jwt.sign({ id: user.id }, JWT_SECRET, {
-      expiresIn: EXPIRE,
+    // Create Access & Refresh Token
+    const accessToken = createAccessToken(user._id);
+    const refreshToken = createRefreshToken(user._id);
+
+    // Store refresh token with user in db
+    await User.findByIdAndUpdate(user._id, {
+      token: refreshToken,
     });
-    if (!token) throw Error("Couldnt sign the token");
-
-    return res.status(200).json({
-      success: true,
-      token,
-      data: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-      },
-    });
+    // Send token. Refresh token as cookie and access token as regular response
+    sendRefreshToken(res, refreshToken);
+    sendAccessToken(req, res, accessToken);
   } catch (err) {
     return res.status(500).json({
       success: false,
-      msg: err.message,
+      error: err.message,
     });
   }
 };
 
 /**
  * @desc   Register user
- * @route  Post /api/auth/register
+ * @route  POST /api/auth/register
  * @access Public
  */
 exports.registerUser = async (req, res, next) => {
   const { name, email, password } = req.body;
-  //Check fields
+  // Check user input
   if (!name || !email || !password) {
+    let warningLabelArr = [];
+    if (!name) warningLabelArr.push(MISSING_NAME);
+    if (!email) warningLabelArr.push(MISSING_EMAIL);
+    if (!password) warningLabelArr.push(MISSING_PASSWORD);
+
     return res.status(400).json({
       success: false,
+      warningLabel: warningLabelArr,
       error: "Empty field(s)",
     });
   }
 
   try {
+    // Hash the password
     const hashedPassword = await new Promise((resolve, reject) => {
       bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(password, salt, (err, hash) => {
@@ -79,15 +101,12 @@ exports.registerUser = async (req, res, next) => {
       });
     });
 
+    // Insert the user in mongoDB
     const user = await User.create({ name, email, password: hashedPassword });
 
-    const token = jwt.sign({ id: user.id }, JWT_SECRET, {
-      expiresIn: EXPIRE,
-    });
-
-    return res.status(201).json({
+    res.status(201).json({
       success: true,
-      token,
+      msg: "User Created",
       data: {
         id: user.id,
         name: user.name,
@@ -96,34 +115,103 @@ exports.registerUser = async (req, res, next) => {
     });
   } catch (err) {
     if (err.name === "MongoError") {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
-        error: "Email already exsit",
+        error: EMAIL_EXIST,
       });
     } else {
-      return res.status(500).json({
+      res.status(500).json({
         success: false,
-        error: "Something went wrong",
+        error: err.message,
       });
     }
   }
 };
 
 /**
+ * @desc   Logout user
+ * @route  POST /api/auth/logout
+ * @access Private
+ */
+exports.logoutUser = async (req, res, next) => {
+  try {
+    // Clear cookie
+    res.clearCookie("refreshtoken", { path: REFRESH_TOKEN_COOKIE_PATH });
+    // Remove token in mongoDB
+    const user = await User.findOneAndUpdate(
+      { email: req.body.email },
+      { token: undefined }
+    );
+
+    res.status(205).json({
+      success: true,
+      user,
+      message: "Logged out",
+    });
+  } catch (err) {
+    res.status(400).json({
+      success: false,
+      error: err.message,
+    });
+  }
+};
+
+/**
+ * @desc   Renew access token
+ * @route  Post /api/auth/refresh_token
+ * @access Public
+ */
+exports.renewToken = async (req, res, next) => {
+  const token = req.cookies.refreshToken;
+  //const token = req.body.refreshtoken;
+  if (!token) return res.status(200).send({ accesstoken: "" });
+
+  try {
+    // Verify token
+    let payload = null;
+    payload = jwt.verify(token, REFRESH_JWT_SECRET);
+
+    // Find id in token with db
+    const user = await User.findById(payload.userId);
+    if (!user) throw Error(USER_NOT_FOUND);
+
+    // Compare token:  db.token vs cookie.token
+    if (user.token !== token) throw Error(TOKEN_NOT_MATCH);
+
+    // Pass the validation
+    // Generate token
+    const accessToken = createAccessToken(user._id);
+    //const refreshToken = createRefreshToken(user._id);
+
+    res.status(201).json({
+      success: true,
+      accesstoken: accessToken,
+    });
+  } catch (err) {
+    return res.status(400).json({
+      success: false,
+      error: err.message,
+      accesstoken: "",
+    });
+  }
+};
+
+/**
  * @desc   Get user
  * @route  Post /api/auth/user
- * @access Private
+ * @access Public
  */
 exports.getUser = async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id).select("-password");
-    if (!user) throw Error("User not found");
+    if (!user) throw Error(USER_NOT_FOUND);
+
     res.status(200).json({
       success: true,
       data: user,
     });
   } catch (err) {
-    return res.status(400).json({
+    res.status(400).json({
       success: false,
       error: err.message,
     });
