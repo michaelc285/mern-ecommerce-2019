@@ -6,7 +6,7 @@ const {
   registerUser,
   getUser,
   logoutUser,
-  renewToken,
+  refresh_token,
 } = require("../../controllers/auth");
 
 router.route("/login").post(loginUser);
@@ -17,6 +17,6 @@ router.route("/user").get(auth, getUser);
 
 router.route("/logout").post(logoutUser);
 
-router.route("/renewToken").post(renewToken);
+router.route("/refresh_token").post(refresh_token);
 
 module.exports = router;

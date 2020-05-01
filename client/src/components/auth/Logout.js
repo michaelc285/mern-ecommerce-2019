@@ -4,9 +4,11 @@ import { logout } from "../../context/actions/AuthAction";
 import { NavLink } from "reactstrap";
 
 const Logout = ({ logout }) => {
+  const handleLogout = () => logout();
+
   return (
     <Fragment>
-      <NavLink onClick={logout} href="#">
+      <NavLink onClick={handleLogout} href="#">
         Logout
       </NavLink>
     </Fragment>

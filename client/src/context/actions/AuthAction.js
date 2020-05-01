@@ -26,30 +26,49 @@ export const tokenConfig = (getState) => {
 
   // If token, add to headers
   if (token) {
-    config.headers["x-auth-token"] = token;
+    config.headers["accesstoken"] = token;
   }
 
   return config;
 };
 
-// Load User
-export const loadUser = () => (dispatch, getState) => {
+// Load User and get access token
+export const loadUser = () => async (dispatch, getState) => {
   //Loading
   dispatch({ type: USER_LOADING });
 
-  //Loaded
-  axios
-    .get("/api/auth/user", tokenConfig(getState))
-    .then((res) =>
-      dispatch({
-        type: USER_LOADED,
-        payload: res.data,
-      })
-    )
-    .catch((err) => {
-      dispatch(returnErrors(err.response.data, err.response.status));
-      dispatch({ type: AUTH_ERROR });
-    });
+  //Loaded ///api/auth/refresh_token
+  const response = await fetch("/api/auth/refresh_token", {
+    method: "POST",
+    credentials: "include", // Cookie,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const result = await response.json();
+  console.log(result);
+
+  if (result.success) {
+    // User loaded then update access token and auth turn to true
+    dispatch({ type: USER_LOADED, payload: result });
+  } else {
+    // fail token to null auth turn to false
+    dispatch(returnErrors(result.error, 500));
+    dispatch({ type: AUTH_ERROR });
+  }
+  // axios
+  //   .get("/api/auth/user", tokenConfig(getState))
+  //   .then((res) =>
+  //     dispatch({
+  //       type: USER_LOADED,
+  //       payload: res.data,
+  //     })
+  //   )
+  //   .catch((err) => {
+  //     dispatch(returnErrors(err.response.data, err.response.status));
+  //     dispatch({ type: AUTH_ERROR });
+  //   });
 };
 
 // Register User
@@ -75,28 +94,65 @@ export const register = ({ name, email, password }) => (dispatch) => {
 };
 
 // Login User
-export const login = ({ email, password }) => (dispatch) => {
-  //Headers
-  const config = {
+export const login = ({ email, password }) => async (dispatch) => {
+  const body = JSON.stringify({ email, password });
+
+  const response = await fetch("/api/auth/login", {
+    method: "POST",
+    credentials: "include", // Cookie
     headers: {
-      "Content-type": "application/json",
+      "Content-Type": "application/json",
     },
-  };
+    body,
+  });
+  const result = await response.json();
 
-  const user = JSON.stringify({ email, password });
+  if (result.success) {
+    dispatch({ type: LOGIN_SUCCESS, payload: result });
+  } else {
+    dispatch(returnErrors(result.error, 500));
+    dispatch({ type: LOGIN_FAIL });
+  }
 
-  axios
-    .post("/api/auth/login", user, config)
-    .then((res) => dispatch({ type: LOGIN_SUCCESS, payload: res.data }))
-    .catch((err) => {
-      dispatch(
-        returnErrors(err.response.data, err.response.status, "LOGIN_FAIL")
-      );
-      dispatch({ type: LOGIN_FAIL });
-    });
+  // ! Cannot find Set-Cookies in header by using Axios
+  //Headers
+  // const config = {
+  //   headers: {
+  //     "Content-type": "application/json",
+  //   },
+  //   withCredentials: true,
+  // };
+
+  //   axios
+  //     .post("/api/auth/login", user, config)
+  //     .then((res) => {
+  //       console.log(res);
+  //       console.log(res.headers["set-cookie"]);
+  //       dispatch({ type: LOGIN_SUCCESS, payload: res.data });
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //       dispatch(
+  //         returnErrors(err.response.data, err.response.status, LOGIN_FAIL)
+  //       );
+  //       dispatch({ type: LOGIN_FAIL });
+  //     });
 };
 
 // Logout User
-export const logout = () => {
-  return { type: LOGOUT_SUCCESS };
+export const logout = () => async (dispatch) => {
+  const response = await fetch("/api/auth/logout", {
+    method: "POST",
+    credentials: "include", // Cookie
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const result = await response.json();
+
+  if (result.success) {
+    dispatch({ type: LOGOUT_SUCCESS });
+  } else {
+    dispatch(returnErrors(result.error, 500));
+  }
 };

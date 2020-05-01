@@ -10,7 +10,7 @@ import {
 } from "../types";
 
 const initialState = {
-  token: localStorage.getItem("token"),
+  token: "",
   isAuthenticated: null,
   isLoading: false,
   user: null,
@@ -26,32 +26,33 @@ export default (state = initialState, action) => {
     case USER_LOADED:
       return {
         ...state,
-        token: state.token,
+        token: action.payload.accesstoken,
         isAuthenticated: true,
         isLoading: false,
-        user: action.payload,
+        user: state.user,
       };
     case REGISTER_SUCCESS:
     case LOGIN_SUCCESS:
-      localStorage.setItem("token", action.payload.token);
+      //localStorage.setItem("accesstoken", action.payload.accesstoken);
       return {
         ...state,
-        user: action.payload,
+        token: action.payload.accesstoken,
         isAuthenticated: true,
         isLoading: false,
+        user: action.payload.data,
         error: null,
       };
     case AUTH_ERROR:
     case LOGIN_FAIL:
     case LOGOUT_SUCCESS:
     case REGISTER_FAIL:
-      localStorage.removeItem("token");
+      //localStorage.removeItem("accesstoken");
       return {
         ...state,
         token: null,
-        user: null,
         isAuthenticated: false,
         isLoading: false,
+        user: null,
       };
     default:
       return state;

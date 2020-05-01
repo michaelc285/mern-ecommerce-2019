@@ -15,6 +15,7 @@ const {
   INVALID_PASSWORD,
   USER_NOT_FOUND,
   TOKEN_NOT_MATCH,
+  TOKEN_NOT_FOUND,
 } = require("../constant/types.js");
 const REFRESH_TOKEN_COOKIE_PATH = require("../constant/path.js");
 const REFRESH_JWT_SECRET = config.get("REFRESH_JWT_TOKEN_SECRET");
@@ -54,13 +55,13 @@ exports.loginUser = async (req, res, next) => {
     const accessToken = createAccessToken(user._id);
     const refreshToken = createRefreshToken(user._id);
 
-    // Store refresh token with user in db
+    // Insert refresh token with user in db
     await User.findByIdAndUpdate(user._id, {
       token: refreshToken,
     });
     // Send token. Refresh token as cookie and access token as regular response
     sendRefreshToken(res, refreshToken);
-    sendAccessToken(req, res, accessToken);
+    sendAccessToken(req, res, accessToken, user);
   } catch (err) {
     return res.status(500).json({
       success: false,
@@ -104,15 +105,27 @@ exports.registerUser = async (req, res, next) => {
     // Insert the user in mongoDB
     const user = await User.create({ name, email, password: hashedPassword });
 
-    res.status(201).json({
-      success: true,
-      msg: "User Created",
-      data: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-      },
+    // Create Access & Refresh Token
+    const accessToken = createAccessToken(user._id);
+    const refreshToken = createRefreshToken(user._id);
+
+    // Insert refresh token with user in db
+    await User.findByIdAndUpdate(user._id, {
+      token: refreshToken,
     });
+    // Send token. Refresh token as cookie and access token as regular response
+    sendRefreshToken(res, refreshToken);
+    sendAccessToken(req, res, accessToken, user);
+
+    // res.status(201).json({
+    //   success: true,
+    //   msg: "User Created",
+    //   data: {
+    //     id: user.id,
+    //     name: user.name,
+    //     email: user.email,
+    //   },
+    // });
   } catch (err) {
     if (err.name === "MongoError") {
       res.status(400).json({
@@ -135,18 +148,25 @@ exports.registerUser = async (req, res, next) => {
  */
 exports.logoutUser = async (req, res, next) => {
   try {
+    // Find token in cookie
+    const token = req.cookies.refreshtoken;
+    if (!token) throw Error(TOKEN_NOT_FOUND);
+
+    // Verify token
+    let payload = null;
+    payload = jwt.verify(token, REFRESH_JWT_SECRET);
+
     // Clear cookie
     res.clearCookie("refreshtoken", { path: REFRESH_TOKEN_COOKIE_PATH });
     // Remove token in mongoDB
     const user = await User.findOneAndUpdate(
-      { email: req.body.email },
+      { _id: payload.userId },
       { token: undefined }
     );
 
-    res.status(205).json({
+    res.status(200).json({
       success: true,
-      user,
-      message: "Logged out",
+      message: "LOGOUT_SUCCESS",
     });
   } catch (err) {
     res.status(400).json({
@@ -161,12 +181,14 @@ exports.logoutUser = async (req, res, next) => {
  * @route  Post /api/auth/refresh_token
  * @access Public
  */
-exports.renewToken = async (req, res, next) => {
-  const token = req.cookies.refreshToken;
-  //const token = req.body.refreshtoken;
-  if (!token) return res.status(200).send({ accesstoken: "" });
-
+exports.refresh_token = async (req, res, next) => {
   try {
+    // Find token in cookie
+    const token = req.cookies.refreshtoken;
+
+    //const token = req.body.refreshtoken;
+    if (!token) throw Error(TOKEN_NOT_FOUND);
+
     // Verify token
     let payload = null;
     payload = jwt.verify(token, REFRESH_JWT_SECRET);
@@ -183,10 +205,11 @@ exports.renewToken = async (req, res, next) => {
     const accessToken = createAccessToken(user._id);
     //const refreshToken = createRefreshToken(user._id);
 
-    res.status(201).json({
+    res.status(200).json({
       success: true,
       accesstoken: accessToken,
     });
+    //sendAccessToken(req, res, accessToken, user);
   } catch (err) {
     return res.status(400).json({
       success: false,

@@ -29,7 +29,7 @@ const AppNavbar = ({ auth }) => {
     <Fragment>
       <NavItem>
         <span className="navbar-text mr-3">
-          <strong>{auth.user ? `Welcome ${auth.user.data.name}` : ""}</strong>
+          <strong>{auth.user ? `Welcome ${auth.user.name}` : ""}</strong>
         </span>
       </NavItem>
       <NavItem>

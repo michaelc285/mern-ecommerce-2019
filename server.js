@@ -5,6 +5,7 @@ const colors = require("colors");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const connectDB = require("./config/db");
+const cors = require("cors");
 dotenv.config({ path: "./config/config.env" });
 
 connectDB();
@@ -20,6 +21,12 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.static("./public"));
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
 
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));

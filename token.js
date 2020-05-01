@@ -19,16 +19,19 @@ const createRefreshToken = (userId) => {
 
 // -----------Send------------
 
-const sendAccessToken = (req, res, accesstoken) => {
-  res.status(201).json({
+const sendAccessToken = (req, res, accesstoken, userInfo) => {
+  res.status(200).json({
     success: true,
     accesstoken,
-    email: req.body.email,
+    data: {
+      name: userInfo.name,
+      email: userInfo.email,
+    },
   });
 };
 
 const sendRefreshToken = (res, token) => {
-  res.cookie("refreshtoken", token, {
+  res.status(200).cookie("refreshtoken", token, {
     httpOnly: true,
     path: REFRESH_TOKEN_COOKIE_PATH,
   });
