@@ -6,7 +6,7 @@ const {
   createRefreshToken,
   sendAccessToken,
   sendRefreshToken,
-} = require("../token.js");
+} = require("./token.js");
 const {
   MISSING_NAME,
   MISSING_EMAIL,
@@ -205,11 +205,11 @@ exports.refresh_token = async (req, res, next) => {
     const accessToken = createAccessToken(user._id);
     //const refreshToken = createRefreshToken(user._id);
 
-    res.status(200).json({
-      success: true,
-      accesstoken: accessToken,
-    });
-    //sendAccessToken(req, res, accessToken, user);
+    // res.status(200).json({
+    //   success: true,
+    //   accesstoken: accessToken,
+    // });
+    sendAccessToken(req, res, accessToken, user);
   } catch (err) {
     return res.status(400).json({
       success: false,

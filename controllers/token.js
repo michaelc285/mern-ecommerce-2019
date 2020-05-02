@@ -2,7 +2,7 @@ const { sign } = require("jsonwebtoken");
 const config = require("config");
 const ACCESS_JWT_SECRET = config.get("ACCESS_JWT_TOKEN_SECRET");
 const REFRESH_JWT_SECRET = config.get("REFRESH_JWT_TOKEN_SECRET");
-const REFRESH_TOKEN_COOKIE_PATH = require("./constant/path.js");
+const REFRESH_TOKEN_COOKIE_PATH = require("../constant/path.js");
 // -------------Create-------------------
 
 const createAccessToken = (userId) => {

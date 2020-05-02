@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ProductMenu from "../product/menu/ProductMenu";
+import ProductMenu from "./menu/ProductMenu";
 import ProductsPerPage from "./section/ProductsPerPage";
 import Pagination from "./section/Pagination";
 
@@ -100,7 +100,7 @@ const ProductPage = () => {
   const currentProduct = product.slice(indexOfFirstProduct, indexOfLastProduct);
 
   // Change page
-  const paginate = (event, pageNumber) => setCurrentPage(pageNumber);
+  const paginate = (e: any, pageNumber: number) => setCurrentPage(pageNumber);
 
   return (
     <div style={{ display: "flex" }}>

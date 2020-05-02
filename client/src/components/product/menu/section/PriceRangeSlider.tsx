@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography, Slider, Input, Button } from "@material-ui/core";
-
+import { ITarget } from "../../../../types/interfaces";
 const useStyles = makeStyles({
   root: {
     width: "100%",
@@ -19,25 +19,25 @@ const inputProps = {
   "aria-labelledby": "input-slider",
 };
 
-const valuetext = (value) => `$ ${value}`;
+const valuetext = (value: number) => `$ ${value}`;
 
 const PriceRangeSlider = () => {
   const classes = useStyles();
-  const [price, setPrice] = useState([minLimit, maxLimit]);
+  const [price, setPrice] = useState<any | undefined>([minLimit, maxLimit]);
 
-  const handleChange = (event, newValue) => setPrice(newValue);
+  const handleChange = (e: object, newValue: any) => setPrice(newValue);
 
-  const handleMinInputChange = (e) => {
+  const handleMinInputChange = (e: ITarget) => {
     let arr = [Number(e.target.value), price[1]];
     arr.sort((a, b) => a - b);
     setPrice(arr);
   };
 
-  const handleMaxInputChange = (e) => {
+  const handleMaxInputChange = (e: ITarget) => {
     setPrice([price[0], Number(e.target.value)].sort((a, b) => a - b));
   };
 
-  const handleSubmitButton = (e) => {
+  const handleSubmitButton = (e: ITarget) => {
     let [minPrice, maxPrice] = price;
     if (minPrice < minLimit) minPrice = minLimit;
     if (maxPrice > maxLimit) maxPrice = maxLimit;
@@ -77,11 +77,7 @@ const PriceRangeSlider = () => {
         />
       </div>
 
-      <Button
-        variant="outlined"
-        style={{ marginTop: "1em" }}
-        onClick={handleSubmitButton}
-      >
+      <Button variant="outlined" type="submit">
         Submit
       </Button>
     </div>

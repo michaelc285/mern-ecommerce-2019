@@ -1,7 +1,14 @@
 import React from "react";
 import { Card, Button } from "react-bootstrap";
 
-const ProductBox = ({ image, title, desc, price }) => {
+interface IProductBox {
+  image: string;
+  title: string;
+  desc: string;
+  price: number;
+}
+
+const ProductBox = ({ image, title, desc, price }: IProductBox) => {
   return (
     <Card style={{ width: "16rem" }}>
       <Card.Img variant="top" src={image} />

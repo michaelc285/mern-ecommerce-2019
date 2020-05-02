@@ -4,7 +4,7 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import Divider from "@material-ui/core/Divider";
 import SearchBar from "./section/SearchBar";
-import Category from "./section/Category";
+//import Category from "./section/Category";
 import PriceRangeSlider from "./section/PriceRangeSlider";
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,7 +26,8 @@ const ProductMenu = () => {
       <Divider />
 
       <ListItem>
-        <Category />
+        {/**<Category />*/}
+        Category
       </ListItem>
 
       <Divider />

@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from "react";
 import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
-
+import { IAppNavbar, IAuthReduxProps } from "../types/interfaces";
 import {
   Collapse,
   Navbar,
@@ -19,17 +19,17 @@ import Logout from "./auth/Logout";
 
 const useStyles = makeStyles((theme) => ({}));
 
-const AppNavbar = ({ auth }) => {
-  const [isOpen, setIsPoen] = useState(false);
+const AppNavbar = ({ auth }: IAppNavbar) => {
+  const [isOpen, setIsOpen] = useState(false);
 
   const toggle = () => {
-    setIsPoen(!isOpen);
+    setIsOpen(!isOpen);
   };
   const userLinks = (
     <Fragment>
       <NavItem>
         <span className="navbar-text mr-3">
-          <strong>{auth.user ? `Welcome ${auth.user.name}` : ""}</strong>
+          <strong>{auth && auth.user ? `Hi, ${auth.user.name}` : ""}</strong>
         </span>
       </NavItem>
       <NavItem>
@@ -73,7 +73,8 @@ const AppNavbar = ({ auth }) => {
   );
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: IAuthReduxProps) => ({
   auth: state.auth,
 });
+
 export default connect(mapStateToProps, null)(AppNavbar);

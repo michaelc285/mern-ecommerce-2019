@@ -1,12 +1,12 @@
 import { GET_ERRORS, CLEAR_ERRORS } from "../types";
-
+import { IAction } from "../../types/interfaces";
 const initialState = {
   msg: {},
   status: null,
   id: null,
 };
 
-export default (state = initialState, action) => {
+export default (state = initialState, action: IAction) => {
   switch (action.type) {
     case GET_ERRORS:
       return {

@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { DropzoneDialog } from "material-ui-dropzone";
 import Button from "@material-ui/core/Button";
 
-const FileUpload = ({ handleFiles }) => {
+const FileUpload = ({ handleFiles }: any) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleClose = () => setIsOpen(false);
   const handleOpen = () => setIsOpen(true);
-  const handleSave = (files) => {
+  const handleSave = (files: any) => {
     handleFiles(files);
     setIsOpen(false);
   };

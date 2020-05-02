@@ -4,6 +4,7 @@ import { login } from "../../context/actions/AuthAction";
 import { clearErrors } from "../../context/actions/ErrorActions";
 import { useFormik } from "formik";
 import { TextField, Button, FormControl } from "@material-ui/core";
+import { ILogin, IAuthReduxProps } from "../../types/interfaces";
 import {
   Modal,
   ModalHeader,
@@ -13,7 +14,7 @@ import {
   Alert,
 } from "reactstrap";
 
-const Login = ({ isAuthenticated, login, clearErrors, error }) => {
+const Login = ({ isAuthenticated, login, clearErrors, error }: ILogin) => {
   const [modal, setModal] = useState(false);
   const [message, setMessage] = useState(null);
   const formik = useFormik({
@@ -95,7 +96,7 @@ const Login = ({ isAuthenticated, login, clearErrors, error }) => {
   );
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: IAuthReduxProps) => ({
   isAuthenticated: state.auth.isAuthenticated,
   error: state.error,
 });

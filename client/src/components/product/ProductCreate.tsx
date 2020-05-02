@@ -35,14 +35,16 @@ const ProductCreate = () => {
       console.log("Form data", values);
     },
   });
-  const handleFiles = (files) => {
+  const handleFiles = (files: any) => {
     setFiles(files);
     console.log(files);
   };
 
   const handleSubmit = () => {
     console.log(files);
-    const config = { header: { "content-type:": "multipart/form-data" } };
+    const config: any = {
+      header: { "content-type:": "multipart/form-data" },
+    };
     let formData = new FormData();
     formData.append("file", files[0]);
     axios
@@ -76,7 +78,7 @@ const ProductCreate = () => {
               <InputLabel htmlFor="title">Title</InputLabel>
               <Input
                 id="title"
-                value={formik.values.productTitle}
+                value={formik.values.title}
                 onChange={formik.handleChange}
               />
             </FormControl>
@@ -113,7 +115,6 @@ const ProductCreate = () => {
               variant="contained"
               color="primary"
               size="large"
-              className={classes.button}
               startIcon={<SaveIcon />}
             >
               Create

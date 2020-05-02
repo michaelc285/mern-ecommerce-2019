@@ -8,6 +8,7 @@ import {
   REGISTER_FAIL,
   REGISTER_SUCCESS,
 } from "../types";
+import { IAction } from "../../types/interfaces";
 
 const initialState = {
   token: "",
@@ -16,7 +17,7 @@ const initialState = {
   user: null,
 };
 
-export default (state = initialState, action) => {
+export default (state = initialState, action: IAction) => {
   switch (action.type) {
     case USER_LOADING:
       return {
@@ -27,26 +28,23 @@ export default (state = initialState, action) => {
       return {
         ...state,
         token: action.payload.accesstoken,
+        user: action.payload.data,
         isAuthenticated: true,
         isLoading: false,
-        user: state.user,
       };
     case REGISTER_SUCCESS:
     case LOGIN_SUCCESS:
-      //localStorage.setItem("accesstoken", action.payload.accesstoken);
       return {
         ...state,
         token: action.payload.accesstoken,
+        user: action.payload.data,
         isAuthenticated: true,
         isLoading: false,
-        user: action.payload.data,
-        error: null,
       };
     case AUTH_ERROR:
     case LOGIN_FAIL:
     case LOGOUT_SUCCESS:
     case REGISTER_FAIL:
-      //localStorage.removeItem("accesstoken");
       return {
         ...state,
         token: null,

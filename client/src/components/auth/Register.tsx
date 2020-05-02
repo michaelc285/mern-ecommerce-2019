@@ -4,6 +4,7 @@ import { register } from "../../context/actions/AuthAction";
 import { clearErrors } from "../../context/actions/ErrorActions";
 import { TextField, Button, FormControl } from "@material-ui/core";
 import { useFormik } from "formik";
+import { IRegister, IAuthReduxProps } from "../../types/interfaces";
 import {
   Modal,
   ModalHeader,
@@ -13,7 +14,12 @@ import {
   Alert,
 } from "reactstrap";
 
-const Register = ({ isAuthenticated, register, error, clearErrors }) => {
+const Register = ({
+  isAuthenticated,
+  register,
+  error,
+  clearErrors,
+}: IRegister) => {
   const [modal, setModal] = useState(false);
   const [message, setMessage] = useState(null);
 
@@ -109,7 +115,7 @@ const Register = ({ isAuthenticated, register, error, clearErrors }) => {
   );
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: IAuthReduxProps) => ({
   isAuthenticated: state.auth.isAuthenticated,
   error: state.error,
 });
