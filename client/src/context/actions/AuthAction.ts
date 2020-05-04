@@ -14,10 +14,7 @@ import {
 } from "../types";
 
 // Load User and get access token
-export const loadUser = () => async (
-  dispatch: Function,
-  getState: Function
-) => {
+export const loadUser = () => async (dispatch: Function) => {
   //Loading
   dispatch({ type: USER_LOADING });
 
@@ -31,7 +28,6 @@ export const loadUser = () => async (
   });
 
   const result = await response.json();
-  console.log(result);
 
   if (result.success) {
     // User loaded then update access token and auth turn to true

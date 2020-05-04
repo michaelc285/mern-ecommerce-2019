@@ -4,7 +4,7 @@ const ProductSchema = new mongoose.Schema(
   {
     creator: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "users",
     },
     title: {
       type: String,
@@ -15,6 +15,10 @@ const ProductSchema = new mongoose.Schema(
     description: {
       type: String,
       trim: true,
+    },
+    type: {
+      type: String,
+      default: "",
     },
     price: {
       type: Number,
@@ -38,6 +42,19 @@ const ProductSchema = new mongoose.Schema(
     },
   },
   { timestamps: true }
+);
+
+ProductSchema.index(
+  {
+    title: "text",
+    description: "text",
+  },
+  {
+    weights: {
+      title: 5,
+      description: 1,
+    },
+  }
 );
 
 module.exports = mongoose.model("product", ProductSchema);

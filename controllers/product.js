@@ -1,4 +1,8 @@
 const Product = require("../models/Products");
+const User = require("../models/Users");
+const config = require("config");
+const jwt = require("jsonwebtoken");
+const ACCESS_JWT_SECRET = config.get("ACCESS_JWT_TOKEN_SECRET");
 const multer = require("multer");
 const path = require("path");
 // Set Storage Engine
@@ -19,7 +23,7 @@ const upload = multer({
   fileFilter: function (req, file, cb) {
     checkFileType(file, cb);
   },
-}).single("image");
+}).array("image", 3);
 
 // Check File Type
 function checkFileType(file, cb) {
@@ -50,26 +54,26 @@ function checkFileType(file, cb) {
 exports.uploadImage = (req, res) => {
   upload(req, res, (err) => {
     if (err) {
-      res.json({
+      return res.status(400).json({
         success: false,
-        msg: err.message,
+        error: err.message,
+      });
+    }
+
+    if (req.files == undefined) {
+      res.status(400).json({
+        success: false,
+        error: "No file(s) uploaded",
       });
     } else {
-      if (req.file == undefined) {
-        res.json({
-          success: false,
-          msg: "No file uploaded",
-        });
-      } else {
-        return res.json({
-          success: true,
-          msg: "File uploaded",
-          data: {
-            name: req.file.filename,
-            path: `uploads/${req.file.filename}`,
-          },
-        });
-      }
+      // file path array
+      const pathArr = req.files.map((file) => `uploads/${file.filename}`);
+
+      res.status(200).json({
+        success: true,
+        msg: "File(s) uploaded",
+        filesPath: pathArr,
+      });
     }
   });
 };
@@ -77,24 +81,45 @@ exports.uploadImage = (req, res) => {
 //Create Product
 /**
  * @desc   Create Product
- * @route  Post /api/product
+ * @route  Post /api/product/create
  * @access Private
  */
-exports.createProduct = (req, res) => {
-  const product = new Product(req.body);
+exports.createProduct = async (req, res) => {
+  const { title, price, type, description, images } = req.body;
 
-  product.save((err) => {
-    if (err) {
-      return res.status(400).json({
-        success: false,
-        msg: err.message,
-      });
-    } else {
-      return res.status(200).json({
-        success: true,
-      });
-    }
-  });
+  // Check all fields input
+  if (!title || !price || !type || !description || !images) {
+    return res.status(400).json({
+      success: false,
+      msg: "Please enter all fields",
+    });
+  }
+
+  try {
+    const newProduct = new Product({
+      creator: req.user.userId,
+      title,
+      description,
+      type,
+      images,
+    });
+
+    const savedProduct = newProduct.save();
+    if (!savedProduct) throw Error("Something went wrong saving the product");
+
+    res.status(200).json({
+      success: true,
+      product: {
+        id: savedProduct._id,
+        title: savedProduct.title,
+      },
+    });
+  } catch (err) {
+    res.status(400).json({
+      success: false,
+      error: err.message,
+    });
+  }
 };
 
 //Get All Products

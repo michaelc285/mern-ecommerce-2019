@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import { connect } from "react-redux";
 import { useFormik } from "formik";
+import { ITarget } from "../../types/interfaces";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Container,
@@ -12,7 +14,8 @@ import {
   TextField,
 } from "@material-ui/core";
 import SaveIcon from "@material-ui/icons/Save";
-import FileUpload from "../utils/FileUpload";
+import { DropzoneArea } from "material-ui-dropzone";
+//import FileUpload from "../utils/FileUpload";
 import axios from "axios";
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,37 +25,66 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-const ProductCreate = () => {
+const ProductCreate = ({ auth }: any) => {
   const classes = useStyles();
-  const [files, setFiles] = useState([]);
-  const formik = useFormik({
-    initialValues: {
-      title: "",
-      price: 0,
-      description: "",
-    },
-    onSubmit: (values) => {
-      console.log("Form data", values);
-    },
-  });
-  const handleFiles = (files: any) => {
-    setFiles(files);
-    console.log(files);
-  };
+  const [images, setImages] = useState<string[]>([]);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [type, setType] = useState("");
+  const [price, setPrice] = useState(0);
 
-  const handleSubmit = () => {
-    console.log(files);
-    const config: any = {
-      header: { "content-type:": "multipart/form-data" },
-    };
+  // Handler
+  const handleChangeTitle = (e: ITarget) => setTitle(e.target.value);
+  const handleChangeDescription = (e: ITarget) =>
+    setDescription(e.target.value);
+  const handleChangePrice = (e: any) => setPrice(e.target.value);
+  const handleChangeType = (e: ITarget) => setType(e.target.value);
+  const handleChangeImages = (files: string[]) => setImages(files);
+
+  const handleSubmit = () => {};
+  const handleSubmitTest = async () => {
     let formData = new FormData();
-    formData.append("file", files[0]);
-    axios
-      .post("/api/product/upload/image", formData, config)
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((err) => console.log(err));
+    // Add image to formData
+    images.forEach((file) => formData.append("image", file));
+
+    try {
+      // Check all fields done?
+      // ######################
+      const uploadedImage = await axios.post(
+        "/api/product/upload/image",
+        formData,
+        {
+          headers: {
+            "content-type": "multipart/form-data",
+            authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+
+      const newProduct: object = {
+        title,
+        price,
+        description,
+        type: "test type",
+        images: uploadedImage.data.filesPath,
+      };
+
+      // Create Product
+      const createProduct = await axios.post(
+        "/api/product/create",
+        newProduct,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+
+      console.log(createProduct);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -63,8 +95,13 @@ const ProductCreate = () => {
       }}
     >
       <h1>Create Product</h1>
-
-      <FileUpload handleFiles={handleFiles} />
+      <DropzoneArea
+        acceptedFiles={["image/jpeg", "image/png", "image/jpg"]}
+        showPreviews={false}
+        maxFileSize={1000000}
+        onChange={(files) => handleChangeImages(files)}
+      />
+      {/* <FileUpload handleImages={handleImages} /> */}
 
       <form
         noValidate
@@ -76,11 +113,7 @@ const ProductCreate = () => {
           <Grid item xs={12}>
             <FormControl fullWidth>
               <InputLabel htmlFor="title">Title</InputLabel>
-              <Input
-                id="title"
-                value={formik.values.title}
-                onChange={formik.handleChange}
-              />
+              <Input id="title" value={title} onChange={handleChangeTitle} />
             </FormControl>
           </Grid>
           <Grid item xs={12}>
@@ -92,8 +125,8 @@ const ProductCreate = () => {
                 startAdornment={
                   <InputAdornment position="start">$</InputAdornment>
                 }
-                value={formik.values.price}
-                onChange={formik.handleChange}
+                value={price}
+                onChange={handleChangePrice}
               />
             </FormControl>
           </Grid>
@@ -104,8 +137,8 @@ const ProductCreate = () => {
                 label="description"
                 multiline
                 rows={4}
-                value={formik.values.description}
-                onChange={formik.handleChange}
+                value={description}
+                onChange={handleChangeDescription}
               />
             </FormControl>
           </Grid>
@@ -122,8 +155,13 @@ const ProductCreate = () => {
           </Grid>
         </Grid>
       </form>
+      <button onClick={handleSubmitTest}>Test button</button>
     </Container>
   );
 };
 
-export default ProductCreate;
+const mapStateToProps = (state: any) => ({
+  auth: state.auth,
+});
+
+export default connect(mapStateToProps, null)(ProductCreate);

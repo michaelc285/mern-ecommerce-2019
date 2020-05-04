@@ -1,27 +1,41 @@
 import React, { useState } from "react";
-import { DropzoneDialog } from "material-ui-dropzone";
+import { DropzoneArea } from "material-ui-dropzone";
 import Button from "@material-ui/core/Button";
+import axios from "axios";
 
-const FileUpload = ({ handleFiles }: any) => {
-  const [isOpen, setIsOpen] = useState(false);
+const FileUpload = ({ handleImages }: any) => {
+  // const handleDrop = async (file: string) => {
+  //   let formData = new FormData();
+  //   // Require Access token to pass the Auth middleware
+  //   const config: object = {
+  //     header: { "content-type": "multipart/form-data" },
+  //   };
+  //   formData.append("image", file);
 
-  const handleClose = () => setIsOpen(false);
-  const handleOpen = () => setIsOpen(true);
-  const handleSave = (files: any) => {
-    handleFiles(files);
-    setIsOpen(false);
-  };
+  //   try {
+  //     const uploadedImage = await axios.post(
+  //       "/api/product/upload/image",
+  //       formData,
+  //       config
+  //     );
+
+  //     setImages([...images, uploadedImage.data.data.path]);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
+
+  // const handleDelete = (file: any) => {
+  //   console.log(file.name);
+  // };
 
   return (
     <div>
-      <Button onClick={handleOpen}>Add Image</Button>
-      <DropzoneDialog
-        open={isOpen}
-        onSave={handleSave}
-        onClose={handleClose}
+      <DropzoneArea
         acceptedFiles={["image/jpeg", "image/png", "image/jpg"]}
-        showPreviews={true}
+        showPreviews={false}
         maxFileSize={1000000}
+        onChange={(files) => handleImages(files)}
       />
     </div>
   );

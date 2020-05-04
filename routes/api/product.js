@@ -1,8 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const auth = require("../../middleware/auth");
-const { uploadImage } = require("../../controllers/product");
+const { uploadImage, createProduct } = require("../../controllers/product");
 
-router.route("/upload/image").post(uploadImage);
+router.route("/upload/image").post(auth, uploadImage);
+
+router.route("/create").post(auth, createProduct);
 
 module.exports = router;

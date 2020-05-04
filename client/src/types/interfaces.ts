@@ -3,7 +3,14 @@ import { E_ERROR } from "./enum";
 // React
 export interface ITarget {
   target: {
-    value: React.SetStateAction<String>;
+    value: React.SetStateAction<string>;
+  };
+  preventDefault(): void;
+}
+
+export interface ITargetNumber {
+  target: {
+    value: React.SetStateAction<number>;
   };
   preventDefault(): void;
 }
