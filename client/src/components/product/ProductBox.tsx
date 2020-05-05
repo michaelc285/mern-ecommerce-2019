@@ -6,12 +6,17 @@ interface IProductBox {
   title: string;
   desc: string;
   price: number;
+  _id: string;
 }
 
-const ProductBox = ({ image, title, desc, price }: IProductBox) => {
+const ProductBox = ({ _id, image, title, desc, price }: IProductBox) => {
   return (
-    <Card style={{ width: "16rem" }}>
-      <Card.Img variant="top" src={image} />
+    <Card>
+      <Card.Img
+        variant="top"
+        src={image}
+        style={{ width: "100%", height: "220px" }}
+      />
       <Card.Body>
         <Card.Title>{title}</Card.Title>
         <Card.Text>{desc}</Card.Text>
@@ -21,7 +26,9 @@ const ProductBox = ({ image, title, desc, price }: IProductBox) => {
         </span>
       </Card.Body>
       <Card.Footer>
-        <Button variant="outline-success">Add to Cart</Button>
+        <Button variant="outline-success" onClick={() => console.log(_id)}>
+          Add to Cart
+        </Button>
       </Card.Footer>
     </Card>
   );

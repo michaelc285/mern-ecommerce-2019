@@ -1,8 +1,4 @@
 const Product = require("../models/Products");
-const User = require("../models/Users");
-const config = require("config");
-const jwt = require("jsonwebtoken");
-const ACCESS_JWT_SECRET = config.get("ACCESS_JWT_TOKEN_SECRET");
 const multer = require("multer");
 const path = require("path");
 // Set Storage Engine
@@ -78,7 +74,6 @@ exports.uploadImage = (req, res) => {
   });
 };
 
-//Create Product
 /**
  * @desc   Create Product
  * @route  Post /api/product/create
@@ -98,6 +93,7 @@ exports.createProduct = async (req, res) => {
   try {
     const newProduct = new Product({
       creator: req.user.userId,
+      price,
       title,
       description,
       type,
@@ -122,7 +118,67 @@ exports.createProduct = async (req, res) => {
   }
 };
 
-//Get All Products
+//Create Product
+/**
+ * @desc   Get Products
+ * @route  POST /api/product/create
+ * @access public
+ */
+exports.getProducts = async (req, res) => {
+  let findArguments = {};
+  console.log(req.body);
+
+  let searchTerm = req.body.searchTerm;
+
+  for (let key in req.body.filters) {
+    if (req.body.filters[key].length > 0) {
+      if (key === "price") {
+        findArguments[key] = {
+          $gte: req.body.filters[key][0],
+          $lte: req.body.filters[key][1],
+        };
+      } else if (key === "type") {
+        findArguments[key] = req.body.filters[key];
+      }
+    }
+  }
+  try {
+    if (searchTerm) {
+      let regex = new RegExp(searchTerm, "i");
+      const products = await Product.find(findArguments)
+        .find({
+          $text: { $search: regex },
+        })
+        .populate("creator");
+
+      res.status(200).json({
+        success: true,
+        products,
+        postSize: products.length,
+      });
+    } else {
+      const products = await Product.find(findArguments);
+
+      res.status(200).json({
+        success: true,
+        products,
+        postSize: products.length,
+      });
+    }
+
+    // res.status(200).json({
+    //   success: true,
+    //   products,
+    //   postSize: products.length,
+    // });
+  } catch (err) {
+    console.log(err.message);
+    res.status(400).json({
+      success: false,
+      error: err.message,
+    });
+  }
+};
 //Get Product (by ID)
 //Update Product (by ID)
 //Remove Product

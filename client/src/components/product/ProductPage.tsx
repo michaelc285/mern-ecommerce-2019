@@ -1,125 +1,62 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ProductMenu from "./menu/ProductMenu";
 import ProductsPerPage from "./section/ProductsPerPage";
 import Pagination from "./section/Pagination";
-
+import axios from "axios";
+import { Typography } from "@material-ui/core";
 const ProductPage = () => {
-  const [product, setProduct] = useState([
-    {
-      image: "https://www.w3schools.com/howto/img_forest.jpg",
-      title: "Product",
-      desc: "Description",
-      price: 80,
-    },
-    {
-      image: "https://www.w3schools.com/howto/img_forest.jpg",
-      title: "Product",
-      desc: "Description",
-      price: 50,
-    },
-    {
-      image: "https://www.w3schools.com/howto/img_forest.jpg",
-      title: "Product",
-      desc: "Description",
-      price: 80,
-    },
-    {
-      image: "https://www.w3schools.com/howto/img_forest.jpg",
-      title: "Product",
-      desc: "Description",
-      price: 80,
-    },
-    {
-      image: "https://www.w3schools.com/howto/img_forest.jpg",
-      title: "Product",
-      desc: "Description",
-      price: 40,
-    },
-    {
-      image: "https://www.w3schools.com/howto/img_forest.jpg",
-      title: "Product",
-      desc: "Description",
-      price: 80,
-    },
-    {
-      image: "https://www.w3schools.com/howto/img_forest.jpg",
-      title: "Product",
-      desc: "Description",
-      price: 80,
-    },
-    {
-      image: "https://www.w3schools.com/howto/img_forest.jpg",
-      title: "Product",
-      desc: "Description",
-      price: 80,
-    },
-    {
-      image: "https://www.w3schools.com/howto/img_forest.jpg",
-      title: "Product",
-      desc: "Description",
-      price: 80,
-    },
-    {
-      image: "https://www.w3schools.com/howto/img_forest.jpg",
-      title: "Product",
-      desc: "Description",
-      price: 80,
-    },
-    {
-      image: "https://www.w3schools.com/howto/img_forest.jpg",
-      title: "Product",
-      desc: "Description",
-      price: 80,
-    },
-    {
-      image: "https://www.w3schools.com/howto/img_forest.jpg",
-      title: "Product",
-      desc: "Description",
-      price: 80,
-    },
-    {
-      image: "https://www.w3schools.com/howto/img_forest.jpg",
-      title: "Product",
-      desc: "Description",
-      price: 80,
-    },
-    {
-      image: "https://www.w3schools.com/howto/img_forest.jpg",
-      title: "Product",
-      desc: "Description",
-      price: 80,
-    },
-  ]);
+  const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [productsPerPage] = useState(6);
+  const [productsPerPage] = useState(8);
 
   // Get current product
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProduct = product.slice(indexOfFirstProduct, indexOfLastProduct);
+  const currentProduct = products.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct
+  );
+
+  // API fetching products info
+  const getProducts = async (body: object) => {
+    const prods = await axios.post("/api/product/", body, {
+      headers: {
+        "content-type": "application/json",
+      },
+    });
+    setProducts([...prods.data.products]);
+    //setProducts([...products, ...prods.data.products]);
+  };
 
   // Change page
   const paginate = (e: any, pageNumber: number) => setCurrentPage(pageNumber);
 
-  return (
-    <div style={{ display: "flex" }}>
-      {/* Menu */}
-      <div style={{ flex: "2", height: "80vh" }}>
-        <ProductMenu />
-      </div>
-      {/* Content */}
+  //Handler
+  const handleProductsSearch = (body: object) => getProducts(body);
 
-      <div
-        style={{
-          flex: "8",
-          height: "80vh",
-        }}
-      >
-        <span style={{ fontSize: "20px" }}>Result: {product.length}</span>
-        <div style={{ marginTop: "1em" }}>
+  useEffect(() => {
+    const body = {};
+
+    getProducts(body);
+  }, []);
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", height: "auto" }}>
+      {/* Menu */}
+      <div>
+        <ProductMenu handleProductsSearch={handleProductsSearch} />
+      </div>
+
+      {/* Content */}
+      <div>
+        <Typography style={{ marginTop: "1rem", marginBottom: "1rem" }}>
+          Result: {products.length}
+        </Typography>
+        <div>
           {/* Products */}
           <ProductsPerPage products={currentProduct} loading={loading} />
+
           {/* Pagination */}
           <div
             style={{
@@ -130,7 +67,7 @@ const ProductPage = () => {
           >
             <Pagination
               productsPerPage={productsPerPage}
-              totalProducts={product.length}
+              totalProducts={products.length}
               paginate={paginate}
             />
           </div>

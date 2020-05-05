@@ -8,13 +8,6 @@ export interface ITarget {
   preventDefault(): void;
 }
 
-export interface ITargetNumber {
-  target: {
-    value: React.SetStateAction<number>;
-  };
-  preventDefault(): void;
-}
-
 //Errors
 export interface IMsg {
   msg: string | any;

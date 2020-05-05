@@ -4,7 +4,7 @@ const ProductSchema = new mongoose.Schema(
   {
     creator: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "users",
+      ref: "user",
     },
     title: {
       type: String,
@@ -52,7 +52,7 @@ ProductSchema.index(
   {
     weights: {
       title: 5,
-      description: 1,
+      description: 2,
     },
   }
 );

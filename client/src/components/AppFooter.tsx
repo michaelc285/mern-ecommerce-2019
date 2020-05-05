@@ -22,31 +22,26 @@ export default function LabelBottomNavigation() {
   };
 
   return (
-    <BottomNavigation
-      value={value}
-      onChange={handleChange}
-      className={classes.root}
+    <div
+      style={{
+        marginTop: "10px",
+        width: "100%",
+        height: "10vh",
+        display: "flex",
+        justifyContent: "center",
+        bottom: "0",
+        backgroundColor: " rgba(184,184,184,.7)",
+      }}
     >
-      <BottomNavigationAction
-        label="Recents"
-        value="recents"
-        icon={<RestoreIcon />}
-      />
-      <BottomNavigationAction
-        label="Favorites"
-        value="favorites"
-        icon={<FavoriteIcon />}
-      />
-      <BottomNavigationAction
-        label="Nearby"
-        value="nearby"
-        icon={<LocationOnIcon />}
-      />
-      <BottomNavigationAction
-        label="Folder"
-        value="folder"
-        icon={<FolderIcon />}
-      />
-    </BottomNavigation>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        Michael Development
+      </div>
+    </div>
   );
 }

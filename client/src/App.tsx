@@ -14,6 +14,7 @@ import AppFooter from "./components/AppFooter";
 import ErrorPage from "./components/ErrorPage";
 import ProdcutPage from "./components/product/ProductPage";
 import ProductCreate from "./components/product/ProductCreate";
+import "./App.css";
 const App = () => {
   useEffect(() => {
     store.dispatch(loadUser());
@@ -22,10 +23,16 @@ const App = () => {
   return (
     <BrowserRouter>
       <Provider store={store}>
-        <div>
-          <AppNavbar />
-
-          <Container maxWidth="lg" style={{ minHeight: "100vh" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <div style={{}}>
+            <AppNavbar />
+          </div>
+          <Container maxWidth="lg" style={{}}>
             <Switch>
               <Route path="/" exact component={ProdcutPage} />
               <Route path="/market" exact component={ProdcutPage} />
@@ -33,7 +40,9 @@ const App = () => {
               <Route component={ErrorPage} />
             </Switch>
           </Container>
-          <AppFooter />
+          <div style={{ bottom: 0 }}>
+            <AppFooter />
+          </div>
         </div>
       </Provider>
     </BrowserRouter>

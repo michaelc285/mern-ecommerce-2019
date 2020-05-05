@@ -10,9 +10,10 @@ const ProductsPerPage = ({ products, loading }: any) => {
   return (
     <Grid container spacing={3}>
       {products.map((product: any) => (
-        <Grid item xs={4} key={uuidv4()}>
+        <Grid item xs={12} sm={3} key={product._id}>
           <ProductBox
-            image={product.image}
+            _id={product._id}
+            image={product.images[0]}
             title={product.title}
             desc={product.desc}
             price={product.price}
