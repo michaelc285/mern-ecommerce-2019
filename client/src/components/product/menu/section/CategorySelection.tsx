@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react";
+import React, { Fragment } from "react";
 import {
   FormGroup,
   FormControlLabel,
@@ -38,25 +38,24 @@ const CategorySelection = ({
 
   const renderCheckBoxs = () =>
     categories &&
-    categories.map((category, index) => {
-      return (
-        <Fragment key={index}>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={checked.indexOf(category.name) === -1 ? false : true}
-                onChange={() => handleToggle(category.name)}
-                name={category.name}
-              />
-            }
-            label={
-              category.name.substring(0, 1) +
-              category.name.substring(1, category.name.length).toLowerCase()
-            }
-          />
-        </Fragment>
-      );
-    });
+    categories.map((category, index) => (
+      <Fragment key={index}>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={checked.indexOf(category.name) === -1 ? false : true}
+              onChange={() => handleToggle(category.name)}
+              name={category.name}
+              color="primary"
+            />
+          }
+          label={
+            category.name.substring(0, 1) +
+            category.name.substring(1, category.name.length).toLowerCase()
+          }
+        />
+      </Fragment>
+    ));
 
   return (
     <div>

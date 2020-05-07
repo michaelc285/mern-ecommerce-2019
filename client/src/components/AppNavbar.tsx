@@ -1,6 +1,5 @@
 import React, { Fragment, useState } from "react";
 import { connect } from "react-redux";
-import { makeStyles } from "@material-ui/core/styles";
 import { IAppNavbar, IAuthReduxProps } from "../types/interfaces";
 import {
   Collapse,
@@ -16,8 +15,6 @@ import {
 import Login from "./auth/Login";
 import Register from "./auth/Register";
 import Logout from "./auth/Logout";
-
-const useStyles = makeStyles((theme) => ({}));
 
 const AppNavbar = ({ auth }: IAppNavbar) => {
   const [isOpen, setIsOpen] = useState(false);

@@ -126,7 +126,6 @@ exports.createProduct = async (req, res) => {
  */
 exports.getProducts = async (req, res) => {
   let findArguments = {};
-  console.log(req.body);
 
   let searchTerm = req.body.searchTerm;
 
@@ -179,6 +178,28 @@ exports.getProducts = async (req, res) => {
     });
   }
 };
-//Get Product (by ID)
+
+/**
+ * @desc   Get Products
+ * @route  GET /api/product/create?id=<"Selected product Id">&type=single
+ * @access public
+ */
+exports.getProductsByID = async (req, res) => {
+  //id
+  let productID = req.query.id;
+  try {
+    const product = await Product.find({ _id: { $in: productID } });
+    if (!product) throw Error("PRODUCT_NOT_FOUND");
+
+    res.status(200).json({ success: true, product });
+  } catch (err) {
+    rse.status(400).json({
+      success: false,
+      error: err.message,
+    });
+  }
+
+  res.end("hi");
+};
 //Update Product (by ID)
 //Remove Product

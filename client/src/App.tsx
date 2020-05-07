@@ -12,8 +12,9 @@ import AppNavbar from "./components/AppNavbar";
 import AppFooter from "./components/AppFooter";
 
 import ErrorPage from "./components/ErrorPage";
-import ProdcutPage from "./components/product/ProductPage";
+import MarketLanding from "./components/product/MarketLanding";
 import ProductCreate from "./components/product/ProductCreate";
+import ProductDetailPage from "./components/product/DetailPage/ProductDetailPage";
 import "./App.css";
 const App = () => {
   useEffect(() => {
@@ -34,9 +35,14 @@ const App = () => {
           </div>
           <Container maxWidth="lg" style={{}}>
             <Switch>
-              <Route path="/" exact component={ProdcutPage} />
-              <Route path="/market" exact component={ProdcutPage} />
+              <Route path="/" exact component={MarketLanding} />
+              <Route path="/market" exact component={MarketLanding} />
               <Route path="/productcreate" exact component={ProductCreate} />
+              <Route
+                path="/product/:productID"
+                exact
+                component={ProductDetailPage}
+              />
               <Route component={ErrorPage} />
             </Switch>
           </Container>

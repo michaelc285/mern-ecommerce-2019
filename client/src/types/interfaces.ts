@@ -74,3 +74,21 @@ export interface IAction {
   type: string;
   payload?: any;
 }
+
+// ***************
+//  Product
+// ***************
+
+export interface IProduct {
+  _id: string;
+  title: string;
+  type: string;
+  price: number;
+  description: string;
+  images: string[];
+  quantity: number;
+  sold: number;
+  createAt: string;
+  updateAt: string;
+  creator?: string | object;
+}

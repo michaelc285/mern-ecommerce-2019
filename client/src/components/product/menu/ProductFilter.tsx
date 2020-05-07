@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import axios from "axios";
 import {
   ExpansionPanel,
   ExpansionPanelSummary,
@@ -15,25 +13,13 @@ import ClearAllIcon from "@material-ui/icons/ClearAll";
 import CategorySelection from "./section/CategorySelection";
 import PriceRangeSlider from "./section/PriceRangeSlider";
 import SearchBar from "./section/SearchBar";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: "90%",
-    maxWidth: 360,
-    backgroundColor: theme.palette.background.paper,
-  },
-}));
-
-interface IProductMenu {
-  handleProductsSearch: Function;
-}
+import { connect } from "react-redux";
+import { getProducts } from "../../../context/actions/ProductAction";
 
 const minPrice = 0;
 const maxPrice = 9999;
 
-const ProductMenu = ({ handleProductsSearch }: IProductMenu) => {
-  const classes = useStyles();
-
+const ProductMenu = ({ getProducts }: any) => {
   const [selections, setSelections] = useState<string[]>([]);
   const [searchValue, setSearchValue] = useState<string>("");
   const [price, setPrice] = useState<number[]>([minPrice, maxPrice]);
@@ -50,7 +36,7 @@ const ProductMenu = ({ handleProductsSearch }: IProductMenu) => {
         price,
       },
     };
-    handleProductsSearch(body);
+    getProducts(body);
   };
 
   const HandleClearProducts = () => {
@@ -60,7 +46,7 @@ const ProductMenu = ({ handleProductsSearch }: IProductMenu) => {
     setPrice([minPrice, maxPrice]);
 
     const body = {}; // empty body
-    handleProductsSearch(body);
+    getProducts(body);
   };
 
   return (
@@ -80,7 +66,7 @@ const ProductMenu = ({ handleProductsSearch }: IProductMenu) => {
             </Grid>
 
             <Grid item xs={12} sm={4}>
-              <div style={{ paddingRight: "30px", paddingLeft: "30px" }}>
+              <div>
                 <PriceRangeSlider
                   handlePrice={handlePrice}
                   price={price}
@@ -89,7 +75,7 @@ const ProductMenu = ({ handleProductsSearch }: IProductMenu) => {
                 />
               </div>
             </Grid>
-
+            <hr />
             <Grid item xs={12} sm={4}>
               <CategorySelection
                 handleSelections={handleSelections}
@@ -126,4 +112,9 @@ const ProductMenu = ({ handleProductsSearch }: IProductMenu) => {
   );
 };
 
-export default ProductMenu;
+const mapStateToProps = (state: any) => ({
+  error: state.error,
+  products: state.product,
+});
+
+export default connect(mapStateToProps, { getProducts })(ProductMenu);

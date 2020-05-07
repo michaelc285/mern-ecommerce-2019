@@ -8,7 +8,6 @@ import {
   REGISTER_FAIL,
   REGISTER_SUCCESS,
 } from "../types";
-import { IAction } from "../../types/interfaces";
 
 const initialState = {
   token: "",

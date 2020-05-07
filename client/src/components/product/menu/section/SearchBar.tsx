@@ -1,19 +1,6 @@
 import React, { Fragment } from "react";
-import { makeStyles, Theme } from "@material-ui/core/styles";
-import { Typography, Paper, InputBase } from "@material-ui/core";
-
-const useStyles = makeStyles((theme: Theme) => ({
-  root: {
-    padding: "2px 4px",
-    display: "flex",
-    alignItems: "center",
-    width: 400,
-  },
-  input: {
-    marginLeft: theme.spacing(1),
-    flex: 1,
-  },
-}));
+import { FormControl, Input, InputAdornment } from "@material-ui/core";
+import SearchIcon from "@material-ui/icons/Search";
 
 interface ISearchBar {
   handleSearchValue: Function;
@@ -21,20 +8,33 @@ interface ISearchBar {
 }
 
 const SearchBar = ({ handleSearchValue, searchValue }: ISearchBar) => {
-  const classes = useStyles();
-
   return (
     <Fragment>
-      <Typography>Search</Typography>
-
-      <Paper component="form" elevation={1}>
-        <InputBase
-          placeholder="Search Your Product"
-          inputProps={{ "aria-label": "search product bar" }}
-          value={searchValue}
-          onChange={(e: any) => handleSearchValue(e.target.value)}
-        />
-      </Paper>
+      {/* <Typography>Search</Typography> */}
+      <div
+        style={{
+          height: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <FormControl
+          style={{
+            width: "90%",
+          }}
+        >
+          <Input
+            id="search-input"
+            placeholder="Search Your Product"
+            endAdornment={
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            }
+          />
+        </FormControl>
+      </div>
     </Fragment>
   );
 };

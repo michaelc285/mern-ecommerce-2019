@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { useFormik } from "formik";
+import { createProduct } from "../../context/actions/ProductAction";
 import { ITarget } from "../../types/interfaces";
 import { makeStyles } from "@material-ui/core/styles";
 import {
@@ -18,7 +18,6 @@ import {
 } from "@material-ui/core";
 import SaveIcon from "@material-ui/icons/Save";
 import { DropzoneArea } from "material-ui-dropzone";
-import axios from "axios";
 const useStyles = makeStyles((theme) => ({
   root: {
     "& > *": {
@@ -26,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-const ProductCreate = ({ auth }: any) => {
+const ProductCreate = ({ product, createProduct, error }: any) => {
   const classes = useStyles();
   const [images, setImages] = useState<string[]>([]);
   const [title, setTitle] = useState("");
@@ -42,48 +41,16 @@ const ProductCreate = ({ auth }: any) => {
   const handleChangeType = (e: any) => setType(e.target.value);
   const handleChangeImages = (files: string[]) => setImages(files);
 
+  // Submit handler
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    let formData = new FormData();
-    // Add image to formData
-    images.forEach((file) => formData.append("image", file));
-
-    try {
-      // Check all fields done?
-      // ######################
-      const uploadedImage = await axios.post(
-        "/api/product/upload/image",
-        formData,
-        {
-          headers: {
-            "content-type": "multipart/form-data",
-            authorization: `Bearer ${auth.token}`,
-          },
-        }
-      );
-
-      const newProduct: object = {
-        title,
-        price,
-        description,
-        type: type,
-        images: uploadedImage.data.filesPath,
-      };
-
-      // Create Product
-      const createProduct = await axios.post(
-        "/api/product/create",
-        newProduct,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            authorization: `Bearer ${auth.token}`,
-          },
-        }
-      );
-    } catch (err) {
-      alert(err);
-    }
+    const productInfo = {
+      title,
+      price,
+      description,
+      type,
+    };
+    createProduct(images, productInfo);
   };
 
   return (
@@ -190,7 +157,8 @@ const ProductCreate = ({ auth }: any) => {
 };
 
 const mapStateToProps = (state: any) => ({
-  auth: state.auth,
+  product: state.product,
+  error: state.error,
 });
 
-export default connect(mapStateToProps, null)(ProductCreate);
+export default connect(mapStateToProps, { createProduct })(ProductCreate);

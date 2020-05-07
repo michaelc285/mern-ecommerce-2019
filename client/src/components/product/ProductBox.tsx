@@ -25,9 +25,16 @@ const ProductBox = ({ _id, image, title, desc, price }: IProductBox) => {
           <strong>$ {price}</strong>
         </span>
       </Card.Body>
-      <Card.Footer>
-        <Button variant="outline-success" onClick={() => console.log(_id)}>
+      <Card.Footer style={{ display: "flex", justifyContent: "space-between" }}>
+        <Button
+          variant="outline-success"
+          href="#"
+          onClick={() => console.log(_id)}
+        >
           Add to Cart
+        </Button>
+        <Button variant="outline-success" href={`/product/${_id}`}>
+          Browse
         </Button>
       </Card.Footer>
     </Card>
