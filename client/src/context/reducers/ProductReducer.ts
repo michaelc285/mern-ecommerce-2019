@@ -4,7 +4,6 @@ import {
   PRODUCT_LOADED,
   PRODUCT_CREATE_SUCCESS,
   PRODUCT_CREATE_FAIL,
-  PRODUCT_CREATE_ERROR,
   PRODUCT_GET_SUCCESS,
   PRODUCT_GET_FAIL,
 } from "../types";
@@ -35,7 +34,6 @@ export default (state = initialState, action: IAction) => {
       };
     case PRODUCT_LOADED:
     case PRODUCT_CREATE_FAIL:
-    case PRODUCT_CREATE_ERROR:
     case PRODUCT_GET_FAIL:
     default:
       return state;

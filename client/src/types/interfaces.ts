@@ -20,6 +20,8 @@ export interface IUser {
   name?: string;
   email: string;
   password: string;
+  cart?: string[];
+  history?: string[];
 }
 
 export interface IError {

@@ -57,7 +57,7 @@ exports.uploadImage = (req, res) => {
     }
 
     if (req.files == undefined) {
-      res.status(400).json({
+      return res.status(400).json({
         success: false,
         error: "No file(s) uploaded",
       });
@@ -65,7 +65,7 @@ exports.uploadImage = (req, res) => {
       // file path array
       const pathArr = req.files.map((file) => `uploads/${file.filename}`);
 
-      res.status(200).json({
+      return res.status(200).json({
         success: true,
         msg: "File(s) uploaded",
         filesPath: pathArr,
@@ -103,7 +103,7 @@ exports.createProduct = async (req, res) => {
     const savedProduct = newProduct.save();
     if (!savedProduct) throw Error("Something went wrong saving the product");
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       product: {
         id: savedProduct._id,
@@ -111,24 +111,25 @@ exports.createProduct = async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(400).json({
+    return res.status(400).json({
       success: false,
       error: err.message,
     });
   }
 };
 
-//Create Product
 /**
- * @desc   Get Products
- * @route  POST /api/product/create
+ * @desc   Get All Products or filtered
+ * @route  POST /api/product/
  * @access public
  */
 exports.getProducts = async (req, res) => {
   let findArguments = {};
 
+  // Text created by search field
   let searchTerm = req.body.searchTerm;
 
+  // Classify the filter object
   for (let key in req.body.filters) {
     if (req.body.filters[key].length > 0) {
       if (key === "price") {
@@ -141,38 +142,28 @@ exports.getProducts = async (req, res) => {
       }
     }
   }
+
   try {
+    let products = null;
+
     if (searchTerm) {
       let regex = new RegExp(searchTerm, "i");
-      const products = await Product.find(findArguments)
+      products = await Product.find(findArguments)
         .find({
           $text: { $search: regex },
         })
         .populate("creator");
-
-      res.status(200).json({
-        success: true,
-        products,
-        postSize: products.length,
-      });
     } else {
-      const products = await Product.find(findArguments);
-
-      res.status(200).json({
-        success: true,
-        products,
-        postSize: products.length,
-      });
+      products = await Product.find(findArguments);
     }
 
-    // res.status(200).json({
-    //   success: true,
-    //   products,
-    //   postSize: products.length,
-    // });
+    return res.status(200).json({
+      success: true,
+      products,
+      postSize: products.length,
+    });
   } catch (err) {
-    console.log(err.message);
-    res.status(400).json({
+    return res.status(400).json({
       success: false,
       error: err.message,
     });
@@ -180,26 +171,35 @@ exports.getProducts = async (req, res) => {
 };
 
 /**
- * @desc   Get Products
- * @route  GET /api/product/create?id=<"Selected product Id">&type=single
+ * @desc   Get Products by ID(s)
+ * @route  GET /api/product?id={productId}&type=single
+ * @route  GET /api/product?id={productIds}&type=array
  * @access public
  */
 exports.getProductsByID = async (req, res) => {
-  //id
-  let productID = req.query.id;
   try {
-    const product = await Product.find({ _id: { $in: productID } });
+    if (!req.query.id) throw Error("Please provide product id(s)");
+    if (
+      !req.query.type ||
+      (req.query.type !== "single" && req.query.type !== "array")
+    )
+      throw Error('type should only be "array" or "single"');
+
+    let productId = req.query.id;
+
+    if (req.query.type === "array") {
+      productId = productId.split(",").map((id) => id);
+    }
+    const product = await Product.find({ _id: { $in: productId } });
     if (!product) throw Error("PRODUCT_NOT_FOUND");
 
-    res.status(200).json({ success: true, product });
+    return res.status(200).json({ success: true, product });
   } catch (err) {
-    rse.status(400).json({
+    return res.status(400).json({
       success: false,
       error: err.message,
     });
   }
-
-  res.end("hi");
 };
 //Update Product (by ID)
 //Remove Product

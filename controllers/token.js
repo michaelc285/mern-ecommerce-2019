@@ -26,6 +26,8 @@ const sendAccessToken = (req, res, accesstoken, userInfo) => {
     data: {
       name: userInfo.name,
       email: userInfo.email,
+      cart: userInfo.cart,
+      history: userInfo.history,
     },
   });
 };

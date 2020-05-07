@@ -6,7 +6,7 @@ interface IProductsPerPage {
   products: object[];
 }
 
-const ProductsPerPage = ({ products }: IProductsPerPage) => {
+const ProductsContainer = ({ products }: IProductsPerPage) => {
   return (
     <div style={{ minHeight: "50vh" }}>
       <Grid container spacing={3}>
@@ -26,4 +26,4 @@ const ProductsPerPage = ({ products }: IProductsPerPage) => {
   );
 };
 
-export default ProductsPerPage;
+export default ProductsContainer;

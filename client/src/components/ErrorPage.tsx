@@ -1,23 +1,20 @@
-import React from "react";
+import React, { Fragment } from "react";
 
 const ErrorPage = () => {
   return (
-    <div
-      style={{
-        height: "50vh",
-        border: "1px solid red",
-      }}
-    >
+    <Fragment>
       <div
         style={{
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          height: "100%",
+          border: "1px solid red",
         }}
       >
         <h1>404 NOT FOUND</h1>
       </div>
-    </div>
+    </Fragment>
   );
 };
 

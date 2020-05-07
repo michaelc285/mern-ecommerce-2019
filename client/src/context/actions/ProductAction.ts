@@ -3,7 +3,6 @@ import {
   PRODUCT_LOADED,
   PRODUCT_CREATE_SUCCESS,
   PRODUCT_CREATE_FAIL,
-  PRODUCT_CREATE_ERROR,
   PRODUCT_GET_SUCCESS,
   PRODUCT_GET_FAIL,
 } from "../types";
@@ -51,22 +50,21 @@ export const createProduct = (
   }
 };
 // Get Product
-export const getProducts = (filters: object = {}) => (dispatch: Function) => {
-  // Loading
-  //dispatch({ type: PRODUCT_LOADING });
-
-  axios
-    .post("/api/product/", filters, {
+export const getProducts = (filters: object = {}) => async (
+  dispatch: Function
+) => {
+  try {
+    // Loading
+    dispatch({ type: PRODUCT_LOADING });
+    // Get Data
+    const prodcut = await axios.post("/api/product/", filters, {
       headers: {
         "content-type": "application/json",
       },
-    })
-    .then((res) => {
-      dispatch({ type: PRODUCT_GET_SUCCESS, payload: res.data });
-    })
-    .catch((err) => {
-      console.log(err);
-      dispatch(returnErrors(err.msg, 500));
-      dispatch({ type: PRODUCT_GET_FAIL });
     });
+    dispatch({ type: PRODUCT_GET_SUCCESS, payload: prodcut.data });
+  } catch (err) {
+    dispatch(returnErrors(err.msg, 500));
+    dispatch({ type: PRODUCT_GET_FAIL });
+  }
 };

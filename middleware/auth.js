@@ -8,7 +8,7 @@ const auth = (req, res, next) => {
 
   //Check for token
   if (!token)
-    return res.status(400).json({
+    return res.status(401).json({
       success: false,
       msg: "No token exists",
     });
@@ -20,7 +20,7 @@ const auth = (req, res, next) => {
     req.user = decoded;
     next();
   } catch (err) {
-    res.status(400).json({ msg: "Token is not valid" });
+    res.status(401).json({ msg: "Token is not valid" });
   }
 };
 

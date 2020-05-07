@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import ProductMenu from "./menu/ProductFilter";
-import ProductsPerPage from "./section/ProductsPerPage";
+import ProductsContainer from "./section/ProductsContainer";
 import Pagination from "./section/Pagination";
 import { Typography, CircularProgress } from "@material-ui/core";
 import { getProducts } from "../../context/actions/ProductAction";
@@ -25,7 +25,7 @@ const MarketLanding = ({ getProducts, products }: any) => {
   }, []);
 
   // Components
-  const loadingComp = (
+  const LoadingComp = (
     <div
       style={{
         marginTop: "10rem",
@@ -37,14 +37,14 @@ const MarketLanding = ({ getProducts, products }: any) => {
     </div>
   );
 
-  const content = (
+  const Content = (
     <div>
       <Typography style={{ marginTop: "1rem", marginBottom: "1rem" }}>
         Result {products.data.length}
       </Typography>
       <div>
         {/* Products */}
-        <ProductsPerPage products={currentProducts} />
+        <ProductsContainer products={currentProducts} />
 
         {/* Pagination */}
         <div
@@ -73,7 +73,7 @@ const MarketLanding = ({ getProducts, products }: any) => {
         </div>
 
         {/* Content */}
-        {products.isLoading ? loadingComp : content}
+        {products && products.isLoading ? LoadingComp : Content}
       </div>
     </div>
   );

@@ -128,12 +128,12 @@ exports.registerUser = async (req, res, next) => {
     // });
   } catch (err) {
     if (err.name === "MongoError") {
-      res.status(400).json({
+      return res.status(400).json({
         success: false,
         error: EMAIL_EXIST,
       });
     } else {
-      res.status(500).json({
+      return res.status(500).json({
         success: false,
         error: err.message,
       });
@@ -164,7 +164,7 @@ exports.logoutUser = async (req, res, next) => {
       { token: undefined }
     );
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "LOGOUT_SUCCESS",
     });
@@ -209,7 +209,7 @@ exports.refresh_token = async (req, res, next) => {
     //   success: true,
     //   accesstoken: accessToken,
     // });
-    sendAccessToken(req, res, accessToken, user);
+    return sendAccessToken(req, res, accessToken, user);
   } catch (err) {
     return res.status(400).json({
       success: false,
@@ -229,12 +229,12 @@ exports.getUser = async (req, res, next) => {
     const user = await User.findById(req.user.id).select("-password");
     if (!user) throw Error(USER_NOT_FOUND);
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       data: user,
     });
   } catch (err) {
-    res.status(400).json({
+    return res.status(400).json({
       success: false,
       error: err.message,
     });

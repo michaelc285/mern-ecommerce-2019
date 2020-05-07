@@ -15,7 +15,7 @@ import PriceRangeSlider from "./section/PriceRangeSlider";
 import SearchBar from "./section/SearchBar";
 import { connect } from "react-redux";
 import { getProducts } from "../../../context/actions/ProductAction";
-
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 const minPrice = 0;
 const maxPrice = 9999;
 
@@ -51,7 +51,7 @@ const ProductMenu = ({ getProducts }: any) => {
 
   return (
     <ExpansionPanel>
-      <ExpansionPanelSummary>
+      <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
         <Typography>Filter</Typography>
       </ExpansionPanelSummary>
 

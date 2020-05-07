@@ -1,9 +1,10 @@
 const User = require("../models/Users");
+const Product = require("../models/Products");
 
 /**
  * @desc   Get all user
  * @route  /api/user
- * @access Public
+ * @access Private
  */
 exports.getUsers = async (req, res, next) => {
   try {
@@ -25,7 +26,7 @@ exports.getUsers = async (req, res, next) => {
 /**
  * @desc   Delete user
  * @route  DELETE /api/user:id
- * @access Public
+ * @access Private
  */
 exports.deleteUser = async (req, res, next) => {
   try {

@@ -8,6 +8,7 @@ import Container from "@material-ui/core/Container";
 
 import { loadUser } from "./context/actions/AuthAction";
 
+import TopContainer from "./components/TopContainer";
 import AppNavbar from "./components/AppNavbar";
 import AppFooter from "./components/AppFooter";
 
@@ -15,6 +16,7 @@ import ErrorPage from "./components/ErrorPage";
 import MarketLanding from "./components/product/MarketLanding";
 import ProductCreate from "./components/product/ProductCreate";
 import ProductDetailPage from "./components/product/DetailPage/ProductDetailPage";
+import CartPage from "./components/cart/CartPage";
 import "./App.css";
 const App = () => {
   useEffect(() => {
@@ -30,10 +32,14 @@ const App = () => {
             flexDirection: "column",
           }}
         >
-          <div style={{}}>
-            <AppNavbar />
-          </div>
-          <Container maxWidth="lg" style={{}}>
+          {/* !!! Add a top cotainer here to display some pic for decoration  */}
+          {/* <TopContainer /> */}
+          <AppNavbar />
+
+          <Container
+            maxWidth="lg"
+            style={{ minHeight: "90vh", paddingTop: "7rem" }}
+          >
             <Switch>
               <Route path="/" exact component={MarketLanding} />
               <Route path="/market" exact component={MarketLanding} />
@@ -43,12 +49,12 @@ const App = () => {
                 exact
                 component={ProductDetailPage}
               />
+              <Route path="/user/cart" exact component={CartPage} />
               <Route component={ErrorPage} />
             </Switch>
           </Container>
-          <div style={{ bottom: 0 }}>
-            <AppFooter />
-          </div>
+
+          <AppFooter />
         </div>
       </Provider>
     </BrowserRouter>
