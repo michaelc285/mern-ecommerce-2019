@@ -30,7 +30,7 @@ export default (state = initialState, action: IAction) => {
     case PRODUCT_GET_SUCCESS:
       return {
         isLoading: false,
-        data: [...action.payload.products],
+        data: [...action.payload.data.products],
       };
     case PRODUCT_LOADED:
     case PRODUCT_CREATE_FAIL:

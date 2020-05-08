@@ -1,4 +1,6 @@
 import React from "react";
+import { connect } from "react-redux";
+import { addProductToCart } from "../../context/actions/CartAction";
 import { Card, Button } from "react-bootstrap";
 
 interface IProductBox {
@@ -7,9 +9,21 @@ interface IProductBox {
   desc: string;
   price: number;
   _id: string;
+  addProductToCart(productId: string): any;
 }
 
-const ProductBox = ({ _id, image, title, desc, price }: IProductBox) => {
+const ProductBox = ({
+  _id,
+  image,
+  title,
+  desc,
+  price,
+  addProductToCart,
+}: IProductBox) => {
+  // const handleAddToCart = (productId: string) => {
+  //   addProductToCart(productId);
+  // };
+
   return (
     <Card>
       <Card.Img
@@ -29,7 +43,7 @@ const ProductBox = ({ _id, image, title, desc, price }: IProductBox) => {
         <Button
           variant="outline-success"
           href="#"
-          onClick={() => console.log(_id)}
+          onClick={() => addProductToCart(_id)}
         >
           Add to Cart
         </Button>
@@ -40,4 +54,10 @@ const ProductBox = ({ _id, image, title, desc, price }: IProductBox) => {
     </Card>
   );
 };
-export default ProductBox;
+const mapStateToProps = (state: any) => ({
+  auth: state.auth,
+  product: state.product,
+  cart: state.cart,
+});
+
+export default connect(mapStateToProps, { addProductToCart })(ProductBox);

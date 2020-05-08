@@ -1,40 +1,64 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useEffect, Fragment } from "react";
+import { connect } from "react-redux";
+import { getProductsById } from "../../../context/actions/ProductAction";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
-import { Container, Grid, Paper, Typography } from "@material-ui/core";
+import {
+  Container,
+  Grid,
+  Typography,
+  CircularProgress,
+} from "@material-ui/core";
 import Panel from "./sections/Panel";
 import Display from "./sections/Display";
 import { IProduct } from "../../../types/interfaces";
 
 interface IProductDetailPage {
   match: any;
+  productIsLoading: boolean;
+  product: IProduct;
+  getProductsById(productId: string): void;
 }
 
-const Product = ({ match }: IProductDetailPage) => {
+const productTemplate = {
+  _id: "",
+  title: "string",
+  type: "",
+  price: 0,
+  description: "",
+  images: [],
+  quantity: 0,
+  sold: 0,
+  createAt: "",
+  updateAt: "",
+};
+
+const ProductDetailPage = ({
+  match,
+  product = productTemplate,
+  productIsLoading,
+  getProductsById,
+}: IProductDetailPage) => {
   const classes = useStyles();
-  const ID = match.params.productID;
-  const [product, setProduct] = useState<IProduct>({
-    _id: "",
-    title: "",
-    type: "",
-    price: 0,
-    description: "",
-    images: [],
-    quantity: 0,
-    sold: 0,
-    createAt: "",
-    updateAt: "",
-  });
+  const productId = match.params.productID;
 
   useEffect(() => {
-    const getProduct = async () => {
-      const data = await axios.get(`/api/product/?id=${ID}&type=single`);
-      setProduct(data.data.product[0]);
-    };
-    getProduct();
-  }, [ID]);
+    getProductsById(productId);
+  }, [productId, getProductsById]);
 
-  return (
+  // Components
+  const LoadingComp = (
+    <div
+      style={{
+        marginTop: "10rem",
+        marginRight: "auto",
+        marginLeft: "auto",
+      }}
+    >
+      <CircularProgress />
+    </div>
+  );
+
+  const Content = (
     <Container maxWidth="lg" className={classes.root}>
       <Grid container spacing={3}>
         <Grid item xs={12}>
@@ -50,6 +74,9 @@ const Product = ({ match }: IProductDetailPage) => {
         </Grid>
       </Grid>
     </Container>
+  );
+  return (
+    <Fragment>{product && productIsLoading ? LoadingComp : Content}</Fragment>
   );
 };
 
@@ -69,4 +96,10 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default Product;
+const mapStateToProps = (state: any) => ({
+  productIsLoading: state.product.isLoading,
+  product: state.product.data[0],
+  cart: state.cart,
+});
+
+export default connect(mapStateToProps, { getProductsById })(ProductDetailPage);

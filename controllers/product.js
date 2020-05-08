@@ -105,7 +105,7 @@ exports.createProduct = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      product: {
+      products: {
         id: savedProduct._id,
         title: savedProduct.title,
       },
@@ -190,10 +190,10 @@ exports.getProductsByID = async (req, res) => {
     if (req.query.type === "array") {
       productId = productId.split(",").map((id) => id);
     }
-    const product = await Product.find({ _id: { $in: productId } });
-    if (!product) throw Error("PRODUCT_NOT_FOUND");
+    const products = await Product.find({ _id: { $in: productId } });
+    if (!products) throw Error("PRODUCT_NOT_FOUND");
 
-    return res.status(200).json({ success: true, product });
+    return res.status(200).json({ success: true, products });
   } catch (err) {
     return res.status(400).json({
       success: false,

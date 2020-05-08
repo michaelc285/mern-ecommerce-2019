@@ -49,7 +49,7 @@ export const createProduct = (
     dispatch({ type: PRODUCT_CREATE_FAIL });
   }
 };
-// Get Product
+// Get and Search Product
 export const getProducts = (filters: object = {}) => async (
   dispatch: Function
 ) => {
@@ -57,14 +57,35 @@ export const getProducts = (filters: object = {}) => async (
     // Loading
     dispatch({ type: PRODUCT_LOADING });
     // Get Data
-    const prodcut = await axios.post("/api/product/", filters, {
+    const result = await axios.post("/api/product/", filters, {
       headers: {
         "content-type": "application/json",
       },
     });
-    dispatch({ type: PRODUCT_GET_SUCCESS, payload: prodcut.data });
+
+    dispatch({ type: PRODUCT_GET_SUCCESS, payload: result });
   } catch (err) {
     dispatch(returnErrors(err.msg, 500));
+    dispatch({ type: PRODUCT_GET_FAIL });
+  }
+};
+
+// Get Product by Id
+export const getProductsById = (
+  productId: string | string[],
+  type: string = "single"
+) => async (dispatch: Function) => {
+  try {
+    dispatch({ type: PRODUCT_LOADING });
+
+    const result = await axios.get(
+      `/api/product/?id=${productId}&type=${type}`
+    );
+
+    dispatch({ type: PRODUCT_GET_SUCCESS, payload: result });
+  } catch (err) {
+    console.log(err);
+    dispatch(returnErrors(err.message, 500));
     dispatch({ type: PRODUCT_GET_FAIL });
   }
 };

@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, Suspense } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./context/store";
+import ProtectedRoute from "./hoc/ProtectedRoute";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Container from "@material-ui/core/Container";
@@ -22,40 +23,58 @@ const App = () => {
   useEffect(() => {
     store.dispatch(loadUser());
   }, []);
-
   return (
     <BrowserRouter>
       <Provider store={store}>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-          {/* !!! Add a top cotainer here to display some pic for decoration  */}
-          {/* <TopContainer /> */}
-          <AppNavbar />
-
-          <Container
-            maxWidth="lg"
-            style={{ minHeight: "90vh", paddingTop: "7rem" }}
+        <Suspense fallback={<div>Loading</div>}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+            }}
           >
-            <Switch>
-              <Route path="/" exact component={MarketLanding} />
-              <Route path="/market" exact component={MarketLanding} />
-              <Route path="/productcreate" exact component={ProductCreate} />
-              <Route
-                path="/product/:productID"
-                exact
-                component={ProductDetailPage}
-              />
-              <Route path="/user/cart" exact component={CartPage} />
-              <Route component={ErrorPage} />
-            </Switch>
-          </Container>
+            {/* !!! Add a top cotainer here to display some pic for decoration  */}
+            {/* <TopContainer /> */}
+            <AppNavbar />
 
-          <AppFooter />
-        </div>
+            <Container
+              maxWidth="lg"
+              style={{ minHeight: "90vh", paddingTop: "7rem" }}
+            >
+              <Switch>
+                {/* Public Route */}
+                <Route path="/" exact component={MarketLanding} />
+                <Route path="/market" exact component={MarketLanding} />
+                <Route
+                  path="/product/:productID"
+                  exact
+                  component={ProductDetailPage}
+                />
+                {/* Authorized Route */}
+                <Route exact path="/user/cart" component={CartPage} />
+                {/* <ProtectedRoute
+                  exact
+                  path="/user/cart"
+                  store={store}
+                  component={CartPage}
+                /> */}
+                {/* Admin Route */}
+                <Route exact path="/productcreate" component={ProductCreate} />
+                {/* <ProtectedRoute
+                  exact
+                  path="/productcreate"
+                  store={store}
+                  component={ProductCreate}
+                /> */}
+
+                {/* Page Not Found Route */}
+                <Route path="*" component={ErrorPage} />
+              </Switch>
+            </Container>
+
+            <AppFooter />
+          </div>
+        </Suspense>
       </Provider>
     </BrowserRouter>
   );

@@ -9,10 +9,10 @@ const Product = require("../models/Products");
 exports.productAddToCart = async (req, res) => {
   try {
     // Check product Id exisit in query ?
-    if (!req.query.id) throw Error("Please provide product id");
+    if (!req.query.productId) throw Error("Please provide product id");
     // Get user id and product id
     const userID = req.user.userId;
-    const productID = req.query.id;
+    const productID = req.query.productId;
 
     // Check product exisit ?
     const product = await Product.findById(productID);
@@ -26,7 +26,6 @@ exports.productAddToCart = async (req, res) => {
     user.cart.forEach((item) => {
       if (item.id == productID) exisitFlag = true;
     });
-    console.log(exisitFlag);
 
     // Add product into cart
     let updateUser = null;
@@ -64,6 +63,7 @@ exports.productAddToCart = async (req, res) => {
       cart: updateUser.cart,
     });
   } catch (err) {
+    console.log(err);
     return res.status(400).json({
       success: false,
       error: err.message,
@@ -79,11 +79,11 @@ exports.productAddToCart = async (req, res) => {
 exports.removeProductFromCart = async (req, res) => {
   try {
     // Check product Id exisit in query ?
-    if (!req.query.id) throw Error("Please provide product id");
+    if (!req.query.productId) throw Error("Please provide product id");
 
     // Get user id and product id
     const userID = req.user.userId;
-    const productID = req.query.id;
+    const productID = req.query.productId;
 
     // Remove product from cart
     const user = await User.findByIdAndUpdate(
@@ -105,6 +105,29 @@ exports.removeProductFromCart = async (req, res) => {
     });
   } catch (err) {
     return res.status(400).json({
+      success: false,
+      error: err.message,
+    });
+  }
+};
+
+/**
+ * @desc   Get cart
+ * @route  GET /api/user/cart/
+ * @access Private
+ */
+exports.loadCart = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+
+    const result = await User.findById(userId).select("-password");
+
+    res.status(200).json({
+      success: true,
+      cart: result.cart,
+    });
+  } catch (err) {
+    res.status(400).json({
       success: false,
       error: err.message,
     });

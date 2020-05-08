@@ -22,7 +22,7 @@ const MarketLanding = ({ getProducts, products }: any) => {
 
   useEffect(() => {
     getProducts();
-  }, []);
+  }, [getProducts]);
 
   // Components
   const LoadingComp = (
@@ -63,7 +63,7 @@ const MarketLanding = ({ getProducts, products }: any) => {
       </div>
     </div>
   );
-
+  console.log();
   return (
     <div style={{ minHeight: "70vh" }}>
       <div style={{ display: "flex", flexDirection: "column", height: "auto" }}>
