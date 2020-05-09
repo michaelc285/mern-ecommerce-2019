@@ -1,24 +1,64 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { connect } from "react-redux";
-import { Paper, CssBaseline } from "@material-ui/core";
+import { makeStyles, Theme } from "@material-ui/core/styles";
+import { Grid, Paper, Typography } from "@material-ui/core";
 import ProductContainer from "./ProductContainer";
+import { getProductsById } from "../../../context/actions/ProductAction";
+import { IProductsList, IProduct } from "../../../types/interfaces";
+const ProductsList = ({ cart, products, getProductsById }: any) => {
+  const classes = useStyles();
 
-const ProductsList = ({ cart, cartIsLoading }: any) => {
+  let contentArr = [];
+
+  if (products.data && products.isLoading === false) {
+    contentArr = products.data.map((product: IProduct) => (
+      <Grid item key={product._id}>
+        <ProductContainer product={product} />
+      </Grid>
+    ));
+  }
+
   const load = <div>Loading</div>;
 
-  return (
-    <Fragment>
-      <CssBaseline />
-      <Paper elevation={7} style={{ minHeight: "50vh" }}>
-        {cartIsLoading && cart ? load : <ProductContainer />}
-      </Paper>
-    </Fragment>
+  const content = (
+    <Paper elevation={7}>
+      <div className={classes.boxTitle}>
+        <Typography className={classes.textMargin} variant={"h6"}>
+          Product List
+        </Typography>
+      </div>
+      <Grid container spacing={1} direction={"column"}>
+        {contentArr}
+      </Grid>
+    </Paper>
   );
+
+  useEffect(() => {
+    if (cart.items && cart.items.length > 0) {
+      getProductsById(cart.items[0].id);
+    }
+  }, [cart]);
+
+  return <Fragment>{cart.items && cart.isLoading ? load : content}</Fragment>;
 };
 
+const useStyles = makeStyles((theme: Theme) => ({
+  root: {
+    minHeight: "5vh",
+  },
+  boxTitle: {
+    padding: "3px",
+    marginBottom: "6px",
+    backgroundColor: "rgb(180, 180, 180)",
+  },
+  textMargin: {
+    marginLeft: "10px",
+  },
+}));
+
 const mapStateToProps = (state: any) => ({
+  products: state.product,
   cart: state.cart,
-  cartIsLoading: state.cart.isLoading,
 });
 
-export default connect(mapStateToProps, null)(ProductsList);
+export default connect(mapStateToProps, { getProductsById })(ProductsList);

@@ -11,7 +11,7 @@ import {
 
 const initialState = {
   isLoading: false,
-  cart: [],
+  items: null,
 };
 
 export default (state = initialState, action: IAction) => {
@@ -27,7 +27,7 @@ export default (state = initialState, action: IAction) => {
       return {
         ...state,
         isLoading: false,
-        cart: action.payload.data.cart,
+        items: action.payload.data.cart,
       };
     case CART_GET_FAIL:
     case CART_ADD_FAIL:

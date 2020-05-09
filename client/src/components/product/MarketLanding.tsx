@@ -9,14 +9,19 @@ import { getProducts } from "../../context/actions/ProductAction";
 const MarketLanding = ({ getProducts, products }: any) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(8);
+  let currentProducts = [];
+  let resultCount = 0;
+  if (products.data) {
+    // Get current product
+    const indexOfLastProduct = currentPage * productsPerPage;
+    const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+    currentProducts = products.data.slice(
+      indexOfFirstProduct,
+      indexOfLastProduct
+    );
+    resultCount = products.data.length;
+  }
 
-  // Get current product
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = products.data.slice(
-    indexOfFirstProduct,
-    indexOfLastProduct
-  );
   // Change page
   const paginate = (e: any, pageNumber: number) => setCurrentPage(pageNumber);
 
@@ -40,7 +45,7 @@ const MarketLanding = ({ getProducts, products }: any) => {
   const Content = (
     <div>
       <Typography style={{ marginTop: "1rem", marginBottom: "1rem" }}>
-        Result {products.data.length}
+        Result {resultCount}
       </Typography>
       <div>
         {/* Products */}
@@ -56,14 +61,14 @@ const MarketLanding = ({ getProducts, products }: any) => {
         >
           <Pagination
             productsPerPage={productsPerPage}
-            totalProducts={products.data.length}
+            totalProducts={resultCount}
             paginate={paginate}
           />
         </div>
       </div>
     </div>
   );
-  console.log();
+
   return (
     <div style={{ minHeight: "70vh" }}>
       <div style={{ display: "flex", flexDirection: "column", height: "auto" }}>

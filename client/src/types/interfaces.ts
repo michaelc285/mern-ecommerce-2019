@@ -94,3 +94,25 @@ export interface IProduct {
   updateAt: string;
   creator?: string | object;
 }
+
+// ***************
+//  Product
+// ***************
+
+export interface ICartItem {
+  id: string;
+  quantity: number;
+  date: number;
+}
+
+export interface ICartPage {
+  auth: { isAuthenticated: boolean };
+  items: ICartItem[];
+  cartIsLoading: boolean;
+  loadCart(): void;
+}
+
+export interface IProductsList {
+  items: ICartItem;
+  cartIsLoading: boolean;
+}

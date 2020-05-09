@@ -3,40 +3,36 @@ import { connect } from "react-redux";
 import { getProductsById } from "../../context/actions/ProductAction";
 import { loadCart } from "../../context/actions/CartAction";
 import { Container, Grid } from "@material-ui/core";
-import Checkout from "./section/Checkout";
+import Bills from "./section/Bills";
 import ProductsList from "./section/ProductsList";
+import Payment from "./section/Payment";
+import { ICartPage } from "../../types/interfaces";
 
-interface cartItem {
-  id: string;
-  quantity: number;
-  date: number;
-}
-
-const CartPage = ({
-  product,
-  auth,
-  cart,
-  cartIsLoading,
-  getProductsById,
-  loadCart,
-}: any) => {
+const CartPage = ({ auth, items, cartIsLoading, loadCart }: ICartPage) => {
   useEffect(() => {
     loadCart();
-  }, [auth.isAuthenticated, loadCart]);
+  }, [auth, loadCart]);
 
   // Components
   const load = <div>Load...</div>;
-
+  const nothing = <div>nothing</div>;
   const shoopingcart = (
     <Fragment>
       {/* Products List */}
-      <Grid container spacing={2}>
+      <Grid container spacing={3}>
         <Grid item xl={8} md={8} xs={12}>
           <ProductsList />
         </Grid>
         {/* Bill */}
         <Grid item xl={4} md={4} xs={12}>
-          <Checkout />
+          <Grid container direction={"column"} spacing={3}>
+            <Grid item>
+              <Bills />
+            </Grid>
+            <Grid item>
+              <Payment />
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
     </Fragment>
@@ -45,16 +41,16 @@ const CartPage = ({
   return (
     <Fragment>
       <Container maxWidth="md">
-        {cart && cartIsLoading ? load : shoopingcart}
+        {cartIsLoading ? load : items ? shoopingcart : nothing}
       </Container>
     </Fragment>
   );
 };
 
 const mapStateToProps = (state: any) => ({
-  auth: state.auth,
+  auth: state.auth.isAuthenticated,
   product: state.product,
-  cart: state.cart,
+  items: state.cart.items,
   cartIsLoading: state.cart.isLoading,
 });
 
