@@ -8,10 +8,28 @@ import ProductsList from "./section/ProductsList";
 import Payment from "./section/Payment";
 import { ICartPage } from "../../types/interfaces";
 
-const CartPage = ({ auth, items, cartIsLoading, loadCart }: ICartPage) => {
+const CartPage = ({
+  authIsLoading,
+  items,
+  cartIsLoading,
+  loadCart,
+}: ICartPage) => {
   useEffect(() => {
     loadCart();
-  }, [auth, loadCart]);
+  }, [authIsLoading, loadCart]);
+
+  // Bills calulate
+  let orderTotal: number = 0;
+  let deliveryFee: number = 0;
+  let totalPayment: number = 0;
+
+  if (cartIsLoading === false && items && items.length > 0) {
+    items.forEach((item) => {
+      orderTotal += item.quantity * item.price;
+    });
+    if (orderTotal < 200) deliveryFee = 80;
+    totalPayment = orderTotal + deliveryFee;
+  }
 
   // Components
   const load = <div>Load...</div>;
@@ -27,10 +45,14 @@ const CartPage = ({ auth, items, cartIsLoading, loadCart }: ICartPage) => {
         <Grid item xl={4} md={4} xs={12}>
           <Grid container direction={"column"} spacing={3}>
             <Grid item>
-              <Bills />
+              <Bills
+                orderTotal={orderTotal}
+                deliveryFee={deliveryFee}
+                totalPayment={totalPayment}
+              />
             </Grid>
             <Grid item>
-              <Payment />
+              <Payment totalPayment={totalPayment} />
             </Grid>
           </Grid>
         </Grid>
@@ -41,14 +63,18 @@ const CartPage = ({ auth, items, cartIsLoading, loadCart }: ICartPage) => {
   return (
     <Fragment>
       <Container maxWidth="md">
-        {cartIsLoading ? load : items ? shoopingcart : nothing}
+        {cartIsLoading
+          ? load
+          : items && items.length > 0
+          ? shoopingcart
+          : nothing}
       </Container>
     </Fragment>
   );
 };
 
 const mapStateToProps = (state: any) => ({
-  auth: state.auth.isAuthenticated,
+  authIsLoading: state.auth.isAuthenticated,
   product: state.product,
   items: state.cart.items,
   cartIsLoading: state.cart.isLoading,

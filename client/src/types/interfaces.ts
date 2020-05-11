@@ -96,7 +96,7 @@ export interface IProduct {
 }
 
 // ***************
-//  Product
+//  Cart
 // ***************
 
 export interface ICartItem {
@@ -105,9 +105,19 @@ export interface ICartItem {
   date: number;
 }
 
+export interface ICartItemDetail {
+  _id: string;
+  title: string;
+  price: number;
+  quantity: number;
+  images: string[];
+  type: string;
+  description: string;
+}
+
 export interface ICartPage {
-  auth: { isAuthenticated: boolean };
-  items: ICartItem[];
+  authIsLoading: boolean;
+  items: ICartItemDetail[];
   cartIsLoading: boolean;
   loadCart(): void;
 }
@@ -115,4 +125,17 @@ export interface ICartPage {
 export interface IProductsList {
   items: ICartItem;
   cartIsLoading: boolean;
+}
+
+export interface IPayment {
+  totalPayment: number;
+  buyProcess(details: any, data: any): void;
+}
+
+// ***************
+//  Utils
+// ***************
+export interface IPaypal {
+  amount: number;
+  onSuccess(details: any, data: any): void;
 }

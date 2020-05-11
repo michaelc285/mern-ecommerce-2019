@@ -12,6 +12,7 @@
   "author": "Michael Cheng",
   "license": "MIT",
   "dependencies": {
+    "async": "^3.2.0",
     "bcryptjs": "^2.4.3",
     "colors": "^1.4.0",
     "config": "^3.3.1",

@@ -7,6 +7,8 @@ import {
   CART_ADD_SUCCESS,
   CART_REMOVE_SUCCESS,
   CART_REMOVE_FAIL,
+  CART_BUY_FAIL,
+  CART_BUY_SUCCESS,
 } from "../types";
 import axios from "axios";
 
@@ -73,5 +75,38 @@ export const removeProductFromCart = (productId: string) => async (
   } catch (err) {
     dispatch(returnErrors(err.message, 500));
     dispatch({ type: CART_REMOVE_FAIL });
+  }
+};
+
+//Buy Product Success
+export const buyProcess = (details: any, data: any) => async (
+  dispatch: Function,
+  getState: Function
+) => {
+  try {
+    // Page Loading signal
+    dispatch({ type: CART_LOADING });
+
+    // Axios Body
+    const body = {
+      details,
+      data,
+      cart: getState().cart.items,
+    };
+    // Axios Config
+    const config = {
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${getState().auth.token}`,
+      },
+    };
+
+    await axios.post("/api/users/cart/buyProcessDone", body, config);
+
+    // Success
+    dispatch({ type: CART_BUY_SUCCESS });
+  } catch (err) {
+    dispatch(returnErrors(err.message, 500));
+    dispatch({ type: CART_BUY_FAIL });
   }
 };

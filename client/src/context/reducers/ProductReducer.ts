@@ -19,7 +19,7 @@ export default (state = initialState, action: IAction) => {
       return {
         ...state,
         isLoading: true,
-        data: [],
+        data: null,
       };
     case PRODUCT_CREATE_SUCCESS:
       return {

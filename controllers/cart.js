@@ -1,6 +1,7 @@
 const User = require("../models/Users");
 const Product = require("../models/Products");
-
+const Payment = require("../models/Payment");
+const async = require("async");
 /**
  * @desc   Add product to cart
  * @route  GET /api/user/cart/add?id={productId}
@@ -120,11 +121,125 @@ exports.loadCart = async (req, res) => {
   try {
     const userId = req.user.userId;
 
-    const result = await User.findById(userId).select("-password");
+    const user = await User.findById(userId)
+      .select("-password")
+      .sort({ _id: 1 });
+
+    const cart = user.cart;
+    const productsIdArr = cart.map((item) => item.id);
+
+    const product = await Product.find({ _id: { $in: productsIdArr } })
+      .sort({
+        _id: 1,
+      })
+      .select("-quantity -sold -views -createdAt -updatedAt -creator");
+
+    cart.forEach((item) => {
+      product.forEach((productDetail, i) => {
+        if (item.id == productDetail._id) {
+          product[i].quantity = item.quantity;
+        }
+      });
+      return product;
+    });
 
     res.status(200).json({
       success: true,
-      cart: result.cart,
+      cart: product,
+    });
+  } catch (err) {
+    res.status(400).json({
+      success: false,
+      error: err.message,
+    });
+  }
+};
+
+/**
+ * @desc   Payment
+ * @route  POST /api/user/cart/payment
+ * @access Private
+ */
+exports.buyProcessDone = async (req, res) => {
+  let payerInfo = {};
+  try {
+    // Get user ID
+    const userId = req.user.userId;
+
+    // Create history array
+    const history = req.body.cart.map((item) => {
+      return {
+        purchaseAt: Date.now(),
+        name: item.title,
+        id: item._id,
+        price: item.price,
+        quantity: item.quantity,
+        orderID: req.body.data.orderID,
+      };
+    });
+
+    // Bills object
+    const bills = {
+      id: req.body.data.orderID,
+      history,
+    };
+
+    // Create Transaction Data
+    // Add user info to transaction object
+    const user = {
+      id: userId,
+      name: req.body.details.payer.name.given_name,
+      surname: req.body.details.payer.name.surname,
+      email: req.body.details.payer.email_address,
+    };
+
+    const paymentData = {
+      details: req.body.details,
+      data: req.body.data,
+    };
+
+    const transaction = {
+      user,
+      data: paymentData,
+      product: history,
+    };
+
+    // Update user by ID, add bills into history and reset cart to empty array
+    const userAfterUpdate = await User.findByIdAndUpdate(
+      userId,
+      { $push: { history: bills }, $set: { cart: [] } },
+      { new: true }
+    );
+    if (!userAfterUpdate) throw Error("User Update Fail");
+
+    // Create payment
+    const payment = new Payment(transaction);
+    const paymentAfterSave = await payment.save();
+    if (!paymentAfterSave) throw Error("Payment Save Fail");
+
+    // Using the return values from payment to update the products sold count
+    const productInPayment = payment.product.map((item) => {
+      return {
+        id: item.id,
+        quantity: item.quantity,
+      };
+    });
+
+    // Update sold value
+    await async.eachSeries(productInPayment, async (item) => {
+      await Product.update(
+        { _id: item.id },
+        {
+          $inc: {
+            sold: item.quantity,
+          },
+        },
+        { new: false }
+      );
+    });
+
+    res.status(200).json({
+      success: true,
     });
   } catch (err) {
     res.status(400).json({

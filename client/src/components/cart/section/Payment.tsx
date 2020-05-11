@@ -1,17 +1,24 @@
 import React, { Fragment } from "react";
 import { makeStyles, Theme } from "@material-ui/core/styles";
+import PaypalButton from "../../utils/Paypal";
 import {
   Paper,
   Grid,
   Typography,
   FormControl,
-  Button,
   Radio,
   FormControlLabel,
 } from "@material-ui/core";
+import { connect } from "react-redux";
+import { buyProcess } from "../../../context/actions/CartAction";
 
-const Payment = () => {
+import { IPayment } from "../../../types/interfaces";
+
+const Payment = ({ totalPayment, buyProcess }: IPayment) => {
   const classes = useStyles();
+
+  const onSuccess = (details: any, data: any) => buyProcess(details, data);
+
   return (
     <Fragment>
       <Paper elevation={7}>
@@ -32,15 +39,8 @@ const Payment = () => {
               />
             </FormControl>
           </Grid>
-          <Grid item>
-            <Button
-              variant="outlined"
-              color="primary"
-              href="#"
-              className={classes.button}
-            >
-              Confirm Payment
-            </Button>
+          <Grid item className={classes.button}>
+            <PaypalButton amount={totalPayment} onSuccess={onSuccess} />
           </Grid>
         </Grid>
       </Paper>
@@ -66,8 +66,8 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   button: {
     display: "flex",
-    margin: " 0 7px 7px 7px",
+    justifyContent: "center",
   },
 }));
 
-export default Payment;
+export default connect(null, { buyProcess })(Payment);

@@ -30,6 +30,8 @@ export const CART_ADD_SUCCESS = "CART_ADD_SUCCESS";
 export const CART_ADD_FAIL = "CART_ADD_FAIL";
 export const CART_REMOVE_FAIL = "CART_REMOVE_FAIL";
 export const CART_REMOVE_SUCCESS = "CART_REMOVE_SUCCESS";
+export const CART_BUY_SUCCESS = "CART_BUY_SUCCESS";
+export const CART_BUY_FAIL = "CART_BUY_FAIL";
 
 /**
  *     ERROR

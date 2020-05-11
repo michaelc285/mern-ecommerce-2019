@@ -1,22 +1,19 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment } from "react";
 import { connect } from "react-redux";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import { Grid, Paper, Typography } from "@material-ui/core";
 import ProductContainer from "./ProductContainer";
-import { getProductsById } from "../../../context/actions/ProductAction";
-import { IProductsList, IProduct } from "../../../types/interfaces";
-const ProductsList = ({ cart, products, getProductsById }: any) => {
+
+import { ICartItemDetail } from "../../../types/interfaces";
+
+const ProductsList = ({ cart, products }: any) => {
   const classes = useStyles();
 
-  let contentArr = [];
-
-  if (products.data && products.isLoading === false) {
-    contentArr = products.data.map((product: IProduct) => (
-      <Grid item key={product._id}>
-        <ProductContainer product={product} />
-      </Grid>
-    ));
-  }
+  const contentArr = cart.items.map((product: ICartItemDetail) => (
+    <Grid item key={product._id}>
+      <ProductContainer product={product} />
+    </Grid>
+  ));
 
   const load = <div>Loading</div>;
 
@@ -32,12 +29,6 @@ const ProductsList = ({ cart, products, getProductsById }: any) => {
       </Grid>
     </Paper>
   );
-
-  useEffect(() => {
-    if (cart.items && cart.items.length > 0) {
-      getProductsById(cart.items[0].id);
-    }
-  }, [cart]);
 
   return <Fragment>{cart.items && cart.isLoading ? load : content}</Fragment>;
 };
@@ -61,4 +52,4 @@ const mapStateToProps = (state: any) => ({
   cart: state.cart,
 });
 
-export default connect(mapStateToProps, { getProductsById })(ProductsList);
+export default connect(mapStateToProps, null)(ProductsList);

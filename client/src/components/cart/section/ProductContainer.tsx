@@ -27,7 +27,9 @@ const ProductContainer = ({ product }: any) => {
         </IconButton>
       </Grid>
       <Grid item>
-        <Typography className={classes.quantityText}>0</Typography>
+        <Typography className={classes.quantityText}>
+          {product.quantity}
+        </Typography>
         {/* <InputBase className={classes.input} /> */}
       </Grid>
       <Grid item>

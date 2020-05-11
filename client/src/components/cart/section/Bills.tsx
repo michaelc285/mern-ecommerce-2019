@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import { Paper, Grid, Typography } from "@material-ui/core";
-const Bills = () => {
+const Bills = ({ orderTotal, deliveryFee, totalPayment }: any) => {
   const classes = useStyles();
   return (
     <Fragment>
@@ -19,25 +19,33 @@ const Bills = () => {
             style={{ borderBottom: " 1px solid rgb(180, 180, 180)" }}
           >
             <Typography className={classes.textContent}>Order total</Typography>
-            <Typography className={classes.textContent}>$ XXX</Typography>
+            <Typography className={classes.textContent}>
+              $ {orderTotal}
+            </Typography>
           </Grid>
           <Grid item xl={2} className={classes.subTitle}>
             <Typography className={classes.textContent}>
               Total billed amount
             </Typography>
-            <Typography className={classes.textContent}>$ XXX</Typography>
+            <Typography className={classes.textContent}>
+              $ {orderTotal}
+            </Typography>
           </Grid>
           <Grid item xl={2} className={classes.subTitle}>
             <Typography className={classes.textContent}>
               Delivery Fee
             </Typography>
-            <Typography className={classes.textContent}>$ XXX</Typography>
+            <Typography className={classes.textContent}>
+              $ {deliveryFee}
+            </Typography>
           </Grid>
           <Grid item xl={3} className={classes.subTitle}>
             <Typography color={"secondary"} className={classes.textContent}>
               Total Payment
             </Typography>
-            <Typography className={classes.textContent}>$ XXX</Typography>
+            <Typography className={classes.textContent}>
+              $ {totalPayment}
+            </Typography>
           </Grid>
         </Grid>
       </Paper>
