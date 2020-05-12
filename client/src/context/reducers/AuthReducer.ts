@@ -11,7 +11,7 @@ import {
 
 const initialState = {
   token: "",
-  isAuthenticated: false,
+  isAuthenticated: null,
   isLoading: false,
   user: null,
 };
@@ -26,7 +26,7 @@ export default (state = initialState, action: any) => {
     case USER_LOADED:
     case REGISTER_SUCCESS:
     case LOGIN_SUCCESS:
-      // localStorage.setItem("token", action.payload.accesstoken);
+      localStorage.setItem("token", action.payload.accesstoken);
       return {
         ...state,
         token: action.payload.accesstoken,

@@ -31,11 +31,11 @@ export const loadUser = () => async (dispatch: Function) => {
 
   if (result.success) {
     // User loaded then update access token and auth turn to true
-    dispatch({ type: USER_LOADED, payload: result });
+    return dispatch({ type: USER_LOADED, payload: result });
   } else {
     // fail token to null auth turn to false
     dispatch(returnErrors(result.error, 500));
-    dispatch({ type: AUTH_ERROR });
+    return dispatch({ type: AUTH_ERROR });
   }
 };
 

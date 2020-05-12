@@ -16,8 +16,6 @@ import {
   Menu,
 } from "@material-ui/core";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
-import Login from "./auth/Login";
-import Register from "./auth/Register";
 import Logout from "./auth/Logout";
 
 const AppNavbar = ({ auth, cart }: any) => {
@@ -58,10 +56,8 @@ const AppNavbar = ({ auth, cart }: any) => {
         num = 0;
       }
       setCartLength(num);
-      return;
     } else {
       setIsAuth(false);
-      return;
     }
   }, [auth, cart]);
 
