@@ -63,6 +63,7 @@ export interface IAuthReduxProps {
 // ***************
 export interface IAppNavbar {
   auth?: {
+    token: string;
     isAuthenticated: boolean;
     user: IUser;
   };
@@ -106,7 +107,7 @@ export interface ICartItem {
 }
 
 export interface ICartItemDetail {
-  _id: string;
+  id: string;
   title: string;
   price: number;
   quantity: number;

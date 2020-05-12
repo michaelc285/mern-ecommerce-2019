@@ -3,6 +3,7 @@ import { makeStyles, Theme } from "@material-ui/core/styles";
 import { Grid, Typography, IconButton } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import RemoveIcon from "@material-ui/icons/Remove";
+import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 
 const ProductContainer = ({ product }: any) => {
   const classes = useStyles();
@@ -56,14 +57,17 @@ const ProductContainer = ({ product }: any) => {
           className={classes.imgSize}
         />
       </Grid>
-      <Grid item xl={6} lg={6} md={6} xs={7} className={classes.titleBox}>
+      <Grid item xl={5} lg={5} md={5} xs={7} className={classes.titleBox}>
         <Typography className={classes.titleBox}>{product.title}</Typography>
+      </Grid>
+      <Grid item xl={2} lg={2} md={2} xs={7} className={classes.priceBox}>
+        <Typography>$ {product.price}</Typography>
       </Grid>
       <Grid item xl={2} lg={2} md={2} xs={5} className={classes.buttonBox}>
         {quantityButtonGroup}
       </Grid>
-      <Grid item xl={2} lg={2} md={2} xs={7} className={classes.priceBox}>
-        <Typography>$ {product.price}</Typography>
+      <Grid item xl={1} lg={1} md={1} xs={1}>
+        <DeleteForeverIcon />
       </Grid>
     </Grid>
   );
@@ -73,7 +77,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   root: {
     borderBottom: "1px solid rgb(180, 180, 180)",
     margin: "0 auto 3px auto",
-    width: "95%",
+    width: "98%",
     minHeight: "73px",
   },
   imgSize: {

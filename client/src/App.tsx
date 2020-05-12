@@ -12,17 +12,19 @@ import { loadUser } from "./context/actions/AuthAction";
 import TopContainer from "./components/TopContainer";
 import AppNavbar from "./components/AppNavbar";
 import AppFooter from "./components/AppFooter";
-
+import AuthPage from "./components/auth/AuthPage";
 import ErrorPage from "./components/ErrorPage";
 import MarketLanding from "./components/product/MarketLanding";
 import ProductCreate from "./components/product/ProductCreate";
 import ProductDetailPage from "./components/product/DetailPage/ProductDetailPage";
 import CartPage from "./components/cart/CartPage";
 import "./App.css";
+
 const App = () => {
   useEffect(() => {
     store.dispatch(loadUser());
   }, []);
+
   return (
     <BrowserRouter>
       <Provider store={store}>
@@ -31,6 +33,8 @@ const App = () => {
             style={{
               display: "flex",
               flexDirection: "column",
+              position: "relative",
+              minHeight: "100vh",
             }}
           >
             {/* !!! Add a top cotainer here to display some pic for decoration  */}
@@ -39,7 +43,7 @@ const App = () => {
 
             <Container
               maxWidth="lg"
-              style={{ minHeight: "90vh", paddingTop: "7rem" }}
+              style={{ minHeight: "90vh", paddingTop: "90px" }}
             >
               <Switch>
                 {/* Public Route */}
@@ -50,14 +54,10 @@ const App = () => {
                   exact
                   component={ProductDetailPage}
                 />
+                <Route path="/auth" exact component={AuthPage} />
                 {/* Authorized Route */}
-                <Route exact path="/user/cart" component={CartPage} />
-                {/* <ProtectedRoute
-                  exact
-                  path="/user/cart"
-                  store={store}
-                  component={CartPage}
-                /> */}
+                {/* <Route exact path="/user/cart" component={CartPage} /> */}
+                <ProtectedRoute exact path="/user/cart" component={CartPage} />
                 {/* Admin Route */}
                 <Route exact path="/productcreate" component={ProductCreate} />
                 {/* <ProtectedRoute

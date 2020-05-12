@@ -1,25 +1,36 @@
 import React from "react";
-
+import { makeStyles, Theme } from "@material-ui/core/styles";
+import { Grid, Typography } from "@material-ui/core";
+import SelectComponent from "../components/utils/SelectComponent";
 const AppFooter = () => {
+  const classes = useStyles();
   return (
-    <div
-      style={{
-        marginTop: "10px",
-        width: "100%",
-        height: "20vh",
-        display: "flex",
-        backgroundColor: " rgba(184,184,184,.7)",
-      }}
-    >
-      <div
-        style={{
-          border: "1px solid red",
-          display: "flex",
-        }}
+    <div className={classes.root}>
+      <Grid
+        container
+        direction={"column"}
+        justify={"flex-end"}
+        alignItems={"center"}
       >
-        ©2020 Michael Development
-      </div>
+        <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+          <Typography> ©2020 Michael Development</Typography>
+        </Grid>
+        {/* <Grid item>
+          <SelectComponent />
+        </Grid> */}
+      </Grid>
     </div>
   );
 };
+
+const useStyles = makeStyles((theme: Theme) => ({
+  root: {
+    position: "absolute",
+    width: "100%",
+    minHeight: "2.5em",
+    bottom: 0,
+    padding: "10px 0 0 0",
+  },
+}));
+
 export default AppFooter;

@@ -26,6 +26,7 @@ export const loadCart = () => async (
         authorization: `Bearer ${getState().auth.token}`,
       },
     });
+
     dispatch({ type: CART_GET_SUCCESS, payload: result });
   } catch (err) {
     dispatch(returnErrors(err.message, 500));
@@ -71,7 +72,8 @@ export const removeProductFromCart = (productId: string) => async (
       headers: { authorization: `Bearer ${getState().auth.token}` },
     });
 
-    dispatch({ type: CART_REMOVE_SUCCESS, payload: result });
+    console.log(result);
+    // dispatch({ type: CART_REMOVE_SUCCESS, payload: result });
   } catch (err) {
     dispatch(returnErrors(err.message, 500));
     dispatch({ type: CART_REMOVE_FAIL });

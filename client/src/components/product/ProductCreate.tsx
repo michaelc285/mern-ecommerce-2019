@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import { createProduct } from "../../context/actions/ProductAction";
 import { ITarget } from "../../types/interfaces";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, Theme } from "@material-ui/core/styles";
 import {
   Container,
   FormControl,
@@ -18,13 +18,7 @@ import {
 } from "@material-ui/core";
 import SaveIcon from "@material-ui/icons/Save";
 import { DropzoneArea } from "material-ui-dropzone";
-const useStyles = makeStyles((theme) => ({
-  root: {
-    "& > *": {
-      margin: theme.spacing(0),
-    },
-  },
-}));
+
 const ProductCreate = ({ product, createProduct, error }: any) => {
   const classes = useStyles();
   const [images, setImages] = useState<string[]>([]);
@@ -156,6 +150,16 @@ const ProductCreate = ({ product, createProduct, error }: any) => {
   );
 };
 
+// Styles
+const useStyles = makeStyles((theme: Theme) => ({
+  root: {
+    "& > *": {
+      margin: theme.spacing(0),
+    },
+  },
+}));
+
+// Redux
 const mapStateToProps = (state: any) => ({
   product: state.product,
   error: state.error,

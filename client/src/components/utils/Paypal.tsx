@@ -6,9 +6,7 @@ import { IPaypal } from "../../types/interfaces";
 const Paypal = ({ amount, onSuccess }: IPaypal) => {
   return (
     <PayPalButton
-      shippingPreference={"NO_SHIPPING"}
       amount={amount}
-      currency={"USD"}
       // shippingPreference="NO_SHIPPING" // default is "GET_FROM_FILE"
       onSuccess={onSuccess}
       options={{

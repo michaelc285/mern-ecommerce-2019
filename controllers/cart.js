@@ -38,7 +38,6 @@ exports.productAddToCart = async (req, res) => {
         { $inc: { "cart.$.quantity": 1 } },
         { new: true }
       );
-
       if (!updateUser) throw Error("Can not add more to cart");
     } else {
       // Push product into cart array
@@ -59,9 +58,29 @@ exports.productAddToCart = async (req, res) => {
       if (!updateUser) throw Error("Can not add to cart");
     }
 
+    const productsIdArr = updateUser.cart.map((item) => item.id);
+    const productInfo = await Product.find({ _id: { $in: productsIdArr } })
+      .sort({
+        _id: 1,
+      })
+      .select("images title type price");
+
+    let cart = updateUser.cart;
+    //Combine and match cart data with images
+    cart.forEach((item) => {
+      productInfo.forEach((info, i) => {
+        if (item.id == info._id) {
+          cart[i].images = info.images;
+          cart[i].title = info.title;
+          cart[i].type = info.type;
+          cart[i].price = info.price;
+        }
+      });
+    });
+
     return res.status(200).json({
       success: true,
-      cart: updateUser.cart,
+      cart: cart,
     });
   } catch (err) {
     console.log(err);
@@ -128,26 +147,30 @@ exports.loadCart = async (req, res) => {
     const cart = user.cart;
     const productsIdArr = cart.map((item) => item.id);
 
-    const product = await Product.find({ _id: { $in: productsIdArr } })
+    const productInfo = await Product.find({ _id: { $in: productsIdArr } })
       .sort({
         _id: 1,
       })
-      .select("-quantity -sold -views -createdAt -updatedAt -creator");
+      .select("images title type price");
 
+    //Combine and match cart data with images
     cart.forEach((item) => {
-      product.forEach((productDetail, i) => {
-        if (item.id == productDetail._id) {
-          product[i].quantity = item.quantity;
+      productInfo.forEach((info, i) => {
+        if (item.id == info._id) {
+          cart[i].images = info.images;
+          cart[i].title = info.title;
+          cart[i].type = info.type;
+          cart[i].price = info.price;
         }
       });
-      return product;
     });
 
     res.status(200).json({
       success: true,
-      cart: product,
+      cart: cart,
     });
   } catch (err) {
+    console.log(err.message);
     res.status(400).json({
       success: false,
       error: err.message,

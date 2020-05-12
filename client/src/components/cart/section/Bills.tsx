@@ -7,14 +7,14 @@ const Bills = ({ orderTotal, deliveryFee, totalPayment }: any) => {
     <Fragment>
       <Paper elevation={7} className={classes.root}>
         <Grid container direction={"column"}>
-          <Grid item xl={3} className={classes.boxTitle}>
+          <Grid item xl={12} className={classes.boxTitle}>
             <Typography className={classes.textContent} variant={"h6"}>
               Summary
             </Typography>
           </Grid>
           <Grid
             item
-            xl={2}
+            xl={12}
             className={classes.subTitle}
             style={{ borderBottom: " 1px solid rgb(180, 180, 180)" }}
           >
@@ -23,7 +23,7 @@ const Bills = ({ orderTotal, deliveryFee, totalPayment }: any) => {
               $ {orderTotal}
             </Typography>
           </Grid>
-          <Grid item xl={2} className={classes.subTitle}>
+          <Grid item xl={12} className={classes.subTitle}>
             <Typography className={classes.textContent}>
               Total billed amount
             </Typography>
@@ -31,7 +31,7 @@ const Bills = ({ orderTotal, deliveryFee, totalPayment }: any) => {
               $ {orderTotal}
             </Typography>
           </Grid>
-          <Grid item xl={2} className={classes.subTitle}>
+          <Grid item xl={12} className={classes.subTitle}>
             <Typography className={classes.textContent}>
               Delivery Fee
             </Typography>
@@ -39,7 +39,7 @@ const Bills = ({ orderTotal, deliveryFee, totalPayment }: any) => {
               $ {deliveryFee}
             </Typography>
           </Grid>
-          <Grid item xl={3} className={classes.subTitle}>
+          <Grid item xl={12} className={classes.subTitle}>
             <Typography color={"secondary"} className={classes.textContent}>
               Total Payment
             </Typography>

@@ -6,11 +6,11 @@ import ProductContainer from "./ProductContainer";
 
 import { ICartItemDetail } from "../../../types/interfaces";
 
-const ProductsList = ({ cart, products }: any) => {
+const ProductsList = ({ cart }: any) => {
   const classes = useStyles();
 
   const contentArr = cart.items.map((product: ICartItemDetail) => (
-    <Grid item key={product._id}>
+    <Grid item key={product.id}>
       <ProductContainer product={product} />
     </Grid>
   ));
@@ -48,7 +48,6 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 const mapStateToProps = (state: any) => ({
-  products: state.product,
   cart: state.cart,
 });
 
