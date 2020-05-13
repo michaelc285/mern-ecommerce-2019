@@ -1,12 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography, Slider } from "@material-ui/core";
-const useStyles = makeStyles({
-  root: {
-    width: "100%",
-    height: "100%",
-  },
-});
 
 const valuetext = (value: number) => `$ ${value}`;
 
@@ -50,5 +44,12 @@ const PriceRangeSlider = ({
     </div>
   );
 };
+
+const useStyles = makeStyles({
+  root: {
+    width: "100%",
+    height: "100%",
+  },
+});
 
 export default PriceRangeSlider;

@@ -21,20 +21,28 @@ import MarketLanding from "./components/product/MarketLanding";
 import ProductCreate from "./components/product/ProductCreate";
 import ProductDetailPage from "./components/product/DetailPage/ProductDetailPage";
 import CartPage from "./components/cart/CartPage";
-import "./App.css";
+
+import { ROLE_ADMIN, ROLE_GUEST, ROLE_USER } from "./context/types";
 
 const App = ({ loadUser, auth }: any) => {
   const [isAuth, setIsAuth] = useState(false);
+  const [role, setRole] = useState(ROLE_GUEST);
+
   useEffect(() => {
     loadUser();
   }, []);
+
   useEffect(() => {
     if (auth && auth.isAuthenticated) {
-      console.log(auth.isAuthenticated);
       setIsAuth(true);
+      if (auth.user.role === 1) {
+        setRole(ROLE_ADMIN);
+      } else {
+        setRole(ROLE_USER);
+      }
     } else {
-      console.log(false);
       setIsAuth(false);
+      setRole(ROLE_GUEST);
     }
   }, [auth]);
 
@@ -46,6 +54,7 @@ const App = ({ loadUser, auth }: any) => {
           flexDirection: "column",
           position: "relative",
           minHeight: "100vh",
+          height: "100%",
         }}
       >
         {/* !!! Add a top cotainer here to display some pic for decoration  */}
@@ -67,19 +76,20 @@ const App = ({ loadUser, auth }: any) => {
             />
             <Route path="/auth" exact component={AuthPage} />
             {/* Authorized Route */}
-            {/* <Route exact path="/user/cart" component={CartPage} /> */}
             <ProtectedRoute
-              isAuthenticated={isAuth}
-              authenticationPath={"/auth"}
               exact
+              isAuthenticated={isAuth}
+              role={role}
+              authenticationPath={"/auth"}
               path="/user/cart"
               component={CartPage}
             />
             {/* Admin Route */}
-            {/* <Route exact path="/productcreate" component={ProductCreate} /> */}
             <ProtectedRoute
               exact
+              adminRestrict
               isAuthenticated={isAuth}
+              role={role}
               authenticationPath={"/auth"}
               path="/productcreate"
               component={ProductCreate}

@@ -1,7 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import { addProductToCart } from "../../context/actions/CartAction";
-import { Card, Button } from "react-bootstrap";
+import { Button } from "@material-ui/core";
+import { Card } from "react-bootstrap";
 
 interface IProductBox {
   image: string;
@@ -41,13 +42,13 @@ const ProductBox = ({
       </Card.Body>
       <Card.Footer style={{ display: "flex", justifyContent: "space-between" }}>
         <Button
-          variant="outline-success"
+          variant="outlined"
           href="#"
           onClick={() => addProductToCart(_id)}
         >
           Add to Cart
         </Button>
-        <Button variant="outline-success" href={`/product/${_id}`}>
+        <Button variant="outlined" href={`/product/${_id}`}>
           Browse
         </Button>
       </Card.Footer>

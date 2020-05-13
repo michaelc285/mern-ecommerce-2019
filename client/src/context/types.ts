@@ -38,3 +38,10 @@ export const CART_BUY_FAIL = "CART_BUY_FAIL";
  */
 export const GET_ERRORS = "GET_ERRORS";
 export const CLEAR_ERRORS = "CLEAR_ERRORS";
+
+/**
+ *     ROLE
+ */
+export const ROLE_GUEST = "GUSET";
+export const ROLE_ADMIN = "ADMIN";
+export const ROLE_USER = "USER";

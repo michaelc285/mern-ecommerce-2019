@@ -1,4 +1,4 @@
-import React, { useEffect, Fragment } from "react";
+import React, { useEffect, Fragment, useState } from "react";
 import { connect } from "react-redux";
 import { getProductsById } from "../../../context/actions/ProductAction";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
@@ -15,7 +15,7 @@ import { IProduct } from "../../../types/interfaces";
 interface IProductDetailPage {
   match: any;
   productIsLoading: boolean;
-  product: IProduct;
+  product: any;
   getProductsById(productId: string): void;
 }
 
@@ -34,16 +34,23 @@ const productTemplate = {
 
 const ProductDetailPage = ({
   match,
-  product = productTemplate,
-  productIsLoading,
+  product,
   getProductsById,
 }: IProductDetailPage) => {
   const classes = useStyles();
   const productId = match.params.productID;
+  const [productData, setProductData] = useState<IProduct>(productTemplate);
 
   useEffect(() => {
     getProductsById(productId);
   }, [productId, getProductsById]);
+
+  useEffect(() => {
+    if (product && product.data && product.data.length > 0) {
+      setProductData(product.data[0]);
+      console.log(product.data[0]);
+    }
+  }, [product]);
 
   // Components
   const LoadingComp = (
@@ -63,20 +70,20 @@ const ProductDetailPage = ({
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <Typography className={classes.typography} variant={"h6"}>
-            {product.title}
+            {productData.title}
           </Typography>
         </Grid>
-        <Grid item xs={12} sm={6}>
-          <Display product={product} />
+        <Grid item xs={12} lg={6}>
+          <Display product={productData} />
         </Grid>
-        <Grid item xs={12} sm={6}>
-          <Panel product={product} />
+        <Grid item xs={12} lg={6}>
+          <Panel product={productData} />
         </Grid>
       </Grid>
     </Container>
   );
   return (
-    <Fragment>{product && productIsLoading ? LoadingComp : Content}</Fragment>
+    <Fragment>{product && product.isLoading ? LoadingComp : Content}</Fragment>
   );
 };
 
@@ -85,6 +92,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
+      minHeight: "100vh",
     },
     paper: {
       padding: theme.spacing(2),
@@ -97,9 +105,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const mapStateToProps = (state: any) => ({
-  productIsLoading: state.product.isLoading,
-  product: state.product.data[0],
-  cart: state.cart,
+  product: state.product,
 });
 
 export default connect(mapStateToProps, { getProductsById })(ProductDetailPage);

@@ -73,7 +73,7 @@ export const removeProductFromCart = (productId: string) => async (
     });
 
     console.log(result);
-    // dispatch({ type: CART_REMOVE_SUCCESS, payload: result });
+    dispatch({ type: CART_REMOVE_SUCCESS, payload: result });
   } catch (err) {
     dispatch(returnErrors(err.message, 500));
     dispatch({ type: CART_REMOVE_FAIL });

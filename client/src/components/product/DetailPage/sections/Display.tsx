@@ -17,7 +17,7 @@ const Display = ({ product }: IDisplay) => {
   const slideItem = product.images.map((image, index) => (
     <Carousel.Item key={`${product._id}-${index}`}>
       <img
-        className="d-block w-100"
+        className={classes.img}
         src={`/${image}`}
         alt={`${product.title}-${index}`}
       />
@@ -25,7 +25,7 @@ const Display = ({ product }: IDisplay) => {
   ));
 
   return (
-    <Paper className={classes.paper}>
+    <Paper className={classes.paper} elevation={4}>
       <Carousel activeIndex={index} onSelect={handleSelect} indicators={false}>
         {slideItem}
       </Carousel>
@@ -40,9 +40,13 @@ const useStyles = makeStyles((theme: Theme) =>
       flexGrow: 1,
     },
     paper: {
+      height: "400px",
       padding: theme.spacing(2),
       textAlign: "center",
       color: theme.palette.text.secondary,
+    },
+    img: {
+      maxHeight: "370px",
     },
   })
 );

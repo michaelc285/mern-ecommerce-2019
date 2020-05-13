@@ -9,6 +9,7 @@ import { getProducts } from "../../context/actions/ProductAction";
 const MarketLanding = ({ getProducts, products }: any) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(8);
+
   let currentProducts = [];
   let resultCount = 0;
   if (products.data) {
