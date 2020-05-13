@@ -34,12 +34,20 @@ const NavDrawer = ({ toggleDrawer, toggle }: any) => {
           </Link>
         </ListItem>
         <ListItem>
+          <Link to="/user/history">
+            <Typography color={"textPrimary"}>History User</Typography>
+          </Link>
+        </ListItem>
+      </List>
+      <Divider className={classes.divider} />
+      <List>
+        <ListItem>
           <Link to="/productcreate">
             <Typography color={"textPrimary"}>Create Product</Typography>
           </Link>
         </ListItem>
       </List>
-      <Divider />
+      <Divider className={classes.divider} />
       <List>
         {/* Two cases, after auth : Records/ PerosnalInfo/ Cart | Non-Auth: Login / Register*/}
         <ListItem>
@@ -68,6 +76,11 @@ const NavDrawer = ({ toggleDrawer, toggle }: any) => {
 const useStyles = makeStyles({
   list: {
     width: 250,
+  },
+  divider: {
+    width: "95%",
+    marginLeft: "auto",
+    marginRight: "auto",
   },
 });
 

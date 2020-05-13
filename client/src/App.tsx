@@ -1,9 +1,8 @@
 import React, { useEffect, Suspense, useState } from "react";
 import { Route, Switch } from "react-router-dom";
 
-import store from "./context/store";
 import { connect } from "react-redux";
-import AuthCheck from "./hoc/AuthCheck";
+
 import ProtectedRoute from "./hoc/ProtectedRoute";
 
 import "./App.css";
@@ -21,6 +20,7 @@ import MarketLanding from "./components/product/MarketLanding";
 import ProductCreate from "./components/product/ProductCreate";
 import ProductDetailPage from "./components/product/DetailPage/ProductDetailPage";
 import CartPage from "./components/cart/CartPage";
+import PurchaseHistoryUser from "./components/history/PurchaseHistoryUser";
 
 import { ROLE_ADMIN, ROLE_GUEST, ROLE_USER } from "./context/types";
 
@@ -83,6 +83,14 @@ const App = ({ loadUser, auth }: any) => {
               authenticationPath={"/auth"}
               path="/user/cart"
               component={CartPage}
+            />
+            <ProtectedRoute
+              exact
+              isAuthenticated={isAuth}
+              role={role}
+              authenticationPath={"/auth"}
+              path="/user/history"
+              component={PurchaseHistoryUser}
             />
             {/* Admin Route */}
             <ProtectedRoute

@@ -140,3 +140,27 @@ export interface IPaypal {
   amount: number;
   onSuccess(details: any, data: any): void;
 }
+
+// ***************
+//  History
+// ***************
+
+export interface IOrderProduct {
+  purchaseAt: number;
+  name: string;
+  id: string;
+  price: number;
+  quantity: number;
+  orderID: string;
+}
+
+export interface IHistory {
+  id: string;
+  purchaseAt: number;
+  history: IOrderProduct[];
+}
+
+export interface IPurchaseHistoryUser {
+  getUserHistory(): void;
+  history: { isLoading: boolean; data: IHistory[] };
+}

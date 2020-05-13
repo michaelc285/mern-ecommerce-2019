@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const auth = require("../../middleware/auth");
-const { getHistory } = require("../../controllers/users");
+const { getHistory } = require("../../controllers/history");
 const { getUsers, deleteUser } = require("../../controllers/users");
 const {
   productAddToCart,

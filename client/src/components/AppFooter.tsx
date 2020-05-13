@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import { Grid, Typography } from "@material-ui/core";
-import SelectComponent from "../components/utils/SelectComponent";
+
 const AppFooter = () => {
   const classes = useStyles();
   return (

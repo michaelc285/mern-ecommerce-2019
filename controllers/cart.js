@@ -194,7 +194,7 @@ exports.buyProcessDone = async (req, res) => {
       return {
         purchaseAt: Date.now(),
         name: item.title,
-        id: item._id,
+        id: item.id,
         price: item.price,
         quantity: item.quantity,
         orderID: req.body.data.orderID,
@@ -204,6 +204,7 @@ exports.buyProcessDone = async (req, res) => {
     // Bills object
     const bills = {
       id: req.body.data.orderID,
+      purchaseAt: Date.now(),
       history,
     };
 

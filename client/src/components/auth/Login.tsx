@@ -20,11 +20,11 @@ const Login = ({ isAuthenticated, login, clearErrors, error }: ILogin) => {
   const [message, setMessage] = useState(null);
   const formik = useFormik({
     initialValues: {
-      email: "",
-      password: "",
+      loginEmail: "",
+      loginPassword: "",
     },
     onSubmit: (user) => {
-      login(user);
+      login({ email: user.loginEmail, password: user.loginPassword });
     },
   });
 
@@ -44,24 +44,24 @@ const Login = ({ isAuthenticated, login, clearErrors, error }: ILogin) => {
         <FormControl fullWidth>
           <TextField
             type="email"
-            id="email"
+            id="loginEmail"
             label="Email"
             variant="outlined"
-            name="email"
+            name="loginEmail"
             className="mb-3"
-            value={formik.values.email}
+            value={formik.values.loginEmail}
             onChange={formik.handleChange}
           />
         </FormControl>
         <FormControl fullWidth>
           <TextField
             type="password"
-            id="password"
+            id="loginPassword"
             label="Password"
             variant="outlined"
-            name="password"
+            name="loginPassword"
             className="mb-3"
-            value={formik.values.password}
+            value={formik.values.loginPassword}
             onChange={formik.handleChange}
           />
         </FormControl>

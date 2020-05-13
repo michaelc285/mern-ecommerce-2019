@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { register } from "../../context/actions/AuthAction";
 import { clearErrors } from "../../context/actions/ErrorActions";
@@ -12,14 +12,7 @@ import {
 import { useFormik } from "formik";
 import { IRegister, IAuthReduxProps } from "../../types/interfaces";
 import { makeStyles, Theme } from "@material-ui/core/styles";
-import {
-  Modal,
-  ModalHeader,
-  ModalBody,
-  Form,
-  NavLink,
-  Alert,
-} from "reactstrap";
+import { Form, Alert } from "reactstrap";
 
 const Register = ({
   isAuthenticated,
@@ -33,12 +26,16 @@ const Register = ({
 
   const formik = useFormik({
     initialValues: {
-      name: "",
-      email: "",
-      password: "",
+      regName: "",
+      regEmail: "",
+      regPassword: "",
     },
     onSubmit: (newUser) => {
-      register(newUser);
+      register({
+        name: newUser.regName,
+        email: newUser.regEmail,
+        password: newUser.regPassword,
+      });
     },
   });
 
@@ -57,35 +54,35 @@ const Register = ({
       <Form onSubmit={formik.handleSubmit}>
         <FormControl fullWidth>
           <TextField
-            id="name"
+            id="regName"
             label="Name"
             variant="outlined"
-            name="name"
+            name="regName"
             className="mb-3"
-            value={formik.values.name}
+            value={formik.values.regName}
             onChange={formik.handleChange}
           />
         </FormControl>
         <FormControl fullWidth>
           <TextField
-            id="email"
-            name="email"
+            id="regEmail"
+            name="regEmail"
             label="Email Address"
             variant="outlined"
             className="mb-3"
-            value={formik.values.email}
+            value={formik.values.regEmail}
             onChange={formik.handleChange}
           />
         </FormControl>
         <FormControl fullWidth>
           <TextField
             type="password"
-            id="password"
+            id="regPassword"
             label="Password"
             variant="outlined"
-            name="password"
+            name="regPassword"
             className="mb-3"
-            value={formik.values.password}
+            value={formik.values.regPassword}
             onChange={formik.handleChange}
           />
         </FormControl>

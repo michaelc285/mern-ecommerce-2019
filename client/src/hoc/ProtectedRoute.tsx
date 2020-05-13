@@ -50,18 +50,5 @@ export default class ProtectedRoute extends Route<IProtectedRoute> {
         return <Route {...this.props} />;
       }
     }
-
-    // If non-auth redirect to specified path
-    // If auth render component
-    if (redirectPath) {
-      const renderComponent = () => (
-        <Redirect to={{ pathname: redirectPath }} />
-      );
-      return (
-        <Route {...this.props} component={renderComponent} render={undefined} />
-      );
-    } else {
-      return <Route {...this.props} />;
-    }
   }
 }
