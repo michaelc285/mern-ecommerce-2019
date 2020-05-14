@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { getUserHistory } from "../../context/actions/HistoryAction";
 import HistoryContainer from "./section/HistoryContainer";
 import { IPurchaseHistoryUser } from "../../types/interfaces";
+import { Typography, Container } from "@material-ui/core";
 
 const PurchaseHistoryUser = ({
   getUserHistory,
@@ -10,17 +11,21 @@ const PurchaseHistoryUser = ({
 }: IPurchaseHistoryUser) => {
   useEffect(() => {
     getUserHistory();
-  }, []);
+  }, [getUserHistory]);
 
-  useEffect(() => {
-    if (history && history.isLoading) {
-    }
-  }, [history]);
-  console.log(history.data);
+  const content =
+    history &&
+    history.data &&
+    history.data
+      .sort((a, b) => b.purchaseAt - a.purchaseAt)
+      .map((item) => <HistoryContainer key={item.id} history={item} />);
+
+  const nothing = <Typography> No History </Typography>;
+
   return (
-    <div>
-      <HistoryContainer />
-    </div>
+    <Container maxWidth="lg">
+      {history && history.data && history.data.length > 0 ? content : nothing}
+    </Container>
   );
 };
 

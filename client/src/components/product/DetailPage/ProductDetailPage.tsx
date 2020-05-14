@@ -1,4 +1,5 @@
-import React, { useEffect, Fragment, useState } from "react";
+import React, { useEffect, Fragment } from "react";
+
 import { connect } from "react-redux";
 import { getProductsById } from "../../../context/actions/ProductAction";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
@@ -7,30 +8,12 @@ import {
   Grid,
   Typography,
   CircularProgress,
+  Breadcrumbs,
+  Link,
 } from "@material-ui/core";
 import Panel from "./sections/Panel";
 import Display from "./sections/Display";
-import { IProduct } from "../../../types/interfaces";
-
-interface IProductDetailPage {
-  match: any;
-  productIsLoading: boolean;
-  product: any;
-  getProductsById(productId: string): void;
-}
-
-const productTemplate = {
-  _id: "",
-  title: "string",
-  type: "",
-  price: 0,
-  description: "",
-  images: [],
-  quantity: 0,
-  sold: 0,
-  createAt: "",
-  updateAt: "",
-};
+import { IProductDetailPage } from "../../../types/interfaces";
 
 const ProductDetailPage = ({
   match,
@@ -39,18 +22,10 @@ const ProductDetailPage = ({
 }: IProductDetailPage) => {
   const classes = useStyles();
   const productId = match.params.productID;
-  const [productData, setProductData] = useState<IProduct>(productTemplate);
 
   useEffect(() => {
     getProductsById(productId);
   }, [productId, getProductsById]);
-
-  useEffect(() => {
-    if (product && product.data && product.data.length > 0) {
-      setProductData(product.data[0]);
-      console.log(product.data[0]);
-    }
-  }, [product]);
 
   // Components
   const LoadingComp = (
@@ -65,19 +40,25 @@ const ProductDetailPage = ({
     </div>
   );
 
-  const Content = (
+  const Content = product && product.data && product.data.length > 0 && (
     <Container maxWidth="lg" className={classes.root}>
+      <Breadcrumbs aria-label="breadcrumb" style={{ marginBottom: "20px" }}>
+        <Link color="inherit" href="/">
+          Market
+        </Link>
+        <Typography color="textPrimary">{product.data[0].title}</Typography>
+      </Breadcrumbs>
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <Typography className={classes.typography} variant={"h6"}>
-            {productData.title}
+            {product.data[0].title}
           </Typography>
         </Grid>
         <Grid item xs={12} lg={6}>
-          <Display product={productData} />
+          <Display product={product.data[0]} />
         </Grid>
         <Grid item xs={12} lg={6}>
-          <Panel product={productData} />
+          <Panel product={product.data[0]} />
         </Grid>
       </Grid>
     </Container>
@@ -86,6 +67,19 @@ const ProductDetailPage = ({
     <Fragment>{product && product.isLoading ? LoadingComp : Content}</Fragment>
   );
 };
+
+// const productTemplate = {
+//   _id: "",
+//   title: "string",
+//   type: "",
+//   price: 0,
+//   description: "",
+//   images: [],
+//   quantity: 0,
+//   sold: 0,
+//   createAt: "",
+//   updateAt: "",
+// };
 
 // Styles
 const useStyles = makeStyles((theme: Theme) =>
@@ -104,6 +98,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+// Redux
 const mapStateToProps = (state: any) => ({
   product: state.product,
 });

@@ -30,7 +30,7 @@ const App = ({ loadUser, auth }: any) => {
 
   useEffect(() => {
     loadUser();
-  }, []);
+  }, [loadUser]);
 
   useEffect(() => {
     if (auth && auth.isAuthenticated) {
@@ -53,18 +53,16 @@ const App = ({ loadUser, auth }: any) => {
           display: "flex",
           flexDirection: "column",
           position: "relative",
-          minHeight: "100vh",
-          height: "100%",
         }}
       >
         {/* !!! Add a top cotainer here to display some pic for decoration  */}
         {/* <TopContainer /> */}
-        <AppNavbar />
 
         <Container
           maxWidth="lg"
-          style={{ minHeight: "90vh", paddingTop: "90px" }}
+          style={{ minHeight: "100vh", paddingTop: "90px" }}
         >
+          <AppNavbar />
           <Switch>
             {/* Public Route */}
             <Route path="/" exact component={MarketLanding} />
@@ -107,7 +105,6 @@ const App = ({ loadUser, auth }: any) => {
             <Route path="*" component={ErrorPage} />
           </Switch>
         </Container>
-
         <AppFooter />
       </div>
     </Suspense>

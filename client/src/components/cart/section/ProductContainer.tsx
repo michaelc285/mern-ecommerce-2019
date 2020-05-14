@@ -1,4 +1,5 @@
 import React from "react";
+import { CurrencyFormatter } from "../../../utils/NumberFormatter";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import { Grid, Typography, IconButton } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
@@ -61,7 +62,7 @@ const ProductContainer = ({ product }: any) => {
         <Typography className={classes.titleBox}>{product.title}</Typography>
       </Grid>
       <Grid item xl={2} lg={2} md={2} xs={7} className={classes.priceBox}>
-        <Typography>$ {product.price}</Typography>
+        <Typography>{CurrencyFormatter(product.price)}</Typography>
       </Grid>
       <Grid item xl={2} lg={2} md={2} xs={5} className={classes.buttonBox}>
         {quantityButtonGroup}

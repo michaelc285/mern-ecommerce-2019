@@ -24,17 +24,17 @@ const NavDrawer = ({ toggleDrawer, toggle }: any) => {
     <div className={classes.list}>
       <List>
         <ListItem disabled>
-          <Link to="/market">
+          <Link to="/">
             <Typography color={"textPrimary"}>Home</Typography>
           </Link>
         </ListItem>
         <ListItem>
-          <Link to="/market">
+          <Link to="/market" onClick={toggleDrawer(!toggle)}>
             <Typography color={"textPrimary"}>Market</Typography>
           </Link>
         </ListItem>
         <ListItem>
-          <Link to="/user/history">
+          <Link to="/user/history" onClick={toggleDrawer(!toggle)}>
             <Typography color={"textPrimary"}>History User</Typography>
           </Link>
         </ListItem>
@@ -42,7 +42,7 @@ const NavDrawer = ({ toggleDrawer, toggle }: any) => {
       <Divider className={classes.divider} />
       <List>
         <ListItem>
-          <Link to="/productcreate">
+          <Link to="/productcreate" onClick={toggleDrawer(!toggle)}>
             <Typography color={"textPrimary"}>Create Product</Typography>
           </Link>
         </ListItem>
@@ -51,7 +51,7 @@ const NavDrawer = ({ toggleDrawer, toggle }: any) => {
       <List>
         {/* Two cases, after auth : Records/ PerosnalInfo/ Cart | Non-Auth: Login / Register*/}
         <ListItem>
-          <Link to="/auth">
+          <Link to="/auth" onClick={toggleDrawer(!toggle)}>
             <Typography color={"textPrimary"}>Auth</Typography>
           </Link>
         </ListItem>

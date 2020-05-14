@@ -46,7 +46,7 @@ const MarketLanding = ({ getProducts, products }: any) => {
   const Content = (
     <div>
       <Typography style={{ marginTop: "1rem", marginBottom: "1rem" }}>
-        Result {resultCount}
+        {resultCount} {resultCount > 1 ? "Results" : "Result"}
       </Typography>
       <div>
         {/* Products */}

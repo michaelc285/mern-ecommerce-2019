@@ -1,9 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
+import { CurrencyFormatter } from "../../../../utils/NumberFormatter";
 import { addProductToCart } from "../../../../context/actions/CartAction";
-import { IAuthReduxProps } from "../../../../types/interfaces";
+
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
-import { Grid, Paper, Button, Typography } from "@material-ui/core";
+import { Paper, Button, Typography } from "@material-ui/core";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import PaymentIcon from "@material-ui/icons/Payment";
 
@@ -21,7 +22,7 @@ const Panel = ({ product, addProductToCart, isAuthenticated }: IPanel) => {
       <div className={classes.infoGroup}>
         <div className={classes.priceBox}>
           <Typography>
-            <strong>Price</strong> $ {product.price}
+            <strong>Price</strong> {CurrencyFormatter(product.price)}
           </Typography>
         </div>
         <div className={classes.descriptionBox}>
@@ -66,26 +67,30 @@ const useStyles = makeStyles((theme: Theme) =>
       height: "400px",
       padding: theme.spacing(2),
       color: theme.palette.text.secondary,
-      border: "1px solid red",
+
       display: "flex",
       flexDirection: "column",
       justifyContent: "flex-start",
     },
     infoGroup: {
       flexGrow: 1,
+      display: "flex",
+      flexDirection: "column",
     },
     priceBox: {
+      flex: 2,
       padding: "10px",
-      marginBottom: "10px",
+      display: "flex",
+      alignItems: "center",
+      backgroundColor: "rgba(250,193,157,0.25)",
     },
     descriptionBox: {
+      flex: 4,
       padding: "10px",
-      minHeight: "200px",
-      marginBottom: "10px",
     },
     soldBox: {
+      flex: 1,
       padding: "10px",
-      marginBottom: "10px",
     },
     buttonGroup: {
       display: "flex",

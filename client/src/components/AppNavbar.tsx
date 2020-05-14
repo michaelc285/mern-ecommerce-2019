@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect, useMemo } from "react";
 import { connect } from "react-redux";
 import { IAppNavbar, IAuthReduxProps } from "../types/interfaces";
 import NavDrawer from "./NavDrawer";
@@ -49,9 +49,9 @@ const AppNavbar = ({ auth, cart }: any) => {
       setIsAuth(auth.isAuthenticated);
       let num = 0;
       if (cart.items && cart.items.length > 0) {
-        num = cart.items.length;
+        num = calCartItem(cart.items);
       } else if (auth.user.cart.length > 0) {
-        num = auth.user.cart.length;
+        num = calCartItem(auth.user.cart);
       } else {
         num = 0;
       }
@@ -145,6 +145,13 @@ const AppNavbar = ({ auth, cart }: any) => {
   );
 };
 
+const calCartItem = (items: any[]) => {
+  let num = 0;
+  items.forEach((item) => (num += item.quantity));
+  return num;
+};
+
+// Style
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -158,7 +165,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   })
 );
-
+// Redux
 const mapStateToProps = (state: any) => ({
   auth: state.auth,
   cart: state.cart,

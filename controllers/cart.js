@@ -83,7 +83,6 @@ exports.productAddToCart = async (req, res) => {
       cart: cart,
     });
   } catch (err) {
-    console.log(err);
     return res.status(400).json({
       success: false,
       error: err.message,
@@ -170,7 +169,6 @@ exports.loadCart = async (req, res) => {
       cart: cart,
     });
   } catch (err) {
-    console.log(err.message);
     res.status(400).json({
       success: false,
       error: err.message,

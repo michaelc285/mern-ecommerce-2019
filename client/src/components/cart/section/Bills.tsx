@@ -1,4 +1,5 @@
 import React, { Fragment } from "react";
+import { CurrencyFormatter } from "../../../utils/NumberFormatter";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import { Paper, Grid, Typography } from "@material-ui/core";
 const Bills = ({ orderTotal, deliveryFee, totalPayment }: any) => {
@@ -20,7 +21,7 @@ const Bills = ({ orderTotal, deliveryFee, totalPayment }: any) => {
           >
             <Typography className={classes.textContent}>Order total</Typography>
             <Typography className={classes.textContent}>
-              $ {orderTotal}
+              {CurrencyFormatter(orderTotal)}
             </Typography>
           </Grid>
           <Grid item xl={12} className={classes.subTitle}>
@@ -28,7 +29,7 @@ const Bills = ({ orderTotal, deliveryFee, totalPayment }: any) => {
               Total billed amount
             </Typography>
             <Typography className={classes.textContent}>
-              $ {orderTotal}
+              {CurrencyFormatter(orderTotal)}
             </Typography>
           </Grid>
           <Grid item xl={12} className={classes.subTitle}>
@@ -36,7 +37,7 @@ const Bills = ({ orderTotal, deliveryFee, totalPayment }: any) => {
               Delivery Fee
             </Typography>
             <Typography className={classes.textContent}>
-              $ {deliveryFee}
+              {CurrencyFormatter(deliveryFee)}
             </Typography>
           </Grid>
           <Grid item xl={12} className={classes.subTitle}>
@@ -44,7 +45,7 @@ const Bills = ({ orderTotal, deliveryFee, totalPayment }: any) => {
               Total Payment
             </Typography>
             <Typography className={classes.textContent}>
-              $ {totalPayment}
+              {CurrencyFormatter(totalPayment)}
             </Typography>
           </Grid>
         </Grid>
