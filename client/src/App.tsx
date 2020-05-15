@@ -1,4 +1,4 @@
-import React, { useEffect, Suspense, useState } from "react";
+import React, { useEffect, Suspense } from "react";
 import { Route, Switch } from "react-router-dom";
 
 import { connect } from "react-redux";
@@ -25,26 +25,16 @@ import PurchaseHistoryUser from "./components/history/PurchaseHistoryUser";
 import { ROLE_ADMIN, ROLE_GUEST, ROLE_USER } from "./context/types";
 
 const App = ({ loadUser, auth }: any) => {
-  const [isAuth, setIsAuth] = useState(false);
-  const [role, setRole] = useState(ROLE_GUEST);
-
   useEffect(() => {
     loadUser();
-  }, [loadUser]);
+  }, []);
 
-  useEffect(() => {
-    if (auth && auth.isAuthenticated) {
-      setIsAuth(true);
-      if (auth.user.role === 1) {
-        setRole(ROLE_ADMIN);
-      } else {
-        setRole(ROLE_USER);
-      }
-    } else {
-      setIsAuth(false);
-      setRole(ROLE_GUEST);
-    }
-  }, [auth]);
+  let role =
+    auth && auth.user
+      ? auth.user.role === 1
+        ? ROLE_ADMIN
+        : ROLE_USER
+      : ROLE_GUEST;
 
   return (
     <Suspense fallback={<div>Loading</div>}>
@@ -76,7 +66,7 @@ const App = ({ loadUser, auth }: any) => {
             {/* Authorized Route */}
             <ProtectedRoute
               exact
-              isAuthenticated={isAuth}
+              isAuthenticated={auth.isAuthenticated}
               role={role}
               authenticationPath={"/auth"}
               path="/user/cart"
@@ -84,7 +74,7 @@ const App = ({ loadUser, auth }: any) => {
             />
             <ProtectedRoute
               exact
-              isAuthenticated={isAuth}
+              isAuthenticated={auth.isAuthenticated}
               role={role}
               authenticationPath={"/auth"}
               path="/user/history"
@@ -94,7 +84,7 @@ const App = ({ loadUser, auth }: any) => {
             <ProtectedRoute
               exact
               adminRestrict
-              isAuthenticated={isAuth}
+              isAuthenticated={auth.isAuthenticated}
               role={role}
               authenticationPath={"/auth"}
               path="/productcreate"

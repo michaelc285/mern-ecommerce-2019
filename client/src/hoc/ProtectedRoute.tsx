@@ -13,11 +13,12 @@ export default class ProtectedRoute extends Route<IProtectedRoute> {
   public render() {
     // If user non-auth add path into reditextPath
     console.log(`AUTH? ${this.props.isAuthenticated}`);
+    console.log(`Role ${this.props.role}`);
     let redirectPath: string = "";
     if (!this.props.isAuthenticated) {
       redirectPath = this.props.authenticationPath;
     }
-    console.log(redirectPath);
+
     //Role Restrict
     if (this.props.adminRestrict === true) {
       // Role = admin, OK

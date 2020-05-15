@@ -3,14 +3,18 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
-
+import { PersistGate } from "redux-persist/integration/react";
 import { BrowserRouter } from "react-router-dom";
-import store from "./context/store";
+// import store from "./context/store";
 import { Provider } from "react-redux";
+import { persistor, store } from "./context/store";
+import LinearProgress from "@material-ui/core/LinearProgress";
 ReactDOM.render(
   <BrowserRouter>
     <Provider store={store}>
-      <App />{" "}
+      <PersistGate loading={<LinearProgress />} persistor={persistor}>
+        <App />
+      </PersistGate>
     </Provider>
   </BrowserRouter>,
   document.getElementById("root")
