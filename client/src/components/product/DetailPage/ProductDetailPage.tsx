@@ -14,6 +14,7 @@ import {
 import Panel from "./sections/Panel";
 import Display from "./sections/Display";
 import { IProductDetailPage } from "../../../types/interfaces";
+import LoadingProgress from "../../utils/LoadingProgress";
 
 const ProductDetailPage = ({
   match,
@@ -28,20 +29,9 @@ const ProductDetailPage = ({
   }, [productId, getProductsById]);
 
   // Components
-  const LoadingComp = (
-    <div
-      style={{
-        marginTop: "10rem",
-        marginRight: "auto",
-        marginLeft: "auto",
-      }}
-    >
-      <CircularProgress />
-    </div>
-  );
 
   const Content = product && product.data && product.data.length > 0 && (
-    <Container maxWidth="lg" className={classes.root}>
+    <Fragment>
       <Breadcrumbs aria-label="breadcrumb" style={{ marginBottom: "20px" }}>
         <Link color="inherit" href="/">
           Market
@@ -61,10 +51,12 @@ const ProductDetailPage = ({
           <Panel product={product.data[0]} />
         </Grid>
       </Grid>
-    </Container>
+    </Fragment>
   );
   return (
-    <Fragment>{product && product.isLoading ? LoadingComp : Content}</Fragment>
+    <Container maxWidth="lg" className={classes.root}>
+      {product && product.isLoading ? <LoadingProgress /> : Content}
+    </Container>
   );
 };
 

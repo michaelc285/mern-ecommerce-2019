@@ -12,7 +12,10 @@ import {
 import { useFormik } from "formik";
 import { IRegister, IAuthReduxProps } from "../../types/interfaces";
 import { makeStyles, Theme } from "@material-ui/core/styles";
-import { Form, Alert } from "reactstrap";
+import { Form } from "reactstrap";
+import { REGISTER_FAIL } from "../../context/types";
+import Alert from "@material-ui/lab/Alert";
+import { v4 as uuidv4 } from "uuid";
 
 const Register = ({
   isAuthenticated,
@@ -22,7 +25,7 @@ const Register = ({
 }: IRegister) => {
   const classes = useStyles();
 
-  const [message, setMessage] = useState(null);
+  const [message, setMessage] = useState<string[] | null>();
 
   const formik = useFormik({
     initialValues: {
@@ -40,17 +43,28 @@ const Register = ({
   });
 
   useEffect(() => {
-    if (error.id === "REGISTER_FAIL") {
-      setMessage(error.msg.msg);
+    if (error.id === REGISTER_FAIL) {
+      setMessage([REGISTER_FAIL]);
     } else {
       setMessage(null);
     }
   }, [error, isAuthenticated]);
 
+  const alertMessage =
+    message &&
+    message.length > 0 &&
+    message.map((msg) => (
+      <Alert
+        className={classes.alertbar}
+        severity="error"
+        key={uuidv4()}
+      >{`${msg.replace(/_/g, " ")}`}</Alert>
+    ));
+
   return (
     <Paper elevation={7} className={classes.root}>
       <Typography gutterBottom={true}>Sign-Up</Typography>
-      {message ? <Alert color="danger">{message}</Alert> : null}
+      {message ? alertMessage : null}
       <Form onSubmit={formik.handleSubmit}>
         <FormControl fullWidth>
           <TextField
@@ -105,6 +119,10 @@ const Register = ({
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     padding: "2em",
+  },
+  alertbar: {
+    marginBottom: "10px",
+    width: "100%",
   },
 }));
 

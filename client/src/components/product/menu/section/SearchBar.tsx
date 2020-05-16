@@ -3,7 +3,7 @@ import { FormControl, Input, InputAdornment } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 
 interface ISearchBar {
-  handleSearchValue: Function;
+  handleSearchValue(event: React.ChangeEvent<HTMLInputElement>): any;
   searchValue: string;
 }
 
@@ -27,6 +27,8 @@ const SearchBar = ({ handleSearchValue, searchValue }: ISearchBar) => {
           <Input
             id="search-input"
             placeholder="Search Your Product"
+            value={searchValue}
+            onChange={handleSearchValue}
             endAdornment={
               <InputAdornment position="start">
                 <SearchIcon />

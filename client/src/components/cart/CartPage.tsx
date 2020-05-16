@@ -95,9 +95,9 @@ const CartPage = ({
         {cartIsLoading ? (
           <LoadingProgress />
         ) : items && items.length > 0 ? (
-          nothing
-        ) : (
           shoopingcart
+        ) : (
+          nothing
         )}
       </Container>
     </Fragment>

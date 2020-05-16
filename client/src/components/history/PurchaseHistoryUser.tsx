@@ -4,30 +4,47 @@ import { getUserHistory } from "../../context/actions/HistoryAction";
 import HistoryContainer from "./section/HistoryContainer";
 import { IPurchaseHistoryUser } from "../../types/interfaces";
 import { Typography, Container } from "@material-ui/core";
+import { makeStyles, Theme } from "@material-ui/core/styles";
 
 const PurchaseHistoryUser = ({
   getUserHistory,
   history,
 }: IPurchaseHistoryUser) => {
+  const classes = useStyles();
+
   useEffect(() => {
     getUserHistory();
   }, [getUserHistory]);
 
-  const content =
+  const Content =
     history &&
     history.data &&
     history.data
       .sort((a, b) => b.purchaseAt - a.purchaseAt)
       .map((item) => <HistoryContainer key={item.id} history={item} />);
 
-  const nothing = <Typography> No History </Typography>;
+  const NoHistory = (
+    <div className={classes.noHistory}>
+      <Typography variant={"h6"}> No history found</Typography>
+    </div>
+  );
 
   return (
     <Container maxWidth="lg" style={{ minHeight: "100vh" }}>
-      {history && history.data && history.data.length > 0 ? content : nothing}
+      {history && history.data && history.data.length > 0 ? Content : NoHistory}
     </Container>
   );
 };
+
+// Style
+const useStyles = makeStyles((theme: Theme) => ({
+  noHistory: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "300px",
+  },
+}));
 
 // Redux
 const mapStateToProps = (state: any) => ({

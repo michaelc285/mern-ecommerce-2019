@@ -31,14 +31,15 @@ exports.loginUser = async (req, res, next) => {
   const { email, password } = req.body;
   //Check fields
   if (!email || !password) {
-    let warningLabelArr = [];
-    if (!email) warningLabelArr.push(MISSING_EMAIL);
-    if (!password) warningLabelArr.push(MISSING_PASSWORD);
+    let labels = [];
+    if (!email) labels.push(MISSING_EMAIL);
+    if (!password) labels.push(MISSING_PASSWORD);
 
-    return res.status(400).json({
+    return res.status(401).json({
       success: false,
-      warningLabel: warningLabelArr,
+      labels: labels,
       error: "Empty field(s)",
+      status: 401,
     });
   }
 
@@ -63,10 +64,21 @@ exports.loginUser = async (req, res, next) => {
     sendRefreshToken(res, refreshToken);
     sendAccessToken(req, res, accessToken, user);
   } catch (err) {
-    return res.status(500).json({
-      success: false,
-      error: err.message,
-    });
+    if (err.message === USER_NOT_FOUND || err.message === INVALID_PASSWORD) {
+      return res.status(401).json({
+        success: false,
+        labels: [err.message],
+        error: err.message,
+        status: 401,
+      });
+    } else {
+      return res.status(500).json({
+        success: false,
+        labels: [err.message],
+        error: err.message,
+        status: 500,
+      });
+    }
   }
 };
 
@@ -79,14 +91,15 @@ exports.registerUser = async (req, res, next) => {
   const { name, email, password } = req.body;
   // Check user input
   if (!name || !email || !password) {
-    let warningLabelArr = [];
-    if (!name) warningLabelArr.push(MISSING_NAME);
-    if (!email) warningLabelArr.push(MISSING_EMAIL);
-    if (!password) warningLabelArr.push(MISSING_PASSWORD);
+    let labels = [];
+    if (!name) labels.push(MISSING_NAME);
+    if (!email) labels.push(MISSING_EMAIL);
+    if (!password) labels.push(MISSING_PASSWORD);
 
     return res.status(400).json({
       success: false,
-      warningLabel: warningLabelArr,
+      status: 400,
+      labels: labels,
       error: "Empty field(s)",
     });
   }
@@ -130,6 +143,8 @@ exports.registerUser = async (req, res, next) => {
     if (err.name === "MongoError") {
       return res.status(400).json({
         success: false,
+        status: 400,
+        labels: EMAIL_EXIST,
         error: EMAIL_EXIST,
       });
     } else {

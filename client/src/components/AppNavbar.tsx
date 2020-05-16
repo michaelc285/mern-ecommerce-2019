@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import { IAppNavbar, IAuthReduxProps } from "../types/interfaces";
 import NavDrawer from "./NavDrawer";
 import MenuIcon from "@material-ui/icons/Menu";
-import { Link } from "react-router-dom";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import {
@@ -77,11 +76,10 @@ const AppNavbar = ({ auth, cart }: any) => {
 
   const AuthedContent = (
     <div>
-      <Link to="/user/cart">
-        <IconButton color="default">
-          {cartLength > 0 ? ShopingCartBadge : <ShoppingCartIcon />}
-        </IconButton>
-      </Link>
+      <IconButton color="default" href="/user/cart">
+        {cartLength > 0 ? ShopingCartBadge : <ShoppingCartIcon />}
+      </IconButton>
+
       <IconButton
         aria-label="account of current user"
         aria-controls="menu-appbar"

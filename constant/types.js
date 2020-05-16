@@ -1,3 +1,7 @@
+/**
+ *  Auth
+ */
+
 exports.MISSING_NAME = "MISSING_NAME";
 exports.MISSING_EMAIL = "MISSING_EMAIL";
 exports.MISSING_PASSWORD = "MISSING_PASSWORD";

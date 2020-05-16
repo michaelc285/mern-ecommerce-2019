@@ -1,5 +1,5 @@
 import axios from "axios";
-import { returnErrors } from "./ErrorActions";
+import { returnErrors, clearErrors } from "./ErrorActions";
 import { IAuthFunction } from "../../types/interfaces";
 //Constant
 import {
@@ -40,7 +40,7 @@ export const loadUser = () => async (dispatch: Function) => {
 };
 
 // Register User
-export const register = ({ name, email, password }: IAuthFunction) => (
+export const register = ({ name, email, password }: IAuthFunction) => async (
   dispatch: Function
 ) => {
   //Headers
@@ -49,18 +49,18 @@ export const register = ({ name, email, password }: IAuthFunction) => (
       "Content-type": "application/json",
     },
   };
-
-  const newUser = JSON.stringify({ name, email, password });
-
-  axios
-    .post("/api/auth/register", newUser, config)
-    .then((res) => dispatch({ type: REGISTER_SUCCESS, payload: res.data }))
-    .catch((err) => {
-      dispatch(
-        returnErrors(err.response.data, err.response.status, "REGISTER_FAIL")
-      );
-      dispatch({ type: REGISTER_FAIL });
-    });
+  try {
+    const newUser = JSON.stringify({ name, email, password });
+    const result = await axios.post("/api/auth/register", newUser, config);
+    dispatch({ type: REGISTER_SUCCESS, payload: result.data });
+  } catch (err) {
+    dispatch(
+      returnErrors(err.response.data, err.response.status, REGISTER_FAIL, [
+        REGISTER_FAIL,
+      ])
+    );
+    dispatch({ type: REGISTER_FAIL });
+  }
 };
 
 // Login User
@@ -81,8 +81,11 @@ export const login = ({ email, password }: IAuthFunction) => async (
 
   if (result.success) {
     dispatch({ type: LOGIN_SUCCESS, payload: result });
+    dispatch(clearErrors());
   } else {
-    dispatch(returnErrors(result.error, 500));
+    dispatch(
+      returnErrors(result.error, result.status, LOGIN_FAIL, result.labels)
+    );
     dispatch({ type: LOGIN_FAIL });
   }
 };

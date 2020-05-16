@@ -6,10 +6,10 @@ import {
   ExpansionPanelSummary,
   ExpansionPanelDetails,
   Typography,
+  Link,
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { IHistoryContainer } from "../../../types/interfaces";
-import { Link } from "react-router-dom";
 
 const HistoryContainer = ({ history }: IHistoryContainer) => {
   const classes = useStyles();
@@ -31,7 +31,7 @@ const HistoryContainer = ({ history }: IHistoryContainer) => {
             <Typography variant={"caption"}>
               <strong>Product Name</strong>
             </Typography>
-            <Link to={`/product/${item.id}`}>
+            <Link href={`/product/${item.id}`}>
               <Typography>{item.name}</Typography>
             </Link>
           </div>

@@ -12,12 +12,15 @@ import {
   Paper,
 } from "@material-ui/core";
 import { ILogin, IAuthReduxProps } from "../../types/interfaces";
-import { Form, Alert } from "reactstrap";
+import Alert from "@material-ui/lab/Alert";
+import { Form } from "reactstrap";
+import { LOGIN_FAIL } from "../../context/types";
+import { v4 as uuidv4 } from "uuid";
 
 const Login = ({ isAuthenticated, login, clearErrors, error }: ILogin) => {
   const classes = useStyles();
 
-  const [message, setMessage] = useState(null);
+  const [message, setMessage] = useState<string[] | null>(null);
   const formik = useFormik({
     initialValues: {
       loginEmail: "",
@@ -29,17 +32,29 @@ const Login = ({ isAuthenticated, login, clearErrors, error }: ILogin) => {
   });
 
   useEffect(() => {
-    if (error.id === "LOGIN_FAIL") {
-      setMessage(error.msg.msg);
+    if (error.id === LOGIN_FAIL && error.labels && error.labels.length > 0) {
+      setMessage([...error.labels]);
     } else {
       setMessage(null);
     }
   }, [error, isAuthenticated]);
 
+  const alertMessage =
+    message &&
+    message.length > 0 &&
+    message.map((msg) => (
+      <Alert
+        className={classes.alertbar}
+        severity="error"
+        key={uuidv4()}
+      >{`${msg.replace(/_/g, " ")}`}</Alert>
+    ));
+
   return (
     <Paper elevation={7} className={classes.root}>
       <Typography gutterBottom={true}>Sign-In</Typography>
-      {message ? <Alert color="danger">{message}</Alert> : null}
+      {message ? alertMessage : null}
+
       <Form onSubmit={formik.handleSubmit}>
         <FormControl fullWidth>
           <TextField
@@ -84,6 +99,10 @@ const Login = ({ isAuthenticated, login, clearErrors, error }: ILogin) => {
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     padding: "2em",
+  },
+  alertbar: {
+    marginBottom: "10px",
+    width: "100%",
   },
 }));
 

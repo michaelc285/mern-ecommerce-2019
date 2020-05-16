@@ -25,10 +25,12 @@ const ProductMenu = ({ getProducts }: any) => {
   const [price, setPrice] = useState<number[]>([minPrice, maxPrice]);
 
   const handleSelections = (selected: string[]) => setSelections(selected);
-  const handleSearchValue = (value: string) => setSearchValue(value);
+  const handleSearchValue = (event: React.ChangeEvent<HTMLInputElement>) =>
+    setSearchValue(event.target.value);
   const handlePrice = (priceArr: number[]) => setPrice(priceArr);
 
   const HandleRefreshProducts = () => {
+    console.log(searchValue);
     const body = {
       searchTerm: searchValue,
       filters: {
