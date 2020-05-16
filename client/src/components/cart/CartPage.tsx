@@ -1,12 +1,15 @@
 import React, { useEffect, Fragment } from "react";
+import { makeStyles, Theme } from "@material-ui/core/styles";
 import { connect } from "react-redux";
 import { getProductsById } from "../../context/actions/ProductAction";
 import { loadCart } from "../../context/actions/CartAction";
-import { Container, Grid } from "@material-ui/core";
+import { Container, Grid, Typography, Button } from "@material-ui/core";
 import Bills from "./section/Bills";
 import ProductsList from "./section/ProductsList";
 import Payment from "./section/Payment";
 import { ICartPage } from "../../types/interfaces";
+import LoadingProgress from "../utils/LoadingProgress";
+import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 
 const CartPage = ({
   authIsLoading,
@@ -14,6 +17,8 @@ const CartPage = ({
   cartIsLoading,
   loadCart,
 }: ICartPage) => {
+  const classes = useStyles();
+
   useEffect(() => {
     loadCart();
   }, [authIsLoading, loadCart]);
@@ -32,8 +37,32 @@ const CartPage = ({
   }
 
   // Components
-  const load = <div>Load...</div>;
-  const nothing = <div>nothing</div>;
+
+  const nothing = (
+    <div
+      style={{
+        height: "300px",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <Typography variant={"h6"} gutterBottom={true}>
+          Nothing in cart
+        </Typography>
+        <Button
+          href="/market"
+          variant="contained"
+          color="primary"
+          endIcon={<AddShoppingCartIcon />}
+        >
+          Shop now
+        </Button>
+      </div>
+    </div>
+  );
+
   const shoopingcart = (
     <Fragment>
       {/* Products List */}
@@ -62,17 +91,25 @@ const CartPage = ({
 
   return (
     <Fragment>
-      <Container maxWidth="md">
-        {cartIsLoading
-          ? load
-          : items && items.length > 0
-          ? shoopingcart
-          : nothing}
+      <Container maxWidth="md" style={{ minHeight: "100vh" }}>
+        {cartIsLoading ? (
+          <LoadingProgress />
+        ) : items && items.length > 0 ? (
+          nothing
+        ) : (
+          shoopingcart
+        )}
       </Container>
     </Fragment>
   );
 };
 
+// Style
+const useStyles = makeStyles((theme: Theme) => ({
+  loading: {},
+}));
+
+// Redux
 const mapStateToProps = (state: any) => ({
   authIsLoading: state.auth.isAuthenticated,
   product: state.product,

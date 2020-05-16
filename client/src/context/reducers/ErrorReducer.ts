@@ -1,5 +1,6 @@
 import { GET_ERRORS, CLEAR_ERRORS } from "../types";
 import { IAction } from "../../types/interfaces";
+
 const initialState = {
   msg: {},
   status: null,

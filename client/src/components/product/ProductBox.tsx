@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { addProductToCart } from "../../context/actions/CartAction";
 import { Button } from "@material-ui/core";
 import { Card } from "react-bootstrap";
+import { CurrencyFormatter } from "../../utils/NumberFormatter";
 
 interface IProductBox {
   image: string;
@@ -37,7 +38,7 @@ const ProductBox = ({
         <Card.Text>{desc}</Card.Text>
 
         <span style={{ fontSize: "1.5rem" }}>
-          <strong>$ {price}</strong>
+          <strong>{CurrencyFormatter(price)}</strong>
         </span>
       </Card.Body>
       <Card.Footer style={{ display: "flex", justifyContent: "space-between" }}>

@@ -123,7 +123,7 @@ const AppNavbar = ({ auth, cart }: any) => {
 
   return (
     <div className={classes.root}>
-      <AppBar position="fixed" color={"default"}>
+      <AppBar position="fixed">
         <Toolbar>
           <IconButton
             edge="start"

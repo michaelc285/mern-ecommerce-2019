@@ -23,7 +23,7 @@ const PurchaseHistoryUser = ({
   const nothing = <Typography> No History </Typography>;
 
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="lg" style={{ minHeight: "100vh" }}>
       {history && history.data && history.data.length > 0 ? content : nothing}
     </Container>
   );

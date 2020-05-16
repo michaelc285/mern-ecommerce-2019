@@ -3,10 +3,14 @@ import { connect } from "react-redux";
 import ProductMenu from "./menu/ProductFilter";
 import ProductsContainer from "./section/ProductsContainer";
 import Pagination from "./section/Pagination";
-import { Typography, CircularProgress } from "@material-ui/core";
+import { Typography, Container } from "@material-ui/core";
 import { getProducts } from "../../context/actions/ProductAction";
+import LoadingProgres from "../utils/LoadingProgress";
+import { makeStyles, Theme } from "@material-ui/core/styles";
 
 const MarketLanding = ({ getProducts, products }: any) => {
+  const classes = useStyles();
+
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(8);
 
@@ -30,22 +34,17 @@ const MarketLanding = ({ getProducts, products }: any) => {
     getProducts();
   }, [getProducts]);
 
-  // Components
-  const LoadingComp = (
-    <div
-      style={{
-        marginTop: "10rem",
-        marginRight: "auto",
-        marginLeft: "auto",
-      }}
-    >
-      <CircularProgress />
+  // Component
+
+  const NoResult = (
+    <div className={classes.noResult}>
+      <Typography>No relevant result was found</Typography>
     </div>
   );
 
   const Content = (
     <div>
-      <Typography style={{ marginTop: "1rem", marginBottom: "1rem" }}>
+      <Typography className={classes.resultText}>
         {resultCount} {resultCount > 1 ? "Results" : "Result"}
       </Typography>
       <div>
@@ -53,13 +52,7 @@ const MarketLanding = ({ getProducts, products }: any) => {
         <ProductsContainer products={currentProducts} />
 
         {/* Pagination */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            padding: "3em",
-          }}
-        >
+        <div className={classes.pagination}>
           <Pagination
             productsPerPage={productsPerPage}
             totalProducts={resultCount}
@@ -71,7 +64,7 @@ const MarketLanding = ({ getProducts, products }: any) => {
   );
 
   return (
-    <div style={{ minHeight: "70vh" }}>
+    <Container maxWidth="lg" style={{ minHeight: "100vh" }}>
       <div style={{ display: "flex", flexDirection: "column", height: "auto" }}>
         {/* Menu */}
         <div>
@@ -79,12 +72,38 @@ const MarketLanding = ({ getProducts, products }: any) => {
         </div>
 
         {/* Content */}
-        {products && products.isLoading ? LoadingComp : Content}
+        {products && products.isLoading ? (
+          <LoadingProgres />
+        ) : products.data && products.data.length > 0 ? (
+          Content
+        ) : (
+          NoResult
+        )}
       </div>
-    </div>
+    </Container>
   );
 };
 
+// Style
+
+const useStyles = makeStyles((theme: Theme) => ({
+  noResult: {
+    height: "300px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  pagination: {
+    display: "flex",
+    justifyContent: "center",
+    padding: "3em",
+  },
+  resultText: {
+    margin: "10px 0 10px 0",
+  },
+}));
+
+// Redux
 const mapStateToProps = (state: any) => ({
   error: state.error,
   products: state.product,

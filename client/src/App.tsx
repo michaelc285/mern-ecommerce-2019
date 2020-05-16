@@ -28,7 +28,7 @@ const App = ({ loadUser, auth }: any) => {
   useEffect(() => {
     loadUser();
   }, []);
-
+  // console.log(auth.token);
   let role =
     auth && auth.user
       ? auth.user.role === 1
@@ -48,10 +48,7 @@ const App = ({ loadUser, auth }: any) => {
         {/* !!! Add a top cotainer here to display some pic for decoration  */}
         {/* <TopContainer /> */}
 
-        <Container
-          maxWidth="lg"
-          style={{ minHeight: "100vh", paddingTop: "90px" }}
-        >
+        <div style={{ paddingTop: "90px" }}>
           <AppNavbar />
           <Switch>
             {/* Public Route */}
@@ -94,7 +91,7 @@ const App = ({ loadUser, auth }: any) => {
             {/* Page Not Found Route */}
             <Route path="*" component={ErrorPage} />
           </Switch>
-        </Container>
+        </div>
         <AppFooter />
       </div>
     </Suspense>

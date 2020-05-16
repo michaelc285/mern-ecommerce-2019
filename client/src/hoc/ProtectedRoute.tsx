@@ -12,8 +12,8 @@ export interface IProtectedRoute extends RouteProps {
 export default class ProtectedRoute extends Route<IProtectedRoute> {
   public render() {
     // If user non-auth add path into reditextPath
-    console.log(`AUTH? ${this.props.isAuthenticated}`);
-    console.log(`Role ${this.props.role}`);
+    // console.log(`AUTH? ${this.props.isAuthenticated}`);
+    // console.log(`Role ${this.props.role}`);
     let redirectPath: string = "";
     if (!this.props.isAuthenticated) {
       redirectPath = this.props.authenticationPath;
@@ -37,7 +37,7 @@ export default class ProtectedRoute extends Route<IProtectedRoute> {
         const renderComponent = () => (
           <Redirect to={{ pathname: redirectPath }} />
         );
-        console.log("fail with only auth required");
+        // console.log("fail with only auth required");
         return (
           <Route
             {...this.props}
@@ -47,7 +47,7 @@ export default class ProtectedRoute extends Route<IProtectedRoute> {
         );
       } else {
         // Success
-        console.log("Success with no any restrict");
+        // console.log("Success with no any restrict");
         return <Route {...this.props} />;
       }
     }

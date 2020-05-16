@@ -48,7 +48,7 @@ const ProductCreate = ({ product, createProduct, error }: any) => {
   };
 
   return (
-    <Container maxWidth="md">
+    <Container maxWidth="lg" style={{ minHeight: "100vh" }}>
       <form className={classes.root} autoComplete="off" onSubmit={handleSubmit}>
         <Grid container spacing={5}>
           {/* Page Title */}
