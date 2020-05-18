@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
-import { Container, Grid, Paper, Typography } from "@material-ui/core";
+import { Paper } from "@material-ui/core";
 import { IProduct } from "../../../../types/interfaces";
 import Carousel from "react-bootstrap/Carousel";
 

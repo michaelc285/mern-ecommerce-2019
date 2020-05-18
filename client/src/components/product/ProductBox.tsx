@@ -3,9 +3,9 @@ import { makeStyles, Theme } from "@material-ui/core/styles";
 import { connect } from "react-redux";
 import { CurrencyFormatter } from "../../utils/NumberFormatter";
 import { addProductToCart } from "../../context/actions/CartAction";
-import { Button, Typography, Link } from "@material-ui/core";
+import { Button, Typography } from "@material-ui/core";
 import { Card } from "react-bootstrap";
-import PageviewIcon from "@material-ui/icons/Pageview";
+
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 
 interface IProductBox {

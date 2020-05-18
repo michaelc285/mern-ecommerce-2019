@@ -7,14 +7,16 @@ import {
   Container,
   Grid,
   Typography,
-  CircularProgress,
   Breadcrumbs,
   Link,
 } from "@material-ui/core";
+import Skeleton from "@material-ui/lab/Skeleton";
 import Panel from "./sections/Panel";
 import Display from "./sections/Display";
 import { IProductDetailPage } from "../../../types/interfaces";
-import LoadingProgress from "../../utils/LoadingProgress";
+
+import DisplaySkeleton from "./sections/DisplaySkeleton";
+import PanelSkeleton from "./sections/PanelSkeleton";
 
 const ProductDetailPage = ({
   match,
@@ -29,7 +31,6 @@ const ProductDetailPage = ({
   }, [productId, getProductsById]);
 
   // Components
-
   const Content = product && product.data && product.data.length > 0 && (
     <Fragment>
       <Breadcrumbs aria-label="breadcrumb" style={{ marginBottom: "20px" }}>
@@ -53,9 +54,36 @@ const ProductDetailPage = ({
       </Grid>
     </Fragment>
   );
+
+  const LoadingSkeleton = (
+    <Fragment>
+      <Breadcrumbs aria-label="breadcrumb" style={{ marginBottom: "20px" }}>
+        <Link color="inherit" href="/">
+          Market
+        </Link>
+        <Skeleton variant="text" animation="wave" style={{ width: "250px" }} />
+      </Breadcrumbs>
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <Skeleton
+            variant="text"
+            animation="wave"
+            style={{ width: "250px" }}
+          />
+        </Grid>
+        <Grid item xs={12} lg={6}>
+          <DisplaySkeleton />
+        </Grid>
+        <Grid item xs={12} lg={6}>
+          <PanelSkeleton />
+        </Grid>
+      </Grid>
+    </Fragment>
+  );
+
   return (
     <Container maxWidth="lg" className={classes.root}>
-      {product && product.isLoading ? <LoadingProgress /> : Content}
+      {product && product.isLoading ? LoadingSkeleton : Content}
     </Container>
   );
 };
@@ -78,6 +106,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
+      border: "1px solid red",
       minHeight: "100vh",
     },
     paper: {

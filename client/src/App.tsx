@@ -27,7 +27,7 @@ import { ROLE_ADMIN, ROLE_GUEST, ROLE_USER } from "./context/types";
 const App = ({ loadUser, auth }: any) => {
   useEffect(() => {
     loadUser();
-  }, []);
+  }, [loadUser]);
   // console.log(auth.token);
   let role =
     auth && auth.user

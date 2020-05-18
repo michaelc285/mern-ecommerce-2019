@@ -17,7 +17,7 @@ const CartPage = ({
   cartIsLoading,
   loadCart,
 }: ICartPage) => {
-  const classes = useStyles();
+  // const classes = useStyles();
 
   useEffect(() => {
     loadCart();

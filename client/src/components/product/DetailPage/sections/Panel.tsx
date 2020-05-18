@@ -37,13 +37,13 @@ const Panel = ({ product, addProductToCart, isAuthenticated }: IPanel) => {
           </Typography>
         </div>
       </div>
-      <div className={classes.buttonGroup}>
+      <div className="d-flex justify-content-center flex-column flex-md-row flex-xl-row">
         <Button
           startIcon={<AddShoppingCartIcon />}
           variant="outlined"
           size="large"
           onClick={() => addProductToCart(product._id)}
-          className={classes.addToCartButton}
+          className="mr-0 mr-md-3 mr-lg-3 mr-xl-3 mb-1 mb-md-0 mb-lg-0 mb-xl-0"
         >
           Add to Cart
         </Button>
@@ -95,9 +95,6 @@ const useStyles = makeStyles((theme: Theme) =>
     buttonGroup: {
       display: "flex",
       justifyContent: "center",
-    },
-    addToCartButton: {
-      marginRight: "10px",
     },
   })
 );

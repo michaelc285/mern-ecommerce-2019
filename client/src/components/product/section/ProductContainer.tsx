@@ -11,7 +11,7 @@ const ProductsContainer = ({ products }: IProductsPerPage) => {
     <div style={{ minHeight: "80vh" }}>
       <Grid container spacing={3}>
         {products.map((product: any) => (
-          <Grid item xl={3} lg={3} md={4} sm={6} xs={12} key={product._id}>
+          <Grid item xl={3} lg={3} md={3} sm={6} xs={12} key={product._id}>
             <ProductBox
               _id={product._id}
               image={product.images[0]}

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import ProductMenu from "./menu/ProductFilter";
-import ProductsContainer from "./section/ProductsContainer";
+import ProductsContainer from "./section/ProductContainer";
 import Pagination from "./section/Pagination";
 import { Typography, Container } from "@material-ui/core";
 import { getProducts } from "../../context/actions/ProductAction";

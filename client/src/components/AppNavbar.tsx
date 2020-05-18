@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { IAppNavbar, IAuthReduxProps } from "../types/interfaces";
 import NavDrawer from "./NavDrawer";
 import MenuIcon from "@material-ui/icons/Menu";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
