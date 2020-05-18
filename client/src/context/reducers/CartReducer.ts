@@ -9,6 +9,8 @@ import {
   CART_REMOVE_SUCCESS,
   CART_BUY_FAIL,
   CART_BUY_SUCCESS,
+  CART_UPDATE_FAIL,
+  CART_UPDATE_SUCCESS,
 } from "../types";
 
 const initialState = {
@@ -23,6 +25,7 @@ export default (state = initialState, action: IAction) => {
         ...state,
         isLoading: true,
       };
+    case CART_UPDATE_SUCCESS:
     case CART_BUY_FAIL:
     case CART_GET_SUCCESS:
     case CART_ADD_SUCCESS:
@@ -38,6 +41,7 @@ export default (state = initialState, action: IAction) => {
         isLoading: false,
         items: null,
       };
+    case CART_UPDATE_FAIL:
     case CART_GET_FAIL:
     case CART_ADD_FAIL:
     case CART_REMOVE_FAIL:

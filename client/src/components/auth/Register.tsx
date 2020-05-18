@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { register } from "../../context/actions/AuthAction";
 import { clearErrors } from "../../context/actions/ErrorActions";
+import { useHistory } from "react-router-dom";
 import {
   TextField,
   Button,
@@ -9,10 +10,8 @@ import {
   Typography,
   Paper,
 } from "@material-ui/core";
-import { useFormik } from "formik";
 import { IRegister, IAuthReduxProps } from "../../types/interfaces";
 import { makeStyles, Theme } from "@material-ui/core/styles";
-import { Form } from "reactstrap";
 import { REGISTER_FAIL } from "../../context/types";
 import Alert from "@material-ui/lab/Alert";
 import { v4 as uuidv4 } from "uuid";
@@ -24,23 +23,32 @@ const Register = ({
   clearErrors,
 }: IRegister) => {
   const classes = useStyles();
-
+  let history = useHistory();
   const [message, setMessage] = useState<string[] | null>();
 
-  const formik = useFormik({
-    initialValues: {
-      regName: "",
-      regEmail: "",
-      regPassword: "",
-    },
-    onSubmit: (newUser) => {
-      register({
-        name: newUser.regName,
-        email: newUser.regEmail,
-        password: newUser.regPassword,
-      });
-    },
-  });
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleName = (event: React.ChangeEvent<HTMLInputElement>) =>
+    setName(event.target.value);
+  const handleEmail = (event: React.ChangeEvent<HTMLInputElement>) =>
+    setEmail(event.target.value);
+  const handlePassword = (event: React.ChangeEvent<HTMLInputElement>) =>
+    setPassword(event.target.value);
+
+  const handleSubmit = (event: any) => {
+    event.preventDefault();
+
+    if (!name || !email || !password) {
+      alert("missing fields");
+    } else {
+      const newUser = { name, email, password };
+      register(newUser)
+        .then(() => history.push("/"))
+        .catch((err) => alert(err));
+    }
+  };
 
   useEffect(() => {
     if (error.id === REGISTER_FAIL) {
@@ -65,7 +73,7 @@ const Register = ({
     <Paper elevation={7} className={classes.root}>
       <Typography gutterBottom={true}>Sign-Up</Typography>
       {message ? alertMessage : null}
-      <Form onSubmit={formik.handleSubmit}>
+      <form onSubmit={handleSubmit}>
         <FormControl fullWidth>
           <TextField
             id="regName"
@@ -73,8 +81,8 @@ const Register = ({
             variant="outlined"
             name="regName"
             className="mb-3"
-            value={formik.values.regName}
-            onChange={formik.handleChange}
+            value={name}
+            onChange={handleName}
           />
         </FormControl>
         <FormControl fullWidth>
@@ -84,8 +92,8 @@ const Register = ({
             label="Email Address"
             variant="outlined"
             className="mb-3"
-            value={formik.values.regEmail}
-            onChange={formik.handleChange}
+            value={email}
+            onChange={handleEmail}
           />
         </FormControl>
         <FormControl fullWidth>
@@ -96,8 +104,8 @@ const Register = ({
             variant="outlined"
             name="regPassword"
             className="mb-3"
-            value={formik.values.regPassword}
-            onChange={formik.handleChange}
+            value={password}
+            onChange={handlePassword}
           />
         </FormControl>
         <FormControl fullWidth>
@@ -110,7 +118,7 @@ const Register = ({
             Sign Up
           </Button>
         </FormControl>
-      </Form>
+      </form>
     </Paper>
   );
 };

@@ -2,12 +2,13 @@ const User = require("../models/Users");
 const Product = require("../models/Products");
 const Payment = require("../models/Payment");
 const async = require("async");
+const { mergeCartAndProduct } = require("../helpers/mergeData");
 /**
  * @desc   Add product to cart
- * @route  GET /api/user/cart/add?id={productId}
+ * @route  GET /api/users/cart/add?productId={productId}
  * @access Private
  */
-exports.productAddToCart = async (req, res) => {
+exports.AddProductToCart = async (req, res) => {
   try {
     // Check product Id exisit in query ?
     if (!req.query.productId) throw Error("Please provide product id");
@@ -58,29 +59,13 @@ exports.productAddToCart = async (req, res) => {
       if (!updateUser) throw Error("Can not add to cart");
     }
 
-    const productsIdArr = updateUser.cart.map((item) => item.id);
-    const productInfo = await Product.find({ _id: { $in: productsIdArr } })
-      .sort({
-        _id: 1,
-      })
-      .select("images title type price");
-
-    let cart = updateUser.cart;
     //Combine and match cart data with images
-    cart.forEach((item) => {
-      productInfo.forEach((info, i) => {
-        if (item.id == info._id) {
-          cart[i].images = info.images;
-          cart[i].title = info.title;
-          cart[i].type = info.type;
-          cart[i].price = info.price;
-        }
-      });
-    });
+    const cart = updateUser.cart;
+    const result = await mergeCartAndProduct(cart);
 
     return res.status(200).json({
       success: true,
-      cart: cart,
+      cart: result,
     });
   } catch (err) {
     return res.status(400).json({
@@ -92,7 +77,7 @@ exports.productAddToCart = async (req, res) => {
 
 /**
  * @desc   Remove product from cart
- * @route  GET /api/user/cart/remove?id={productId}
+ * @route  GET /api/users/cart/remove?productId={productId}
  * @access Private
  */
 exports.removeProductFromCart = async (req, res) => {
@@ -112,15 +97,13 @@ exports.removeProductFromCart = async (req, res) => {
     );
     if (!user) throw Error("Product remove fail");
 
+    //Combine and match cart data with images
     const cart = user.cart;
-    const productIdArr = cart.map((item) => item.id);
-
-    const products = await Product.find({ _id: { $in: productIdArr } });
+    const result = await mergeCartAndProduct(cart);
 
     return res.status(200).json({
       success: true,
-      cart,
-      products,
+      cart: result,
     });
   } catch (err) {
     return res.status(400).json({
@@ -132,7 +115,7 @@ exports.removeProductFromCart = async (req, res) => {
 
 /**
  * @desc   Get cart
- * @route  GET /api/user/cart/
+ * @route  GET /api/users/cart/
  * @access Private
  */
 exports.loadCart = async (req, res) => {
@@ -143,30 +126,13 @@ exports.loadCart = async (req, res) => {
       .select("-password")
       .sort({ _id: 1 });
 
-    const cart = user.cart;
-    const productsIdArr = cart.map((item) => item.id);
-
-    const productInfo = await Product.find({ _id: { $in: productsIdArr } })
-      .sort({
-        _id: 1,
-      })
-      .select("images title type price");
-
     //Combine and match cart data with images
-    cart.forEach((item) => {
-      productInfo.forEach((info, i) => {
-        if (item.id == info._id) {
-          cart[i].images = info.images;
-          cart[i].title = info.title;
-          cart[i].type = info.type;
-          cart[i].price = info.price;
-        }
-      });
-    });
+    const cart = user.cart;
+    const result = await mergeCartAndProduct(cart);
 
     res.status(200).json({
       success: true,
-      cart: cart,
+      cart: result,
     });
   } catch (err) {
     res.status(400).json({
@@ -177,8 +143,46 @@ exports.loadCart = async (req, res) => {
 };
 
 /**
+ * @desc   Update product quantity in cart
+ * @route  GET /api/users/cart/update?productId={productId}&quantity={quantity}
+ * @access Private
+ */
+exports.updateProductInCart = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    if (!req.query.productId) throw Error("Please provide productId");
+    if (!req.query.quantity) throw Error("Please provide quantity");
+
+    const productId = req.query.productId;
+    const quantity = Number(req.query.quantity);
+
+    // find user and update product quantity
+    const user = await User.findOneAndUpdate(
+      { _id: userId, "cart.id": productId },
+      { $set: { "cart.$.quantity": quantity } },
+      { new: true }
+    ).select("-password");
+    if (!user) throw Error("Update fail");
+
+    //Combine and match cart data with images
+    const cart = user.cart;
+    const result = await mergeCartAndProduct(cart);
+
+    return res.status(200).json({
+      success: true,
+      cart: result,
+    });
+  } catch (err) {
+    return res.status(401).json({
+      success: false,
+      error: err.message,
+    });
+  }
+};
+
+/**
  * @desc   Payment
- * @route  POST /api/user/cart/payment
+ * @route  POST /api/users/cart/payment
  * @access Private
  */
 exports.buyProcessDone = async (req, res) => {

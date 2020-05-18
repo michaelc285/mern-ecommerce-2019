@@ -9,6 +9,8 @@ import {
   CART_REMOVE_FAIL,
   CART_BUY_FAIL,
   CART_BUY_SUCCESS,
+  CART_UPDATE_FAIL,
+  CART_UPDATE_SUCCESS,
 } from "../types";
 import axios from "axios";
 
@@ -68,15 +70,41 @@ export const removeProductFromCart = (productId: string) => async (
   try {
     dispatch({ type: CART_LOADING });
 
-    const result = axios.get(`/api/user/cart/remove?productId=${productId}`, {
-      headers: { authorization: `Bearer ${getState().auth.token}` },
-    });
+    const result = await axios.get(
+      `/api/users/cart/remove?productId=${productId}`,
+      {
+        headers: { authorization: `Bearer ${getState().auth.token}` },
+      }
+    );
 
-    console.log(result);
     dispatch({ type: CART_REMOVE_SUCCESS, payload: result });
   } catch (err) {
     dispatch(returnErrors(err.message, 500));
     dispatch({ type: CART_REMOVE_FAIL });
+  }
+};
+
+// Update product quantity in cart
+export const updateProductInCart = (
+  productId: string,
+  quantity: number
+) => async (dispatch: Function, getState: Function) => {
+  try {
+    dispatch({ type: CART_LOADING });
+
+    const result = await axios.get(
+      `/api/users/cart/update?productId=${productId}&quantity=${quantity}`,
+      {
+        headers: {
+          authorization: `Bearer ${getState().auth.token}`,
+        },
+      }
+    );
+
+    dispatch({ type: CART_UPDATE_SUCCESS, payload: result });
+  } catch (err) {
+    dispatch(returnErrors(err.message, 500));
+    dispatch({ type: CART_UPDATE_FAIL });
   }
 };
 

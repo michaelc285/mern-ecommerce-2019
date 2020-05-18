@@ -48,8 +48,8 @@ const App = ({ loadUser, auth }: any) => {
         {/* !!! Add a top cotainer here to display some pic for decoration  */}
         {/* <TopContainer /> */}
 
+        <AppNavbar />
         <div style={{ paddingTop: "90px" }}>
-          <AppNavbar />
           <Switch>
             {/* Public Route */}
             <Route path="/" exact component={MarketLanding} />

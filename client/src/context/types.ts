@@ -32,6 +32,8 @@ export const CART_REMOVE_FAIL = "CART_REMOVE_FAIL";
 export const CART_REMOVE_SUCCESS = "CART_REMOVE_SUCCESS";
 export const CART_BUY_SUCCESS = "CART_BUY_SUCCESS";
 export const CART_BUY_FAIL = "CART_BUY_FAIL";
+export const CART_UPDATE_SUCCESS = "CART_UPDATE_SUCCESS";
+export const CART_UPDATE_FAIL = "CART_UPDATE_FAIL";
 
 /**
  *      History

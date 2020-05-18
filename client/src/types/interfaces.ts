@@ -37,11 +37,11 @@ export interface IAuthForm {
 }
 
 export interface ILogin extends IAuthForm {
-  login(user: IUser): void;
+  login(user: IUser): Promise<void>;
 }
 
 export interface IRegister extends IAuthForm {
-  register(user: IUser): void;
+  register(user: IUser): Promise<void>;
 }
 
 export interface ILogout {

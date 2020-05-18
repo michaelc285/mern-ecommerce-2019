@@ -1,45 +1,58 @@
-import React from "react";
+import React, { useState } from "react";
 import { CurrencyFormatter } from "../../../utils/NumberFormatter";
 import { makeStyles, Theme } from "@material-ui/core/styles";
-import { Grid, Typography, IconButton } from "@material-ui/core";
+import {
+  Grid,
+  Typography,
+  IconButton,
+  NativeSelect,
+  FormControl,
+} from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import RemoveIcon from "@material-ui/icons/Remove";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
+import {
+  removeProductFromCart,
+  updateProductInCart,
+} from "../../../context/actions/CartAction";
+import { connect } from "react-redux";
 
-const ProductContainer = ({ product }: any) => {
+const ProductContainer = ({
+  product,
+  removeProductFromCart,
+  updateProductInCart,
+}: any) => {
   const classes = useStyles();
 
-  const quantityButtonGroup = (
-    <Grid
-      container
-      spacing={1}
-      direction={"row"}
-      justify={"center"}
-      alignItems={"center"}
-      className={classes.quantityButtonGroup}
-    >
-      <Grid item>
-        <IconButton
-          disableRipple={true}
-          disableFocusRipple={true}
-          aria-label="plus"
-          className={classes.iconButtonLeft}
-        >
-          <AddIcon className={classes.icon} />
-        </IconButton>
-      </Grid>
-      <Grid item>
-        <Typography className={classes.quantityText}>
-          {product.quantity}
-        </Typography>
-        {/* <InputBase className={classes.input} /> */}
-      </Grid>
-      <Grid item>
-        <IconButton aria-label="minus" className={classes.iconButtonRight}>
-          <RemoveIcon className={classes.icon} />
-        </IconButton>
-      </Grid>
-    </Grid>
+  const [quantity, setQuantity] = useState(product.quantity);
+
+  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const quantityNumber = Number(event.target.value);
+    updateProductInCart(product.id, quantityNumber)
+      .then(() => setQuantity(quantity))
+      .catch(() => alert("Quantity Update fail"));
+  };
+
+  let options = [];
+  for (let i = 1; i < 100; i++)
+    options.push(
+      <option key={`${product.id}-${i}`} value={i}>
+        {i}
+      </option>
+    );
+
+  const quantitySelection = (
+    <FormControl className={classes.formControl}>
+      <NativeSelect
+        value={quantity}
+        onChange={handleChange}
+        name={`${product.id} - selection`}
+        className={classes.selectEmpty}
+        inputProps={{ "aria-label": "quantity" }}
+      >
+        {options}
+      </NativeSelect>
+    </FormControl>
   );
 
   return (
@@ -65,10 +78,15 @@ const ProductContainer = ({ product }: any) => {
         <Typography>{CurrencyFormatter(product.price)}</Typography>
       </Grid>
       <Grid item xl={2} lg={2} md={2} xs={5} className={classes.buttonBox}>
-        {quantityButtonGroup}
+        {quantitySelection}
       </Grid>
       <Grid item xl={1} lg={1} md={1} xs={1}>
-        <DeleteForeverIcon />
+        <IconButton
+          aria-label="remove"
+          onClick={() => removeProductFromCart(product.id)}
+        >
+          <DeleteForeverIcon />
+        </IconButton>
       </Grid>
     </Grid>
   );
@@ -115,6 +133,15 @@ const useStyles = makeStyles((theme: Theme) => ({
     padding: "1px",
     marginLeft: "1px",
   },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 30,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
 }));
 
-export default ProductContainer;
+export default connect(null, { removeProductFromCart, updateProductInCart })(
+  ProductContainer
+);

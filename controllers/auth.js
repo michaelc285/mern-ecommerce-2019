@@ -6,7 +6,7 @@ const {
   createRefreshToken,
   sendAccessToken,
   sendRefreshToken,
-} = require("./token.js");
+} = require("../helpers/token");
 const {
   MISSING_NAME,
   MISSING_EMAIL,
@@ -129,16 +129,6 @@ exports.registerUser = async (req, res, next) => {
     // Send token. Refresh token as cookie and access token as regular response
     sendRefreshToken(res, refreshToken);
     sendAccessToken(req, res, accessToken, user);
-
-    // res.status(201).json({
-    //   success: true,
-    //   msg: "User Created",
-    //   data: {
-    //     id: user.id,
-    //     name: user.name,
-    //     email: user.email,
-    //   },
-    // });
   } catch (err) {
     if (err.name === "MongoError") {
       return res.status(400).json({

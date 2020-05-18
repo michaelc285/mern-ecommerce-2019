@@ -4,8 +4,9 @@ const auth = require("../../middleware/auth");
 const { getHistory } = require("../../controllers/history");
 const { getUsers, deleteUser } = require("../../controllers/users");
 const {
-  productAddToCart,
+  AddProductToCart,
   removeProductFromCart,
+  updateProductInCart,
   loadCart,
   buyProcessDone,
 } = require("../../controllers/cart");
@@ -18,9 +19,11 @@ router.route("/history").get(auth, getHistory);
 
 router.route("/cart").get(auth, loadCart);
 
-router.route("/cart/add").get(auth, productAddToCart);
+router.route("/cart/update/").get(auth, updateProductInCart);
 
-router.route("/cart/remove").get(auth, removeProductFromCart);
+router.route("/cart/add").get(auth, AddProductToCart);
+
+router.route("/cart/remove/").get(auth, removeProductFromCart);
 
 router.route("/cart/buyProcessDone").post(auth, buyProcessDone);
 

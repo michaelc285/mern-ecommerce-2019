@@ -1,10 +1,11 @@
-import React, { Fragment, useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { IAppNavbar, IAuthReduxProps } from "../types/interfaces";
 import NavDrawer from "./NavDrawer";
 import MenuIcon from "@material-ui/icons/Menu";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import AccountCircle from "@material-ui/icons/AccountCircle";
+
 import {
   IconButton,
   Badge,
@@ -13,12 +14,14 @@ import {
   Typography,
   MenuItem,
   Menu,
+  Link,
 } from "@material-ui/core";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import Logout from "./auth/Logout";
 
 const AppNavbar = ({ auth, cart }: any) => {
   const classes = useStyles();
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isAuth, setIsAuth] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -110,8 +113,12 @@ const AppNavbar = ({ auth, cart }: any) => {
         <MenuItem onClick={handleClose} disabled={true}>
           My account
         </MenuItem>
-        <MenuItem onClick={handleClose}>Cart</MenuItem>
-        <MenuItem onClick={handleClose}>Records</MenuItem>
+        <MenuItem onClick={handleClose}>
+          <Link href="/user/cart">Cart</Link>
+        </MenuItem>
+        <MenuItem onClick={handleClose}>
+          <Link href="/user/history">Records</Link>
+        </MenuItem>
         <MenuItem onClick={handleClose}>
           <Logout />
         </MenuItem>

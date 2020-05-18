@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { login } from "../../context/actions/AuthAction";
 import { clearErrors } from "../../context/actions/ErrorActions";
-import { useFormik } from "formik";
 import { makeStyles, Theme } from "@material-ui/core/styles";
+import { useHistory } from "react-router-dom";
 import {
   TextField,
   Button,
@@ -13,23 +13,32 @@ import {
 } from "@material-ui/core";
 import { ILogin, IAuthReduxProps } from "../../types/interfaces";
 import Alert from "@material-ui/lab/Alert";
-import { Form } from "reactstrap";
 import { LOGIN_FAIL } from "../../context/types";
 import { v4 as uuidv4 } from "uuid";
 
 const Login = ({ isAuthenticated, login, clearErrors, error }: ILogin) => {
   const classes = useStyles();
-
+  let history = useHistory();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [message, setMessage] = useState<string[] | null>(null);
-  const formik = useFormik({
-    initialValues: {
-      loginEmail: "",
-      loginPassword: "",
-    },
-    onSubmit: (user) => {
-      login({ email: user.loginEmail, password: user.loginPassword });
-    },
-  });
+
+  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) =>
+    setEmail(event.target.value);
+  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) =>
+    setPassword(event.target.value);
+  const handleSubmit = (event: any) => {
+    event.preventDefault();
+
+    if (!email || !password) {
+      alert("missing fields");
+    } else {
+      const user = { email, password };
+      login(user)
+        .then(() => history.push("/"))
+        .catch((err) => alert(err));
+    }
+  };
 
   useEffect(() => {
     if (error.id === LOGIN_FAIL && error.labels && error.labels.length > 0) {
@@ -55,7 +64,7 @@ const Login = ({ isAuthenticated, login, clearErrors, error }: ILogin) => {
       <Typography gutterBottom={true}>Sign-In</Typography>
       {message ? alertMessage : null}
 
-      <Form onSubmit={formik.handleSubmit}>
+      <form onSubmit={handleSubmit}>
         <FormControl fullWidth>
           <TextField
             type="email"
@@ -64,8 +73,8 @@ const Login = ({ isAuthenticated, login, clearErrors, error }: ILogin) => {
             variant="outlined"
             name="loginEmail"
             className="mb-3"
-            value={formik.values.loginEmail}
-            onChange={formik.handleChange}
+            value={email}
+            onChange={handleEmailChange}
           />
         </FormControl>
         <FormControl fullWidth>
@@ -76,8 +85,8 @@ const Login = ({ isAuthenticated, login, clearErrors, error }: ILogin) => {
             variant="outlined"
             name="loginPassword"
             className="mb-3"
-            value={formik.values.loginPassword}
-            onChange={formik.handleChange}
+            value={password}
+            onChange={handlePasswordChange}
           />
         </FormControl>
         <FormControl fullWidth>
@@ -90,7 +99,7 @@ const Login = ({ isAuthenticated, login, clearErrors, error }: ILogin) => {
             Sign In
           </Button>
         </FormControl>
-      </Form>
+      </form>
     </Paper>
   );
 };

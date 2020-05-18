@@ -1,9 +1,12 @@
 import React from "react";
+import { makeStyles, Theme } from "@material-ui/core/styles";
 import { connect } from "react-redux";
-import { addProductToCart } from "../../context/actions/CartAction";
-import { Button } from "@material-ui/core";
-import { Card } from "react-bootstrap";
 import { CurrencyFormatter } from "../../utils/NumberFormatter";
+import { addProductToCart } from "../../context/actions/CartAction";
+import { Button, Typography, Link } from "@material-ui/core";
+import { Card } from "react-bootstrap";
+import PageviewIcon from "@material-ui/icons/Pageview";
+import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 
 interface IProductBox {
   image: string;
@@ -22,40 +25,48 @@ const ProductBox = ({
   price,
   addProductToCart,
 }: IProductBox) => {
-  // const handleAddToCart = (productId: string) => {
-  //   addProductToCart(productId);
-  // };
-
+  const classes = useStyles();
   return (
     <Card>
-      <Card.Img
-        variant="top"
-        src={image}
-        style={{ width: "100%", height: "220px" }}
-      />
-      <Card.Body>
-        <Card.Title>{title}</Card.Title>
-        <Card.Text>{desc}</Card.Text>
+      <a href={`/product/${_id}`} className="text-body text-decoration-none">
+        <Card.Img
+          variant="top"
+          src={image}
+          className={classes.img}
+          alt={`${title} - M's Market`}
+        />
+        <Card.Body>
+          <Card.Title>{title}</Card.Title>
+          <Card.Text>{desc}</Card.Text>
 
-        <span style={{ fontSize: "1.5rem" }}>
-          <strong>{CurrencyFormatter(price)}</strong>
-        </span>
-      </Card.Body>
-      <Card.Footer style={{ display: "flex", justifyContent: "space-between" }}>
+          <Typography variant={"h6"}>
+            <strong>{CurrencyFormatter(price)}</strong>
+          </Typography>
+        </Card.Body>
+      </a>
+      <Card.Footer className={"d-flex flex-column"}>
         <Button
           variant="outlined"
           href="#"
           onClick={() => addProductToCart(_id)}
+          startIcon={<AddShoppingCartIcon />}
         >
           Add to Cart
-        </Button>
-        <Button variant="outlined" href={`/product/${_id}`}>
-          Browse
         </Button>
       </Card.Footer>
     </Card>
   );
 };
+
+// Style
+const useStyles = makeStyles((theme: Theme) => ({
+  img: {
+    width: "100%",
+    height: "220px",
+  },
+}));
+
+// Redux
 const mapStateToProps = (state: any) => ({
   auth: state.auth,
   product: state.product,
