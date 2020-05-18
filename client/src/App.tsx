@@ -49,7 +49,7 @@ const App = ({ loadUser, auth }: any) => {
         {/* <TopContainer /> */}
 
         <AppNavbar />
-        <div style={{ paddingTop: "90px" }}>
+        <div style={{ paddingTop: "90px", flexGrow: 1 }}>
           <Switch>
             {/* Public Route */}
             <Route path="/" exact component={MarketLanding} />

@@ -3,8 +3,15 @@ import { makeStyles, Theme } from "@material-ui/core/styles";
 import { connect } from "react-redux";
 import { CurrencyFormatter } from "../../utils/NumberFormatter";
 import { addProductToCart } from "../../context/actions/CartAction";
-import { Button, Typography } from "@material-ui/core";
-import { Card } from "react-bootstrap";
+import {
+  Button,
+  Typography,
+  Card,
+  CardActionArea,
+  CardMedia,
+  CardContent,
+  CardActions,
+} from "@material-ui/core";
 
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 
@@ -26,25 +33,28 @@ const ProductBox = ({
   addProductToCart,
 }: IProductBox) => {
   const classes = useStyles();
-  return (
-    <Card>
-      <a href={`/product/${_id}`} className="text-body text-decoration-none">
-        <Card.Img
-          variant="top"
-          src={image}
-          className={classes.img}
-          alt={`${title} - M's Market`}
-        />
-        <Card.Body>
-          <Card.Title>{title}</Card.Title>
-          <Card.Text>{desc}</Card.Text>
 
-          <Typography variant={"h6"}>
+  return (
+    <Card className={classes.root}>
+      <CardActionArea
+        href={`/product/${_id}`}
+        className="text-decoration-none text-dark"
+      >
+        <CardMedia
+          className={classes.img}
+          image={image}
+          title={`${title} - M's Market`}
+        />
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="h2">
+            {title}
+          </Typography>
+          <Typography variant="h6" color="textSecondary" component="h6">
             <strong>{CurrencyFormatter(price)}</strong>
           </Typography>
-        </Card.Body>
-      </a>
-      <Card.Footer className={"d-flex flex-column"}>
+        </CardContent>
+      </CardActionArea>
+      <CardActions>
         <Button
           variant="outlined"
           href="#"
@@ -53,15 +63,17 @@ const ProductBox = ({
         >
           Add to Cart
         </Button>
-      </Card.Footer>
+      </CardActions>
     </Card>
   );
 };
 
 // Style
 const useStyles = makeStyles((theme: Theme) => ({
+  root: {
+    maxWidth: 345,
+  },
   img: {
-    width: "100%",
     height: "220px",
   },
 }));

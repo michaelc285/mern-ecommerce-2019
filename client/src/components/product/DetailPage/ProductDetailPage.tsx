@@ -106,7 +106,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-      border: "1px solid red",
+
       minHeight: "100vh",
     },
     paper: {

@@ -12,7 +12,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { IHistoryContainer } from "../../../types/interfaces";
 
 const HistoryContainer = ({ history }: IHistoryContainer) => {
-  const classes = useStyles();
+  // const classes = useStyles();
 
   // ms to  YYYY-MM-DD  HH:MM
   const date = new Date(history.purchaseAt);
@@ -21,37 +21,40 @@ const HistoryContainer = ({ history }: IHistoryContainer) => {
   // init totalPrice
   let totalPrice = 0;
 
-  // Product
+  // record in row
   const content = history.history.map((item, index) => {
     totalPrice += item.price * item.quantity;
     return (
       <ExpansionPanelDetails key={`${history.id}-${index}`}>
-        <div className={classes.product}>
-          <div className={classes.productTitle}>
+        <div className="w-100 d-flex flex-column flex-lg-row flex-md-row">
+          <div className="w-75">
             <Typography variant={"caption"}>
               <strong>Product Name</strong>
             </Typography>
-            <Link href={`/product/${item.id}`}>
+            <Link href={`/product/${item.id}`} className="text-decoration-none">
               <Typography>{item.name}</Typography>
             </Link>
           </div>
 
-          <div className={classes.productDetailBox}>
-            <div className={classes.subDetailBox}>
+          <div
+            className=" d-flex flex-column flex-lg-row flex-md-row justify-content-lg-around justify-content-md-around"
+            style={{ width: "400px" }}
+          >
+            <div style={{ minWidth: "100px" }}>
               <Typography variant={"caption"}>
                 <strong>Quantity</strong>
               </Typography>
               <Typography>{item.quantity}</Typography>
             </div>
 
-            <div className={classes.subDetailBox}>
+            <div style={{ minWidth: "100px" }}>
               <Typography variant={"caption"}>
                 <strong>Price</strong>
               </Typography>
               <Typography>{CurrencyFormatter(item.price)}</Typography>
             </div>
 
-            <div className={classes.subDetailBox}>
+            <div style={{ minWidth: "100px" }}>
               <Typography variant={"caption"}>
                 <strong>Sub Total </strong>
               </Typography>
@@ -67,39 +70,43 @@ const HistoryContainer = ({ history }: IHistoryContainer) => {
 
   // History Container
   return (
-    <div className={classes.root}>
-      <ExpansionPanel>
-        <ExpansionPanelSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-          style={{ borderBottom: "1px solid gray" }}
-        >
-          <div className={classes.header}>
-            <Typography className={classes.heading}>
+    <ExpansionPanel>
+      <ExpansionPanelSummary
+        expandIcon={<ExpandMoreIcon />}
+        aria-controls="panel1a-content"
+        id="panel1a-header"
+        className="border-bottom "
+      >
+        <div className="w-100 d-flex flex-column flex-md-row flex-lg-row flex-xl-row">
+          <div className="p2 flex-grow-1">
+            <Typography>
               <strong>Order ID:</strong> {history.id}
             </Typography>
-
-            <Typography style={{ flex: 2 }}>
-              <strong>Date:</strong> {formattedDate}
-            </Typography>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                flex: 1,
-              }}
-            >
-              <Typography>
-                <strong>Total:</strong>
-              </Typography>
-              <Typography>{CurrencyFormatter(totalPrice)}</Typography>
-            </div>
           </div>
-        </ExpansionPanelSummary>
-        {content}
-      </ExpansionPanel>
-    </div>
+
+          <div
+            className="p2 mr-3 d-flex justify-content-lg-between justify-content-md-between"
+            style={{ minWidth: "175px" }}
+          >
+            <Typography>
+              <strong>Date:</strong>&nbsp;
+            </Typography>
+            <Typography>{formattedDate}</Typography>
+          </div>
+
+          <div
+            className="p2 d-flex justify-content-lg-between justify-content-md-between"
+            style={{ minWidth: "130px" }}
+          >
+            <Typography>
+              <strong>Total:</strong>&nbsp;
+            </Typography>
+            <Typography>{CurrencyFormatter(totalPrice)}</Typography>
+          </div>
+        </div>
+      </ExpansionPanelSummary>
+      {content}
+    </ExpansionPanel>
   );
 };
 // Styles

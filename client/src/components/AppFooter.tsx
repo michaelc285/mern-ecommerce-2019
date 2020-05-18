@@ -5,7 +5,7 @@ import { Grid, Typography } from "@material-ui/core";
 const AppFooter = () => {
   const classes = useStyles();
   return (
-    <div className={classes.root}>
+    <footer className={classes.root}>
       <Grid
         container
         direction={"column"}
@@ -19,13 +19,13 @@ const AppFooter = () => {
           <SelectComponent />
         </Grid> */}
       </Grid>
-    </div>
+    </footer>
   );
 };
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
-    position: "absolute",
+    flex: 1,
     width: "100%",
     minHeight: "2.5em",
     bottom: 0,
