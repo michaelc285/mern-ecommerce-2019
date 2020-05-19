@@ -16,7 +16,6 @@ const ProductsContainer = ({ products }: IProductsPerPage) => {
               _id={product._id}
               image={product.images[0]}
               title={product.title}
-              desc={product.desc}
               price={product.price}
             />
           </Grid>

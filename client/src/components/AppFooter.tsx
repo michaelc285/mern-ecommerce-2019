@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: "100%",
     minHeight: "2.5em",
     bottom: 0,
-    padding: "10px 0 0 0",
+    padding: 10,
   },
 }));
 

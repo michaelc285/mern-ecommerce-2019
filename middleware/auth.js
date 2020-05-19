@@ -7,11 +7,12 @@ const auth = (req, res, next) => {
   const token = req.header("authorization").split(" ")[1];
 
   //Check for token
-  if (!token)
+  if (!token) {
     return res.status(401).json({
       success: false,
       msg: "No token exists",
     });
+  }
 
   try {
     // Verify token

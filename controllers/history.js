@@ -1,5 +1,4 @@
 const User = require("../models/Users");
-const Product = require("../models/Products");
 
 /**
  * @desc   Get History in User

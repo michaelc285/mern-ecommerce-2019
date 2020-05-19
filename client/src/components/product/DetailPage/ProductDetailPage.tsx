@@ -1,5 +1,5 @@
 import React, { useEffect, Fragment } from "react";
-
+import { MARKET_LANDING, HOME_PAGE } from "../../../context/path";
 import { connect } from "react-redux";
 import { getProductsById } from "../../../context/actions/ProductAction";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
@@ -34,7 +34,7 @@ const ProductDetailPage = ({
   const Content = product && product.data && product.data.length > 0 && (
     <Fragment>
       <Breadcrumbs aria-label="breadcrumb" style={{ marginBottom: "20px" }}>
-        <Link color="inherit" href="/">
+        <Link color="inherit" href={MARKET_LANDING}>
           Market
         </Link>
         <Typography color="textPrimary">{product.data[0].title}</Typography>
@@ -58,7 +58,7 @@ const ProductDetailPage = ({
   const LoadingSkeleton = (
     <Fragment>
       <Breadcrumbs aria-label="breadcrumb" style={{ marginBottom: "20px" }}>
-        <Link color="inherit" href="/">
+        <Link color="inherit" href={MARKET_LANDING}>
           Market
         </Link>
         <Skeleton variant="text" animation="wave" style={{ width: "250px" }} />

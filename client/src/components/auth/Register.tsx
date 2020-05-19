@@ -9,12 +9,14 @@ import {
   FormControl,
   Typography,
   Paper,
+  Container,
 } from "@material-ui/core";
 import { IRegister, IAuthReduxProps } from "../../types/interfaces";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import { REGISTER_FAIL } from "../../context/types";
 import Alert from "@material-ui/lab/Alert";
 import { v4 as uuidv4 } from "uuid";
+import { SIGN_IN } from "../../context/path";
 
 const Register = ({
   isAuthenticated,
@@ -70,56 +72,72 @@ const Register = ({
     ));
 
   return (
-    <Paper elevation={7} className={classes.root}>
-      <Typography gutterBottom={true}>Sign-Up</Typography>
-      {message ? alertMessage : null}
-      <form onSubmit={handleSubmit}>
-        <FormControl fullWidth>
-          <TextField
-            id="regName"
-            label="Name"
-            variant="outlined"
-            name="regName"
-            className="mb-3"
-            value={name}
-            onChange={handleName}
-          />
-        </FormControl>
-        <FormControl fullWidth>
-          <TextField
-            id="regEmail"
-            name="regEmail"
-            label="Email Address"
-            variant="outlined"
-            className="mb-3"
-            value={email}
-            onChange={handleEmail}
-          />
-        </FormControl>
-        <FormControl fullWidth>
-          <TextField
-            type="password"
-            id="regPassword"
-            label="Password"
-            variant="outlined"
-            name="regPassword"
-            className="mb-3"
-            value={password}
-            onChange={handlePassword}
-          />
-        </FormControl>
-        <FormControl fullWidth>
+    <Container maxWidth="sm">
+      <Paper elevation={7} className={classes.root}>
+        <Typography gutterBottom={true} variant={"h6"}>
+          Sign-Up
+        </Typography>
+        {message ? alertMessage : null}
+        <form onSubmit={handleSubmit}>
+          <FormControl fullWidth>
+            <TextField
+              id="regName"
+              label="Name"
+              variant="outlined"
+              name="regName"
+              className="mb-3"
+              value={name}
+              onChange={handleName}
+            />
+          </FormControl>
+          <FormControl fullWidth>
+            <TextField
+              id="regEmail"
+              name="regEmail"
+              label="Email Address"
+              variant="outlined"
+              className="mb-3"
+              value={email}
+              onChange={handleEmail}
+            />
+          </FormControl>
+          <FormControl fullWidth>
+            <TextField
+              type="password"
+              id="regPassword"
+              label="Password"
+              variant="outlined"
+              name="regPassword"
+              className="mb-3"
+              value={password}
+              onChange={handlePassword}
+            />
+          </FormControl>
+          <FormControl fullWidth>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              size="small"
+            >
+              Sign Up
+            </Button>
+          </FormControl>
+        </form>
+        <div className="w-100 d-flex flex-column align-items-center">
+          <Typography variant={"subtitle1"}> or</Typography>
           <Button
-            type="submit"
             variant="contained"
             color="primary"
-            size="large"
+            size="small"
+            className="w-100"
+            href={SIGN_IN}
           >
-            Sign Up
+            Sign In
           </Button>
-        </FormControl>
-      </form>
-    </Paper>
+        </div>
+      </Paper>
+    </Container>
   );
 };
 

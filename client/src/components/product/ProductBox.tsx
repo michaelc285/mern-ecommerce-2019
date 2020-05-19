@@ -3,6 +3,8 @@ import { makeStyles, Theme } from "@material-ui/core/styles";
 import { connect } from "react-redux";
 import { CurrencyFormatter } from "../../utils/NumberFormatter";
 import { addProductToCart } from "../../context/actions/CartAction";
+import { useHistory } from "react-router-dom";
+import { SIGN_UP } from "../../context/path";
 import {
   Button,
   Typography,
@@ -12,15 +14,15 @@ import {
   CardContent,
   CardActions,
 } from "@material-ui/core";
-
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 
 interface IProductBox {
   image: string;
   title: string;
-  desc: string;
+  description?: string;
   price: number;
   _id: string;
+  auth: boolean;
   addProductToCart(productId: string): any;
 }
 
@@ -28,11 +30,12 @@ const ProductBox = ({
   _id,
   image,
   title,
-  desc,
   price,
+  auth,
   addProductToCart,
 }: IProductBox) => {
   const classes = useStyles();
+  const history = useHistory();
 
   return (
     <Card className={classes.root}>
@@ -58,7 +61,9 @@ const ProductBox = ({
         <Button
           variant="outlined"
           href="#"
-          onClick={() => addProductToCart(_id)}
+          onClick={() => {
+            auth ? addProductToCart(_id) : history.push(SIGN_UP);
+          }}
           startIcon={<AddShoppingCartIcon />}
         >
           Add to Cart
@@ -80,7 +85,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 // Redux
 const mapStateToProps = (state: any) => ({
-  auth: state.auth,
+  auth: state.auth.isAuthenticated,
   product: state.product,
   cart: state.cart,
 });

@@ -1,8 +1,9 @@
 import React, { Fragment } from "react";
 import { connect } from "react-redux";
 import { logout } from "../../context/actions/AuthAction";
-import { Link } from "react-router-dom";
 import { ILogout } from "../../types/interfaces";
+import { Link } from "@material-ui/core";
+import { HOME_PAGE } from "../../context/path";
 
 const Logout = ({ logout }: ILogout) => {
   const handleLogout = () => {
@@ -11,7 +12,12 @@ const Logout = ({ logout }: ILogout) => {
 
   return (
     <Fragment>
-      <Link to="/" onClick={handleLogout}>
+      <Link
+        href={HOME_PAGE}
+        onClick={handleLogout}
+        className="text-decoration-none"
+        color="textPrimary"
+      >
         Logout
       </Link>
     </Fragment>

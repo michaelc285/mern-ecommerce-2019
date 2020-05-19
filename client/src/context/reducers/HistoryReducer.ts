@@ -3,6 +3,7 @@ import {
   HISTORY_LOADING,
   HISTORY_GET_SUCCESS,
   HISTORY_GET_FAIL,
+  HISTORY_CLEAR,
 } from "../types";
 const initialState = {
   isLoading: false,
@@ -21,6 +22,11 @@ export default (state = initialState, action: IAction) => {
         ...state,
         isLoading: false,
         data: action.payload.history,
+      };
+    case HISTORY_CLEAR:
+      return {
+        isLoading: false,
+        data: null,
       };
     case HISTORY_GET_FAIL:
     default:

@@ -11,6 +11,8 @@ import {
   LOGOUT_SUCCESS,
   REGISTER_FAIL,
   REGISTER_SUCCESS,
+  CART_CLEAR,
+  HISTORY_CLEAR,
 } from "../types";
 
 // Load User and get access token
@@ -103,6 +105,8 @@ export const logout = () => async (dispatch: Function) => {
 
   if (result.success) {
     dispatch({ type: LOGOUT_SUCCESS });
+    dispatch({ type: HISTORY_CLEAR });
+    dispatch({ type: CART_CLEAR });
   } else {
     dispatch(returnErrors(result.error, 500));
   }

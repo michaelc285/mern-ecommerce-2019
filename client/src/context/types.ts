@@ -34,14 +34,14 @@ export const CART_BUY_SUCCESS = "CART_BUY_SUCCESS";
 export const CART_BUY_FAIL = "CART_BUY_FAIL";
 export const CART_UPDATE_SUCCESS = "CART_UPDATE_SUCCESS";
 export const CART_UPDATE_FAIL = "CART_UPDATE_FAIL";
-
+export const CART_CLEAR = "CART_CLEAR";
 /**
  *      History
  */
 export const HISTORY_LOADING = "HISTORY_LOADING";
 export const HISTORY_GET_SUCCESS = "HISTORY_GET_SUCCESS";
 export const HISTORY_GET_FAIL = "HISTORY_GET_FAIL";
-
+export const HISTORY_CLEAR = "HISTORY_CLEAR";
 /**
  *     ERROR
  */

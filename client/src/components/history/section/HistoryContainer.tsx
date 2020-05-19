@@ -80,7 +80,7 @@ const HistoryContainer = ({ history }: IHistoryContainer) => {
         <div className="w-100 d-flex flex-column flex-md-row flex-lg-row flex-xl-row">
           <div className="p2 flex-grow-1">
             <Typography>
-              <strong>Order ID:</strong> {history.id}
+              <strong>Order:</strong> {history.id}
             </Typography>
           </div>
 

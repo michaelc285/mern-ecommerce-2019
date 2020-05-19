@@ -3,9 +3,9 @@ import { connect } from "react-redux";
 import { getUserHistory } from "../../context/actions/HistoryAction";
 import HistoryContainer from "./section/HistoryContainer";
 import { IPurchaseHistoryUser } from "../../types/interfaces";
-import { Typography, Container } from "@material-ui/core";
+import { Typography, Container, Breadcrumbs, Link } from "@material-ui/core";
 import { makeStyles, Theme } from "@material-ui/core/styles";
-
+import { MARKET_LANDING } from "../../context/path";
 const PurchaseHistoryUser = ({
   getUserHistory,
   history,
@@ -31,6 +31,14 @@ const PurchaseHistoryUser = ({
 
   return (
     <Container maxWidth="lg" style={{ minHeight: "100vh" }}>
+      <div className="mb-3">
+        <Breadcrumbs aria-label="breadcrumb">
+          <Link color="inherit" href={MARKET_LANDING}>
+            Market
+          </Link>
+          <Typography color="textPrimary">History</Typography>
+        </Breadcrumbs>
+      </div>
       {history && history.data && history.data.length > 0 ? Content : NoHistory}
     </Container>
   );

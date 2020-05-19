@@ -10,7 +10,7 @@ import Payment from "./section/Payment";
 import { ICartPage } from "../../types/interfaces";
 import LoadingProgress from "../utils/LoadingProgress";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
-
+import { MARKET_LANDING } from "../../context/path";
 const CartPage = ({
   authIsLoading,
   items,
@@ -52,7 +52,7 @@ const CartPage = ({
           Nothing in cart
         </Typography>
         <Button
-          href="/market"
+          href={MARKET_LANDING}
           variant="contained"
           color="primary"
           endIcon={<AddShoppingCartIcon />}

@@ -1,13 +1,13 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import { CurrencyFormatter } from "../../../../utils/NumberFormatter";
 import { addProductToCart } from "../../../../context/actions/CartAction";
-
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import { Paper, Button, Typography } from "@material-ui/core";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import PaymentIcon from "@material-ui/icons/Payment";
-
+import { SIGN_IN } from "../../../../context/path";
 interface IPanel {
   product: any;
   isAuthenticated: boolean;
@@ -16,7 +16,7 @@ interface IPanel {
 
 const Panel = ({ product, addProductToCart, isAuthenticated }: IPanel) => {
   const classes = useStyles();
-
+  let history = useHistory();
   return (
     <Paper className={classes.paper} elevation={4}>
       <div className={classes.infoGroup}>
@@ -42,7 +42,11 @@ const Panel = ({ product, addProductToCart, isAuthenticated }: IPanel) => {
           startIcon={<AddShoppingCartIcon />}
           variant="outlined"
           size="large"
-          onClick={() => addProductToCart(product._id)}
+          onClick={() => {
+            isAuthenticated
+              ? addProductToCart(product._id)
+              : history.push(SIGN_IN);
+          }}
           className="mr-0 mr-md-3 mr-lg-3 mr-xl-3 mb-1 mb-md-0 mb-lg-0 mb-xl-0"
         >
           Add to Cart
