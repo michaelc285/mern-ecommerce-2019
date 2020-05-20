@@ -16,29 +16,36 @@ import { ILogin, IAuthReduxProps } from "../../types/interfaces";
 import Alert from "@material-ui/lab/Alert";
 import { LOGIN_FAIL } from "../../context/types";
 import { v4 as uuidv4 } from "uuid";
-import { SIGN_UP } from "../../context/path";
+import { MARKET_LANDING, SIGN_UP } from "../../context/path";
 
 const Login = ({ isAuthenticated, login, clearErrors, error }: ILogin) => {
   const classes = useStyles();
-  let history = useHistory();
+  const history = useHistory();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState<string[] | null>(null);
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) =>
     setEmail(event.target.value);
+
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) =>
     setPassword(event.target.value);
+
   const handleSubmit = (event: any) => {
     event.preventDefault();
 
     if (!email || !password) {
       alert("missing fields");
     } else {
-      const user = { email, password };
-      login(user)
-        .then(() => history.push("/"))
-        .catch((err) => alert(err));
+      const loginUser = { email, password };
+
+      login(loginUser).then((success) => {
+        if (success) {
+          history.push(MARKET_LANDING);
+          clearErrors();
+        }
+      });
     }
   };
 

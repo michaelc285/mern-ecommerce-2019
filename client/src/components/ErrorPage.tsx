@@ -1,8 +1,7 @@
 import React, { Fragment } from "react";
-import { makeStyles, Theme } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core/";
+
 const ErrorPage = () => {
-  //const classes = useStyles();
   return (
     <Fragment>
       <div
@@ -14,8 +13,5 @@ const ErrorPage = () => {
     </Fragment>
   );
 };
-
-//const useStyles = makeStyles((theme: Theme) => ({
-//}));
 
 export default ErrorPage;

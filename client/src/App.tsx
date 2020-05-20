@@ -1,11 +1,8 @@
 import React, { useEffect, Suspense } from "react";
 import { Route, Switch } from "react-router-dom";
-
 import { connect } from "react-redux";
-
 import ProtectedRoute from "./hoc/ProtectedRoute";
 import {
-  AUTH_PAGE,
   USER_CART,
   USER_HISTORY,
   ADMIN_CREATE_PRODUCT,
@@ -16,22 +13,19 @@ import {
 } from "./context/path";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-//import Container from "@material-ui/core/Container";
-
 import { loadUser } from "./context/actions/AuthAction";
-
 //import TopContainer from "./components/TopContainer";
 import AppNavbar from "./components/AppNavbar";
 import AppFooter from "./components/AppFooter";
 //import AuthPage from "./components/auth/AuthPage";
-import ErrorPage from "./components/ErrorPage";
+import Login from "./components/auth/Login";
+import Register from "./components/auth/Register";
 import MarketLanding from "./components/product/MarketLanding";
 import ProductCreate from "./components/product/ProductCreate";
 import ProductDetailPage from "./components/product/DetailPage/ProductDetailPage";
 import CartPage from "./components/cart/CartPage";
 import PurchaseHistoryUser from "./components/history/PurchaseHistoryUser";
-import Login from "./components/auth/Login";
-import Register from "./components/auth/Register";
+import ErrorPage from "./components/ErrorPage";
 
 import { ROLE_ADMIN, ROLE_GUEST, ROLE_USER } from "./context/types";
 

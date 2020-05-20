@@ -1,7 +1,6 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import NavDrawer from "./NavDrawer";
-import MenuIcon from "@material-ui/icons/Menu";
+import { NavLink } from "react-router-dom";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import { ADMIN_CREATE_PRODUCT, USER_CART, USER_HISTORY } from "../context/path";
@@ -13,9 +12,10 @@ import {
   Typography,
   MenuItem,
   Menu,
-  Link,
 } from "@material-ui/core";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
+import MenuIcon from "@material-ui/icons/Menu";
+import NavDrawer from "./NavDrawer";
 import Logout from "./auth/Logout";
 
 const AppNavbar = ({ auth, cart }: any) => {
@@ -86,22 +86,22 @@ const AppNavbar = ({ auth, cart }: any) => {
 
   const adminMenu = (
     <MenuItem onClick={handleClose}>
-      <Link
-        href={ADMIN_CREATE_PRODUCT}
-        className="text-decoration-none"
-        color="textPrimary"
+      <NavLink
+        to={ADMIN_CREATE_PRODUCT}
+        className="text-decoration-none text-primary"
       >
         Create Product
-      </Link>
+      </NavLink>
     </MenuItem>
   );
 
   const AuthedContent = (
     <div>
-      <IconButton color="default" href={USER_CART}>
-        {cartLength > 0 ? ShopingCartBadge : <ShoppingCartIcon />}
-      </IconButton>
-
+      <NavLink to={USER_CART}>
+        <IconButton color="default">
+          {cartLength > 0 ? ShopingCartBadge : <ShoppingCartIcon />}
+        </IconButton>
+      </NavLink>
       <IconButton
         aria-label="account of current user"
         aria-controls="menu-appbar"
@@ -134,27 +134,21 @@ const AppNavbar = ({ auth, cart }: any) => {
           My account
         </MenuItem>
         <MenuItem onClick={handleClose}>
-          <Link
-            href={USER_CART}
-            className="text-decoration-none"
-            color="textPrimary"
-          >
+          <NavLink to={USER_CART} className="text-decoration-none text-primary">
             Cart
-          </Link>
+          </NavLink>
         </MenuItem>
         <MenuItem onClick={handleClose}>
-          <Link
-            href={USER_HISTORY}
-            className="text-decoration-none"
-            color="textPrimary"
+          <NavLink
+            to={USER_HISTORY}
+            className="text-decoration-none text-primary"
           >
             Records
-          </Link>
+          </NavLink>
         </MenuItem>
         <MenuItem
           onClick={handleClose}
-          className="text-decoration-none"
-          color="textPrimary"
+          className="text-decoration-none text-primary"
         >
           <Logout />
         </MenuItem>

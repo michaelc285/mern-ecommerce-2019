@@ -16,7 +16,7 @@ import { makeStyles, Theme } from "@material-ui/core/styles";
 import { REGISTER_FAIL } from "../../context/types";
 import Alert from "@material-ui/lab/Alert";
 import { v4 as uuidv4 } from "uuid";
-import { SIGN_IN } from "../../context/path";
+import { SIGN_IN, MARKET_LANDING } from "../../context/path";
 
 const Register = ({
   isAuthenticated,
@@ -46,9 +46,13 @@ const Register = ({
       alert("missing fields");
     } else {
       const newUser = { name, email, password };
-      register(newUser)
-        .then(() => history.push("/"))
-        .catch((err) => alert(err));
+
+      register(newUser).then((success) => {
+        if (success) {
+          history.push(MARKET_LANDING);
+          clearErrors();
+        }
+      });
     }
   };
 

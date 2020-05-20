@@ -1,12 +1,12 @@
 import React from "react";
 import { CurrencyFormatter } from "../../../utils/NumberFormatter";
+import { NavLink } from "react-router-dom";
 import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
 import {
   ExpansionPanel,
   ExpansionPanelSummary,
   ExpansionPanelDetails,
   Typography,
-  Link,
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { IHistoryContainer } from "../../../types/interfaces";
@@ -31,9 +31,12 @@ const HistoryContainer = ({ history }: IHistoryContainer) => {
             <Typography variant={"caption"}>
               <strong>Product Name</strong>
             </Typography>
-            <Link href={`/product/${item.id}`} className="text-decoration-none">
+            <NavLink
+              to={`/product/${item.id}`}
+              className="text-decoration-none"
+            >
               <Typography>{item.name}</Typography>
-            </Link>
+            </NavLink>
           </div>
 
           <div

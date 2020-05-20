@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { logout } from "../context/actions/AuthAction";
-
+import { NavLink } from "react-router-dom";
 import {
   ADMIN_CREATE_PRODUCT,
   MARKET_LANDING,
@@ -18,7 +18,6 @@ import {
   SwipeableDrawer,
   ListItemText,
   ListItemIcon,
-  Link,
 } from "@material-ui/core/";
 import VpnKeyIcon from "@material-ui/icons/VpnKey";
 import HowToRegIcon from "@material-ui/icons/HowToReg";
@@ -26,7 +25,6 @@ import HomeIcon from "@material-ui/icons/Home";
 import ShoppingBasketIcon from "@material-ui/icons/ShoppingBasket";
 import ReceiptIcon from "@material-ui/icons/Receipt";
 import CreateIcon from "@material-ui/icons/Create";
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 
 const NavDrawer = ({ toggleDrawer, toggle, admin, isAuth }: any) => {
   const classes = useStyles();
@@ -34,10 +32,9 @@ const NavDrawer = ({ toggleDrawer, toggle, admin, isAuth }: any) => {
   // Admin Only
   const adminContent = (
     <List>
-      <Link
-        href={ADMIN_CREATE_PRODUCT}
-        className="text-decoration-none"
-        color="textPrimary"
+      <NavLink
+        to={ADMIN_CREATE_PRODUCT}
+        className="text-decoration-none text-primary"
       >
         <ListItem button key={"create-product"} onClick={toggleDrawer(!toggle)}>
           <ListItemIcon>
@@ -45,24 +42,20 @@ const NavDrawer = ({ toggleDrawer, toggle, admin, isAuth }: any) => {
           </ListItemIcon>
           <ListItemText primary={"Create Product"} />
         </ListItem>
-      </Link>
+      </NavLink>
     </List>
   );
   // Auth = true , guest user
   const authPanel = (
     <List>
-      <Link
-        href={USER_HISTORY}
-        className="text-decoration-none"
-        color="textPrimary"
-      >
+      <NavLink to={USER_HISTORY} className="text-decoration-none text-primary">
         <ListItem button key={"History"} onClick={toggleDrawer(!toggle)}>
           <ListItemIcon>
             <ReceiptIcon />
           </ListItemIcon>
           <ListItemText primary={"History"} />
         </ListItem>
-      </Link>
+      </NavLink>
       <Divider className={classes.divider} />
     </List>
   );
@@ -71,22 +64,22 @@ const NavDrawer = ({ toggleDrawer, toggle, admin, isAuth }: any) => {
   const guestPanel = (
     <List>
       {/* Two cases, after auth : Records/ PerosnalInfo/ Cart | Non-Auth: Login / Register*/}
-      <Link href={SIGN_IN} className="text-decoration-none" color="textPrimary">
+      <NavLink to={SIGN_IN} className="text-decoration-none text-primary">
         <ListItem button key={"sign_in"} onClick={toggleDrawer(!toggle)}>
           <ListItemIcon>
             <VpnKeyIcon />
           </ListItemIcon>
           <ListItemText primary={"Sign In"} />
         </ListItem>
-      </Link>
-      <Link href={SIGN_UP} className="text-decoration-none" color="textPrimary">
+      </NavLink>
+      <NavLink to={SIGN_UP} className="text-decoration-none text-primary">
         <ListItem button key={"sign_up"} onClick={toggleDrawer(!toggle)}>
           <ListItemIcon>
             <HowToRegIcon />
           </ListItemIcon>
           <ListItemText primary={"Sign Up"} />
         </ListItem>
-      </Link>
+      </NavLink>
     </List>
   );
 
@@ -94,22 +87,17 @@ const NavDrawer = ({ toggleDrawer, toggle, admin, isAuth }: any) => {
     <div className={`${classes.list}`}>
       {/* Guest Panel / All User */}
       <List>
-        <Link
-          href={HOME_PAGE}
-          className="text-decoration-none"
-          color="textPrimary"
-        >
+        <NavLink to={HOME_PAGE} className="text-decoration-none text-primary">
           <ListItem button onClick={toggleDrawer(!toggle)}>
             <ListItemIcon>
               <HomeIcon />
             </ListItemIcon>
             <ListItemText primary={"Home"} />
           </ListItem>
-        </Link>
-        <Link
-          href={MARKET_LANDING}
-          className="text-decoration-none"
-          color="textPrimary"
+        </NavLink>
+        <NavLink
+          to={MARKET_LANDING}
+          className="text-decoration-none text-primary"
         >
           <ListItem
             button
@@ -121,10 +109,9 @@ const NavDrawer = ({ toggleDrawer, toggle, admin, isAuth }: any) => {
             </ListItemIcon>
             <ListItemText primary={"Market"} />
           </ListItem>
-        </Link>
+        </NavLink>
         {isAuth ? authPanel : null}
       </List>
-      <Divider className={classes.divider} />
 
       {/* Admin Panel */}
       {admin ? adminContent : null}

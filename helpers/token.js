@@ -7,13 +7,13 @@ const REFRESH_TOKEN_COOKIE_PATH = require("../constant/path.js");
 
 const createAccessToken = (userId) => {
   return sign({ userId }, ACCESS_JWT_SECRET, {
-    expiresIn: "15m",
+    expiresIn: "1d",
   });
 };
 
 const createRefreshToken = (userId) => {
   return sign({ userId }, REFRESH_JWT_SECRET, {
-    expiresIn: "7d",
+    expiresIn: "30d",
   });
 };
 

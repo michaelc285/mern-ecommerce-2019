@@ -40,7 +40,7 @@ const Payment = ({ totalPayment, buyProcess }: IPayment) => {
             </FormControl>
           </Grid>
           <Grid item className={classes.button}>
-            <PaypalButton amount={totalPayment} onSuccess={onSuccess} />
+            {/* <PaypalButton amount={totalPayment} onSuccess={onSuccess} /> */}
           </Grid>
         </Grid>
       </Paper>

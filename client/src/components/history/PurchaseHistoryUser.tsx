@@ -1,9 +1,11 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
+import { NavLink } from "react-router-dom";
 import { getUserHistory } from "../../context/actions/HistoryAction";
 import HistoryContainer from "./section/HistoryContainer";
 import { IPurchaseHistoryUser } from "../../types/interfaces";
-import { Typography, Container, Breadcrumbs, Link } from "@material-ui/core";
+import { Typography, Container, Breadcrumbs } from "@material-ui/core";
+
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import { MARKET_LANDING } from "../../context/path";
 const PurchaseHistoryUser = ({
@@ -33,9 +35,12 @@ const PurchaseHistoryUser = ({
     <Container maxWidth="lg" style={{ minHeight: "100vh" }}>
       <div className="mb-3">
         <Breadcrumbs aria-label="breadcrumb">
-          <Link color="inherit" href={MARKET_LANDING}>
+          <NavLink
+            to={MARKET_LANDING}
+            className="text-decoration-none text-secondary"
+          >
             Market
-          </Link>
+          </NavLink>
           <Typography color="textPrimary">History</Typography>
         </Breadcrumbs>
       </div>

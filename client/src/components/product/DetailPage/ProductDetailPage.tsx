@@ -1,15 +1,10 @@
 import React, { useEffect, Fragment } from "react";
-import { MARKET_LANDING, HOME_PAGE } from "../../../context/path";
+import { MARKET_LANDING } from "../../../context/path";
 import { connect } from "react-redux";
 import { getProductsById } from "../../../context/actions/ProductAction";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
-import {
-  Container,
-  Grid,
-  Typography,
-  Breadcrumbs,
-  Link,
-} from "@material-ui/core";
+import { NavLink } from "react-router-dom";
+import { Container, Grid, Typography, Breadcrumbs } from "@material-ui/core";
 import Skeleton from "@material-ui/lab/Skeleton";
 import Panel from "./sections/Panel";
 import Display from "./sections/Display";
@@ -34,9 +29,9 @@ const ProductDetailPage = ({
   const Content = product && product.data && product.data.length > 0 && (
     <Fragment>
       <Breadcrumbs aria-label="breadcrumb" style={{ marginBottom: "20px" }}>
-        <Link color="inherit" href={MARKET_LANDING}>
+        <NavLink to={MARKET_LANDING} className="text-decoration-none">
           Market
-        </Link>
+        </NavLink>
         <Typography color="textPrimary">{product.data[0].title}</Typography>
       </Breadcrumbs>
       <Grid container spacing={3}>
@@ -58,9 +53,9 @@ const ProductDetailPage = ({
   const LoadingSkeleton = (
     <Fragment>
       <Breadcrumbs aria-label="breadcrumb" style={{ marginBottom: "20px" }}>
-        <Link color="inherit" href={MARKET_LANDING}>
+        <NavLink to={MARKET_LANDING} className="text-decoration-none">
           Market
-        </Link>
+        </NavLink>
         <Skeleton variant="text" animation="wave" style={{ width: "250px" }} />
       </Breadcrumbs>
       <Grid container spacing={3}>

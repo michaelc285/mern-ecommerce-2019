@@ -2,13 +2,12 @@ import React, { useState } from "react";
 import { CurrencyFormatter } from "../../../utils/NumberFormatter";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import {
-  Link,
   Typography,
   IconButton,
   NativeSelect,
   FormControl,
 } from "@material-ui/core";
-
+import { NavLink } from "react-router-dom";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import {
   removeProductFromCart,
@@ -69,9 +68,12 @@ const ProductContainer = ({
           />
         </div>
         <div className="flex-grow-1  ml-2">
-          <Link href={`/product/${product.id}`} underline={"none"}>
+          <NavLink
+            to={`/product/${product.id}`}
+            className="text-decoration-none"
+          >
             <Typography>{product.title}</Typography>
-          </Link>
+          </NavLink>
         </div>
         <div
           className="py-2  mr-3"

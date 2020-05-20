@@ -41,7 +41,7 @@ export const loadUser = () => async (dispatch: Function) => {
   }
 };
 
-// Register User
+// Register User, reutrn boolean
 export const register = ({ name, email, password }: IAuthFunction) => async (
   dispatch: Function
 ) => {
@@ -53,8 +53,12 @@ export const register = ({ name, email, password }: IAuthFunction) => async (
   };
   try {
     const newUser = JSON.stringify({ name, email, password });
+
     const result = await axios.post("/api/auth/register", newUser, config);
+
     dispatch({ type: REGISTER_SUCCESS, payload: result.data });
+
+    return true;
   } catch (err) {
     dispatch(
       returnErrors(err.response.data, err.response.status, REGISTER_FAIL, [
@@ -62,10 +66,11 @@ export const register = ({ name, email, password }: IAuthFunction) => async (
       ])
     );
     dispatch({ type: REGISTER_FAIL });
+    return false;
   }
 };
 
-// Login User
+// Login User , return boolean
 export const login = ({ email, password }: IAuthFunction) => async (
   dispatch: Function
 ) => {
@@ -83,16 +88,17 @@ export const login = ({ email, password }: IAuthFunction) => async (
 
   if (result.success) {
     dispatch({ type: LOGIN_SUCCESS, payload: result });
-    dispatch(clearErrors());
+    return true;
   } else {
     dispatch(
       returnErrors(result.error, result.status, LOGIN_FAIL, result.labels)
     );
     dispatch({ type: LOGIN_FAIL });
+    return false;
   }
 };
 
-// Logout User
+// Logout User, return boolean
 export const logout = () => async (dispatch: Function) => {
   const response = await fetch("/api/auth/logout", {
     method: "POST",
@@ -107,7 +113,9 @@ export const logout = () => async (dispatch: Function) => {
     dispatch({ type: LOGOUT_SUCCESS });
     dispatch({ type: HISTORY_CLEAR });
     dispatch({ type: CART_CLEAR });
+    return true;
   } else {
     dispatch(returnErrors(result.error, 500));
+    return false;
   }
 };
