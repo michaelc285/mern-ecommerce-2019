@@ -20,11 +20,11 @@ Client `Path: /mern-ecommerce/client`
 
   
 
-Also you need to cretae your own config.env and default.json file in `/mern-ecommerce/config`, here is the template and content you need to have
+Also you need to cretae your own config.env and default.json file in `/mern-ecommerce/config`, here are the templates and contents you need to have
 1. config.env   `/mern-ecommerce/config/config.env`
 ```
-NODE_ENV=development
-PORT=5000
+NODE_ENV= <development | production>
+PORT= <Port you want>
 MONGO_URI= <Your MongoDB uri>
 ```
 2.   default.json `/mern-ecommerce/config/default.json`

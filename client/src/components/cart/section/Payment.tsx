@@ -11,14 +11,12 @@ import {
 } from "@material-ui/core";
 import { connect } from "react-redux";
 import { buyProcess } from "../../../context/actions/CartAction";
-
 import { IPayment } from "../../../types/interfaces";
 
 const Payment = ({ totalPayment, buyProcess }: IPayment) => {
   const classes = useStyles();
 
   const onSuccess = (details: any, data: any) => buyProcess(details, data);
-
   return (
     <Fragment>
       <Paper elevation={7}>
@@ -40,7 +38,7 @@ const Payment = ({ totalPayment, buyProcess }: IPayment) => {
             </FormControl>
           </Grid>
           <Grid item className={classes.button}>
-            {/* <PaypalButton amount={totalPayment} onSuccess={onSuccess} /> */}
+            <PaypalButton amount={totalPayment} onSuccess={onSuccess} />
           </Grid>
         </Grid>
       </Paper>
