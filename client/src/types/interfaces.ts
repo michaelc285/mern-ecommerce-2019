@@ -99,8 +99,10 @@ export interface IProduct {
 
 export interface IProductDetailPage {
   match: any;
-  product: { isLoading: boolean; data: IProduct[] };
-  getProductsById(productId: string): void;
+}
+
+export interface IPanel {
+  product: any;
 }
 
 // ***************
@@ -137,7 +139,12 @@ export interface IProductsList {
 
 export interface IPayment {
   totalPayment: number;
-  buyProcess(details: any, data: any): void;
+}
+
+export interface IBills {
+  orderTotal: number;
+  deliveryFee: number;
+  totalPayment: number;
 }
 
 // ***************

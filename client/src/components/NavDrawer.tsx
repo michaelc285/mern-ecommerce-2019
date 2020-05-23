@@ -1,6 +1,6 @@
 import React from "react";
-import { connect } from "react-redux";
-import { logout } from "../context/actions/AuthAction";
+import { useSelector } from "react-redux";
+import { RootState } from "../context/store";
 import { NavLink } from "react-router-dom";
 import {
   ADMIN_CREATE_PRODUCT,
@@ -26,10 +26,13 @@ import ShoppingBasketIcon from "@material-ui/icons/ShoppingBasket";
 import ReceiptIcon from "@material-ui/icons/Receipt";
 import CreateIcon from "@material-ui/icons/Create";
 
-const NavDrawer = ({ toggleDrawer, toggle, admin, isAuth }: any) => {
+const NavDrawer = ({ toggleDrawer, toggle }: any) => {
   const classes = useStyles();
+  const { isAuthenticated, user } = useSelector(
+    (state: RootState) => state.auth
+  );
 
-  // Admin Only
+  // For Admin Only
   const adminContent = (
     <List>
       <NavLink
@@ -45,7 +48,8 @@ const NavDrawer = ({ toggleDrawer, toggle, admin, isAuth }: any) => {
       </NavLink>
     </List>
   );
-  // Auth = true , guest user
+
+  // For User
   const authPanel = (
     <List>
       <NavLink to={USER_HISTORY} className="text-decoration-none text-primary">
@@ -60,7 +64,7 @@ const NavDrawer = ({ toggleDrawer, toggle, admin, isAuth }: any) => {
     </List>
   );
 
-  // Auth = false
+  // For Guest
   const guestPanel = (
     <List>
       {/* Two cases, after auth : Records/ PerosnalInfo/ Cart | Non-Auth: Login / Register*/}
@@ -110,15 +114,15 @@ const NavDrawer = ({ toggleDrawer, toggle, admin, isAuth }: any) => {
             <ListItemText primary={"Market"} />
           </ListItem>
         </NavLink>
-        {isAuth ? authPanel : null}
+        {isAuthenticated ? authPanel : null}
       </List>
 
       {/* Admin Panel */}
-      {admin ? adminContent : null}
+      {user && user.role === 1 ? adminContent : null}
       {/* {admin ? <Divider className={classes.divider} /> : null} */}
 
       {/* Auth Panel */}
-      {isAuth ? null : guestPanel}
+      {isAuthenticated ? null : guestPanel}
     </div>
   );
 
@@ -150,4 +154,4 @@ const useStyles = makeStyles({
 
 // Redux
 
-export default connect(null, { logout })(NavDrawer);
+export default NavDrawer;

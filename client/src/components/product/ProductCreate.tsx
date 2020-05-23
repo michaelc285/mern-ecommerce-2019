@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { connect } from "react-redux";
+import { useDispatch } from "react-redux";
 import { createProduct } from "../../context/actions/ProductAction";
 import { ITarget } from "../../types/interfaces";
 import { makeStyles, Theme } from "@material-ui/core/styles";
@@ -19,8 +19,10 @@ import {
 import SaveIcon from "@material-ui/icons/Save";
 import { DropzoneArea } from "material-ui-dropzone";
 
-const ProductCreate = ({ product, createProduct, error }: any) => {
+const ProductCreate = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
   const [images, setImages] = useState<string[]>([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -44,7 +46,7 @@ const ProductCreate = ({ product, createProduct, error }: any) => {
       description,
       type,
     };
-    createProduct(images, productInfo);
+    dispatch(createProduct(images, productInfo));
   };
 
   return (
@@ -159,10 +161,4 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-// Redux
-const mapStateToProps = (state: any) => ({
-  product: state.product,
-  error: state.error,
-});
-
-export default connect(mapStateToProps, { createProduct })(ProductCreate);
+export default ProductCreate;

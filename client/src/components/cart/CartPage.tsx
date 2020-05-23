@@ -1,35 +1,34 @@
 import React, { useEffect, Fragment } from "react";
 import { makeStyles, Theme } from "@material-ui/core/styles";
-import { connect } from "react-redux";
-import { getProductsById } from "../../context/actions/ProductAction";
+import { RootState } from "../../context/store";
+import { useDispatch, useSelector } from "react-redux";
 import { loadCart } from "../../context/actions/CartAction";
 import { Container, Grid, Typography, Button } from "@material-ui/core";
 import Bills from "./section/Bills";
 import ProductsList from "./section/ProductsList";
 import Payment from "./section/Payment";
-import { ICartPage } from "../../types/interfaces";
 import LoadingProgress from "../utils/LoadingProgress";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import { MARKET_LANDING } from "../../context/path";
-const CartPage = ({
-  authIsLoading,
-  items,
-  cartIsLoading,
-  loadCart,
-}: ICartPage) => {
+import { NavLink } from "react-router-dom";
+
+const CartPage = () => {
   // const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const cart = useSelector((state: RootState) => state.cart);
 
   useEffect(() => {
-    loadCart();
-  }, [authIsLoading, loadCart]);
+    dispatch(loadCart());
+  }, [dispatch]);
 
   // Bills calulate
   let orderTotal: number = 0;
   let deliveryFee: number = 0;
   let totalPayment: number = 0;
 
-  if (cartIsLoading === false && items && items.length > 0) {
-    items.forEach((item) => {
+  if (cart.items && cart.items.length > 0) {
+    cart.items.forEach((item: any) => {
       orderTotal += item.quantity * item.price;
     });
     if (orderTotal < 200) deliveryFee = 80;
@@ -51,14 +50,15 @@ const CartPage = ({
         <Typography variant={"h6"} gutterBottom={true}>
           Nothing in cart
         </Typography>
-        <Button
-          href={MARKET_LANDING}
-          variant="contained"
-          color="primary"
-          endIcon={<AddShoppingCartIcon />}
-        >
-          Shop now
-        </Button>
+        <NavLink to={MARKET_LANDING}>
+          <Button
+            variant="contained"
+            color="primary"
+            endIcon={<AddShoppingCartIcon />}
+          >
+            Shop now
+          </Button>
+        </NavLink>
       </div>
     </div>
   );
@@ -92,9 +92,9 @@ const CartPage = ({
   return (
     <Fragment>
       <Container maxWidth="md" style={{ minHeight: "100vh" }}>
-        {cartIsLoading ? (
+        {cart.isLoading ? (
           <LoadingProgress />
-        ) : items && items.length > 0 ? (
+        ) : cart.items && cart.items.length > 0 ? (
           shoopingcart
         ) : (
           nothing
@@ -109,14 +109,4 @@ const useStyles = makeStyles((theme: Theme) => ({
   loading: {},
 }));
 
-// Redux
-const mapStateToProps = (state: any) => ({
-  authIsLoading: state.auth.isAuthenticated,
-  product: state.product,
-  items: state.cart.items,
-  cartIsLoading: state.cart.isLoading,
-});
-
-export default connect(mapStateToProps, { getProductsById, loadCart })(
-  CartPage
-);
+export default CartPage;

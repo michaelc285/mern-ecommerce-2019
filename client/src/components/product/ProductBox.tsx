@@ -1,6 +1,7 @@
 import React from "react";
 import { makeStyles, Theme } from "@material-ui/core/styles";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../context/store";
 import { CurrencyFormatter } from "../../utils/NumberFormatter";
 import { addProductToCart } from "../../context/actions/CartAction";
 import { useHistory } from "react-router-dom";
@@ -22,20 +23,13 @@ interface IProductBox {
   description?: string;
   price: number;
   _id: string;
-  auth: boolean;
-  addProductToCart(productId: string): any;
 }
 
-const ProductBox = ({
-  _id,
-  image,
-  title,
-  price,
-  auth,
-  addProductToCart,
-}: IProductBox) => {
+const ProductBox = ({ _id, image, title, price }: IProductBox) => {
   const classes = useStyles();
   const history = useHistory();
+  const dispatch = useDispatch();
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
   return (
     <Card className={classes.root}>
@@ -62,7 +56,9 @@ const ProductBox = ({
           variant="outlined"
           href="#"
           onClick={() => {
-            auth ? addProductToCart(_id) : history.push(SIGN_UP);
+            isAuthenticated
+              ? dispatch(addProductToCart(_id))
+              : history.push(SIGN_UP);
           }}
           startIcon={<AddShoppingCartIcon />}
         >
@@ -83,11 +79,4 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-// Redux
-const mapStateToProps = (state: any) => ({
-  auth: state.auth.isAuthenticated,
-  product: state.product,
-  cart: state.cart,
-});
-
-export default connect(mapStateToProps, { addProductToCart })(ProductBox);
+export default ProductBox;

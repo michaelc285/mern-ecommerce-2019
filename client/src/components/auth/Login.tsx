@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../context/store";
 import { login } from "../../context/actions/AuthAction";
+
 import { clearErrors } from "../../context/actions/ErrorActions";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
@@ -12,15 +14,18 @@ import {
   Paper,
   Container,
 } from "@material-ui/core";
-import { ILogin, IAuthReduxProps } from "../../types/interfaces";
+
 import Alert from "@material-ui/lab/Alert";
 import { LOGIN_FAIL } from "../../context/types";
 import { v4 as uuidv4 } from "uuid";
 import { MARKET_LANDING, SIGN_UP } from "../../context/path";
 
-const Login = ({ isAuthenticated, login, clearErrors, error }: ILogin) => {
+const Login = () => {
   const classes = useStyles();
   const history = useHistory();
+  const dispatch = useDispatch();
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const error = useSelector((state: RootState) => state.error);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -40,12 +45,7 @@ const Login = ({ isAuthenticated, login, clearErrors, error }: ILogin) => {
     } else {
       const loginUser = { email, password };
 
-      login(loginUser).then((success) => {
-        if (success) {
-          history.push(MARKET_LANDING);
-          clearErrors();
-        }
-      });
+      dispatch(login(loginUser));
     }
   };
 
@@ -55,7 +55,12 @@ const Login = ({ isAuthenticated, login, clearErrors, error }: ILogin) => {
     } else {
       setMessage(null);
     }
-  }, [error, isAuthenticated]);
+
+    if (isAuthenticated) {
+      history.push(MARKET_LANDING);
+      dispatch(clearErrors());
+    }
+  }, [error, isAuthenticated, dispatch, history]);
 
   const alertMessage =
     message &&
@@ -140,10 +145,4 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-// Redux
-const mapStateToProps = (state: IAuthReduxProps) => ({
-  isAuthenticated: state.auth.isAuthenticated,
-  error: state.error,
-});
-
-export default connect(mapStateToProps, { login, clearErrors })(Login);
+export default Login;

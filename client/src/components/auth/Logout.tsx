@@ -1,17 +1,14 @@
 import React, { Fragment } from "react";
-import { connect } from "react-redux";
+import { useDispatch } from "react-redux";
 import { logout } from "../../context/actions/AuthAction";
-import { ILogout } from "../../types/interfaces";
 import { NavLink } from "react-router-dom";
 import { HOME_PAGE } from "../../context/path";
 
-const Logout = ({ logout }: ILogout) => {
+const Logout = () => {
+  const dispatch = useDispatch();
+
   const handleLogout = () => {
-    logout().then((success) => {
-      if (success) {
-        console.log(success);
-      }
-    });
+    dispatch(logout());
   };
 
   return (
@@ -27,4 +24,4 @@ const Logout = ({ logout }: ILogout) => {
   );
 };
 
-export default connect(null, { logout })(Logout);
+export default Logout;

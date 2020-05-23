@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { CurrencyFormatter } from "../../../utils/NumberFormatter";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import {
@@ -13,21 +13,16 @@ import {
   removeProductFromCart,
   updateProductInCart,
 } from "../../../context/actions/CartAction";
-import { connect } from "react-redux";
+import { useDispatch } from "react-redux";
 
-const ProductContainer = ({
-  product,
-  removeProductFromCart,
-  updateProductInCart,
-}: any) => {
+const ProductContainer = ({ product }: any) => {
   const classes = useStyles();
-  const [quantity, setQuantity] = useState(product.quantity);
+  const dispatch = useDispatch();
+  const [quantity] = useState(product.quantity);
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const quantityNumber = Number(event.target.value);
-    updateProductInCart(product.id, quantityNumber)
-      .then(() => setQuantity(quantity))
-      .catch(() => alert("Quantity Update fail"));
+    dispatch(updateProductInCart(product.id, quantityNumber));
   };
 
   // Gen options 1-99
@@ -91,7 +86,7 @@ const ProductContainer = ({
           <IconButton
             style={{ padding: 1 }}
             aria-label="remove"
-            onClick={() => removeProductFromCart(product.id)}
+            onClick={() => dispatch(removeProductFromCart(product.id))}
           >
             <DeleteForeverIcon />
           </IconButton>
@@ -108,6 +103,4 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-export default connect(null, { removeProductFromCart, updateProductInCart })(
-  ProductContainer
-);
+export default ProductContainer;

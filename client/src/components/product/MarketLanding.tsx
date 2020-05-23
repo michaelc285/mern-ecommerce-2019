@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../context/store";
 import ProductMenu from "./menu/ProductFilter";
 import ProductsContainer from "./section/ProductContainer";
 import Pagination from "./section/Pagination";
@@ -8,8 +9,10 @@ import { getProducts } from "../../context/actions/ProductAction";
 import LoadingProgres from "../utils/LoadingProgress";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 
-const MarketLanding = ({ getProducts, products }: any) => {
+const MarketLanding = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const products = useSelector((state: RootState) => state.product);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(8);
@@ -31,8 +34,8 @@ const MarketLanding = ({ getProducts, products }: any) => {
   const paginate = (e: any, pageNumber: number) => setCurrentPage(pageNumber);
 
   useEffect(() => {
-    getProducts();
-  }, [getProducts]);
+    dispatch(getProducts());
+  }, [dispatch]);
 
   // Component
 
@@ -103,10 +106,4 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-// Redux
-const mapStateToProps = (state: any) => ({
-  error: state.error,
-  products: state.product,
-});
-
-export default connect(mapStateToProps, { getProducts })(MarketLanding);
+export default MarketLanding;

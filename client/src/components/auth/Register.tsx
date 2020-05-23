@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../context/store";
 import { register } from "../../context/actions/AuthAction";
 import { clearErrors } from "../../context/actions/ErrorActions";
 import { useHistory } from "react-router-dom";
@@ -11,23 +12,20 @@ import {
   Paper,
   Container,
 } from "@material-ui/core";
-import { IRegister, IAuthReduxProps } from "../../types/interfaces";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import { REGISTER_FAIL } from "../../context/types";
 import Alert from "@material-ui/lab/Alert";
 import { v4 as uuidv4 } from "uuid";
 import { SIGN_IN, MARKET_LANDING } from "../../context/path";
 
-const Register = ({
-  isAuthenticated,
-  register,
-  error,
-  clearErrors,
-}: IRegister) => {
+const Register = () => {
   const classes = useStyles();
-  let history = useHistory();
-  const [message, setMessage] = useState<string[] | null>();
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const error = useSelector((state: RootState) => state.error);
 
+  const [message, setMessage] = useState<string[] | null>();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -47,12 +45,7 @@ const Register = ({
     } else {
       const newUser = { name, email, password };
 
-      register(newUser).then((success) => {
-        if (success) {
-          history.push(MARKET_LANDING);
-          clearErrors();
-        }
-      });
+      dispatch(register(newUser));
     }
   };
 
@@ -62,7 +55,12 @@ const Register = ({
     } else {
       setMessage(null);
     }
-  }, [error, isAuthenticated]);
+
+    if (isAuthenticated) {
+      history.push(MARKET_LANDING);
+      clearErrors();
+    }
+  }, [error, isAuthenticated, history]);
 
   const alertMessage =
     message &&
@@ -156,10 +154,4 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-// Redux
-const mapStateToProps = (state: IAuthReduxProps) => ({
-  isAuthenticated: state.auth.isAuthenticated,
-  error: state.error,
-});
-
-export default connect(mapStateToProps, { register, clearErrors })(Register);
+export default Register;

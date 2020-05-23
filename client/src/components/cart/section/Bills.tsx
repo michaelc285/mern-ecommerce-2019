@@ -2,7 +2,9 @@ import React, { Fragment } from "react";
 import { CurrencyFormatter } from "../../../utils/NumberFormatter";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import { Paper, Grid, Typography } from "@material-ui/core";
-const Bills = ({ orderTotal, deliveryFee, totalPayment }: any) => {
+import { IBills } from "../../../types/interfaces";
+
+const Bills = ({ orderTotal, deliveryFee, totalPayment }: IBills) => {
   const classes = useStyles();
   return (
     <Fragment>

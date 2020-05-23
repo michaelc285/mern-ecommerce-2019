@@ -1,29 +1,29 @@
 import React, { useEffect } from "react";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../context/store";
 import { NavLink } from "react-router-dom";
 import { getUserHistory } from "../../context/actions/HistoryAction";
 import HistoryContainer from "./section/HistoryContainer";
-import { IPurchaseHistoryUser } from "../../types/interfaces";
 import { Typography, Container, Breadcrumbs } from "@material-ui/core";
-
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import { MARKET_LANDING } from "../../context/path";
-const PurchaseHistoryUser = ({
-  getUserHistory,
-  history,
-}: IPurchaseHistoryUser) => {
+import LoadingProgress from "../utils/LoadingProgress";
+
+const PurchaseHistoryUser = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const history = useSelector((state: RootState) => state.history);
 
   useEffect(() => {
-    getUserHistory();
-  }, [getUserHistory]);
+    dispatch(getUserHistory());
+  }, [dispatch]);
 
   const Content =
     history &&
     history.data &&
     history.data
-      .sort((a, b) => b.purchaseAt - a.purchaseAt)
-      .map((item) => <HistoryContainer key={item.id} history={item} />);
+      .sort((a: any, b: any) => b.purchaseAt - a.purchaseAt)
+      .map((item: any) => <HistoryContainer key={item.id} history={item} />);
 
   const NoHistory = (
     <div className={classes.noHistory}>
@@ -44,7 +44,13 @@ const PurchaseHistoryUser = ({
           <Typography color="textPrimary">History</Typography>
         </Breadcrumbs>
       </div>
-      {history && history.data && history.data.length > 0 ? Content : NoHistory}
+      {history.isLoading ? (
+        <LoadingProgress />
+      ) : history.data && history.data.length > 0 ? (
+        Content
+      ) : (
+        NoHistory
+      )}
     </Container>
   );
 };
@@ -59,10 +65,4 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-// Redux
-const mapStateToProps = (state: any) => ({
-  history: state.history,
-});
-export default connect(mapStateToProps, { getUserHistory })(
-  PurchaseHistoryUser
-);
+export default PurchaseHistoryUser;

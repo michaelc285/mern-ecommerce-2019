@@ -1,6 +1,7 @@
 import React, { useEffect, Suspense } from "react";
 import { Route, Switch } from "react-router-dom";
-import { connect } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "./context/store";
 import ProtectedRoute from "./hoc/ProtectedRoute";
 import {
   USER_CART,
@@ -29,17 +30,17 @@ import ErrorPage from "./components/ErrorPage";
 
 import { ROLE_ADMIN, ROLE_GUEST, ROLE_USER } from "./context/types";
 
-const App = ({ loadUser, auth }: any) => {
+const App = () => {
+  const auth = useSelector((state: RootState) => state.auth);
+  const { isAuthenticated, user } = auth;
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    loadUser();
-  }, [loadUser]);
-  // console.log(auth.token);
+    dispatch(loadUser());
+  }, [dispatch]);
+
   let role =
-    auth && auth.user
-      ? auth.user.role === 1
-        ? ROLE_ADMIN
-        : ROLE_USER
-      : ROLE_GUEST;
+    user && user.role ? (user.role === 1 ? ROLE_ADMIN : ROLE_USER) : ROLE_GUEST;
 
   return (
     <Suspense fallback={<div>Loading</div>}>
@@ -67,7 +68,7 @@ const App = ({ loadUser, auth }: any) => {
             {/* Authorized Route */}
             <ProtectedRoute
               exact
-              isAuthenticated={auth.isAuthenticated}
+              isAuthenticated={isAuthenticated}
               role={role}
               authenticationPath={SIGN_UP}
               path={USER_CART}
@@ -75,7 +76,7 @@ const App = ({ loadUser, auth }: any) => {
             />
             <ProtectedRoute
               exact
-              isAuthenticated={auth.isAuthenticated}
+              isAuthenticated={isAuthenticated}
               role={role}
               authenticationPath={SIGN_UP}
               path={USER_HISTORY}
@@ -85,7 +86,7 @@ const App = ({ loadUser, auth }: any) => {
             <ProtectedRoute
               exact
               adminRestrict
-              isAuthenticated={auth.isAuthenticated}
+              isAuthenticated={isAuthenticated}
               role={role}
               authenticationPath={SIGN_UP}
               path={ADMIN_CREATE_PRODUCT}
@@ -102,8 +103,4 @@ const App = ({ loadUser, auth }: any) => {
   );
 };
 
-const mapStateToProps = (state: any) => ({
-  auth: state.auth,
-});
-
-export default connect(mapStateToProps, { loadUser })(App);
+export default App;

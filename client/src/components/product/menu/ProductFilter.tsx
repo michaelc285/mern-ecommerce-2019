@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useReducer } from "react";
 import {
   ExpansionPanel,
   ExpansionPanelSummary,
@@ -13,23 +13,35 @@ import ClearAllIcon from "@material-ui/icons/ClearAll";
 import CategorySelection from "./section/CategorySelection";
 import PriceRangeSlider from "./section/PriceRangeSlider";
 import SearchBar from "./section/SearchBar";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getProducts } from "../../../context/actions/ProductAction";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+
 const minPrice = 0;
 const maxPrice = 9999;
 
-const ProductMenu = ({ getProducts }: any) => {
+const ProductMenu = () => {
+  const dispatch = useDispatch();
+
   const [selections, setSelections] = useState<string[]>([]);
   const [searchValue, setSearchValue] = useState<string>("");
   const [price, setPrice] = useState<number[]>([minPrice, maxPrice]);
 
-  const handleSelections = (selected: string[]) => setSelections(selected);
-  const handleSearchValue = (event: React.ChangeEvent<HTMLInputElement>) =>
-    setSearchValue(event.target.value);
-  const handlePrice = (priceArr: number[]) => setPrice(priceArr);
+  const handleSelections = useCallback(
+    (selected: string[]) => setSelections(selected),
+    []
+  );
+  const handleSearchValue = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) =>
+      setSearchValue(event.target.value),
+    []
+  );
+  const handlePrice = useCallback(
+    (priceArr: number[]) => setPrice(priceArr),
+    []
+  );
 
-  const HandleRefreshProducts = () => {
+  const HandleRefreshProducts = useCallback(() => {
     console.log(searchValue);
     const body = {
       searchTerm: searchValue,
@@ -39,7 +51,7 @@ const ProductMenu = ({ getProducts }: any) => {
       },
     };
     getProducts(body);
-  };
+  }, [selections, searchValue, price]);
 
   const HandleClearProducts = () => {
     // Clean filters
@@ -48,7 +60,7 @@ const ProductMenu = ({ getProducts }: any) => {
     setPrice([minPrice, maxPrice]);
 
     const body = {}; // empty body
-    getProducts(body);
+    dispatch(getProducts(body));
   };
 
   return (
@@ -114,9 +126,4 @@ const ProductMenu = ({ getProducts }: any) => {
   );
 };
 
-const mapStateToProps = (state: any) => ({
-  error: state.error,
-  products: state.product,
-});
-
-export default connect(mapStateToProps, { getProducts })(ProductMenu);
+export default ProductMenu;

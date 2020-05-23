@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import AccountCircle from "@material-ui/icons/AccountCircle";
+import { RootState } from "../context/store";
 import { ADMIN_CREATE_PRODUCT, USER_CART, USER_HISTORY } from "../context/path";
 import {
   IconButton,
@@ -18,17 +19,18 @@ import MenuIcon from "@material-ui/icons/Menu";
 import NavDrawer from "./NavDrawer";
 import Logout from "./auth/Logout";
 
-const AppNavbar = ({ auth, cart }: any) => {
+const AppNavbar = () => {
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [admin, setAdmin] = useState(false);
-  const [isAuth, setIsAuth] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
+  const { isAuthenticated, user } = useSelector(
+    (state: RootState) => state.auth
+  );
+  const cart = useSelector((state: RootState) => state.cart);
   const [cartLength, setCartLength] = useState(0);
-  // const toggle = () => setIsOpen(!isOpen);
+  const [isOpen, setIsOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-
   const [toggle, setToggle] = useState(false);
+  // const toggle = () => setIsOpen(!isOpen);
 
   const toggleDrawer = (action: boolean) => (
     event: React.KeyboardEvent | React.MouseEvent
@@ -46,29 +48,18 @@ const AppNavbar = ({ auth, cart }: any) => {
   };
 
   useEffect(() => {
-    if (auth && auth.isAuthenticated) {
-      setIsAuth(auth.isAuthenticated);
-
-      if (auth.user.role === 1) {
-        setAdmin(true);
-      } else {
-        setAdmin(false);
-      }
-
+    if (isAuthenticated) {
       let num = 0;
       if (cart.items && cart.items.length > 0) {
         num = calCartItem(cart.items);
-      } else if (auth.user.cart.length > 0) {
-        num = calCartItem(auth.user.cart);
+      } else if (user.cart.length > 0) {
+        num = calCartItem(user.cart);
       } else {
         num = 0;
       }
       setCartLength(num);
-    } else {
-      setIsAuth(false);
-      setAdmin(false);
     }
-  }, [auth, cart]);
+  }, [isAuthenticated, user, cart]);
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -126,7 +117,7 @@ const AppNavbar = ({ auth, cart }: any) => {
         open={open}
         onClose={handleClose}
       >
-        {admin ? adminMenu : null}
+        {user && user.role === 1 ? adminMenu : null}
         <MenuItem onClick={handleClose} disabled={true}>
           Profile
         </MenuItem>
@@ -169,16 +160,11 @@ const AppNavbar = ({ auth, cart }: any) => {
           >
             <MenuIcon />
           </IconButton>
-          <NavDrawer
-            admin={admin}
-            isAuth={isAuth}
-            toggleDrawer={toggleDrawer}
-            toggle={toggle}
-          />
+          <NavDrawer toggleDrawer={toggleDrawer} toggle={toggle} />
           <Typography variant="h6" className={classes.title}>
             M's Market
           </Typography>
-          {isAuth && AuthedContent}
+          {isAuthenticated && AuthedContent}
         </Toolbar>
       </AppBar>
     </div>
@@ -205,10 +191,5 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   })
 );
-// Redux
-const mapStateToProps = (state: any) => ({
-  auth: state.auth,
-  cart: state.cart,
-});
 
-export default connect(mapStateToProps, null)(AppNavbar);
+export default AppNavbar;

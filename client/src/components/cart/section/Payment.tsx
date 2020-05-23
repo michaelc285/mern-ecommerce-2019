@@ -9,14 +9,17 @@ import {
   Radio,
   FormControlLabel,
 } from "@material-ui/core";
-import { connect } from "react-redux";
+import { useDispatch } from "react-redux";
 import { buyProcess } from "../../../context/actions/CartAction";
 import { IPayment } from "../../../types/interfaces";
 
-const Payment = ({ totalPayment, buyProcess }: IPayment) => {
+const Payment = ({ totalPayment }: IPayment) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
-  const onSuccess = (details: any, data: any) => buyProcess(details, data);
+  const onSuccess = (details: any, data: any) =>
+    dispatch(buyProcess(details, data));
+
   return (
     <Fragment>
       <Paper elevation={7}>
@@ -68,4 +71,4 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-export default connect(null, { buyProcess })(Payment);
+export default Payment;

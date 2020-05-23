@@ -1,6 +1,7 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../../context/store";
 import { CurrencyFormatter } from "../../../../utils/NumberFormatter";
 import { addProductToCart } from "../../../../context/actions/CartAction";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
@@ -8,15 +9,14 @@ import { Paper, Button, Typography } from "@material-ui/core";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import PaymentIcon from "@material-ui/icons/Payment";
 import { SIGN_IN } from "../../../../context/path";
-interface IPanel {
-  product: any;
-  isAuthenticated: boolean;
-  addProductToCart(productId: string): void;
-}
+import { IPanel } from "../../../../types/interfaces";
 
-const Panel = ({ product, addProductToCart, isAuthenticated }: IPanel) => {
+const Panel = ({ product }: IPanel) => {
   const classes = useStyles();
-  let history = useHistory();
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+
   return (
     <Paper className={classes.paper} elevation={4}>
       <div className={classes.infoGroup}>
@@ -44,7 +44,7 @@ const Panel = ({ product, addProductToCart, isAuthenticated }: IPanel) => {
           size="large"
           onClick={() => {
             isAuthenticated
-              ? addProductToCart(product._id)
+              ? dispatch(addProductToCart(product._id))
               : history.push(SIGN_IN);
           }}
           className="mr-0 mr-md-3 mr-lg-3 mr-xl-3 mb-1 mb-md-0 mb-lg-0 mb-xl-0"
@@ -103,8 +103,4 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const mapStateToProps = (state: any) => ({
-  isAuthenticated: state.auth.isAuthenticated,
-});
-
-export default connect(mapStateToProps, { addProductToCart })(Panel);
+export default Panel;

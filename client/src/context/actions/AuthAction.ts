@@ -33,11 +33,11 @@ export const loadUser = () => async (dispatch: Function) => {
 
   if (result.success) {
     // User loaded then update access token and auth turn to true
-    return dispatch({ type: USER_LOADED, payload: result });
+    dispatch({ type: USER_LOADED, payload: result });
   } else {
     // fail token to null auth turn to false
     dispatch(returnErrors(result.error, 500));
-    return dispatch({ type: AUTH_ERROR });
+    dispatch({ type: AUTH_ERROR });
   }
 };
 
@@ -88,13 +88,11 @@ export const login = ({ email, password }: IAuthFunction) => async (
 
   if (result.success) {
     dispatch({ type: LOGIN_SUCCESS, payload: result });
-    return true;
   } else {
     dispatch(
       returnErrors(result.error, result.status, LOGIN_FAIL, result.labels)
     );
     dispatch({ type: LOGIN_FAIL });
-    return false;
   }
 };
 

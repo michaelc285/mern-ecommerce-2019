@@ -1,6 +1,7 @@
 import React, { useEffect, Fragment } from "react";
 import { MARKET_LANDING } from "../../../context/path";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../context/store";
 import { getProductsById } from "../../../context/actions/ProductAction";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import { NavLink } from "react-router-dom";
@@ -13,20 +14,18 @@ import { IProductDetailPage } from "../../../types/interfaces";
 import DisplaySkeleton from "./sections/DisplaySkeleton";
 import PanelSkeleton from "./sections/PanelSkeleton";
 
-const ProductDetailPage = ({
-  match,
-  product,
-  getProductsById,
-}: IProductDetailPage) => {
+const ProductDetailPage = ({ match }: IProductDetailPage) => {
   const classes = useStyles();
   const productId = match.params.productID;
+  const dispatch = useDispatch();
+  const product = useSelector((state: RootState) => state.product);
 
   useEffect(() => {
-    getProductsById(productId);
-  }, [productId, getProductsById]);
+    dispatch(getProductsById(productId));
+  }, [dispatch, productId]);
 
   // Components
-  const Content = product && product.data && product.data.length > 0 && (
+  const Content = product.data && product.data.length > 0 && (
     <Fragment>
       <Breadcrumbs aria-label="breadcrumb" style={{ marginBottom: "20px" }}>
         <NavLink to={MARKET_LANDING} className="text-decoration-none">
@@ -114,9 +113,4 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-// Redux
-const mapStateToProps = (state: any) => ({
-  product: state.product,
-});
-
-export default connect(mapStateToProps, { getProductsById })(ProductDetailPage);
+export default ProductDetailPage;

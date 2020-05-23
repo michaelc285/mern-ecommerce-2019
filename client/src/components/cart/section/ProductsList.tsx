@@ -1,21 +1,21 @@
 import React, { Fragment } from "react";
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../context/store";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import { Grid, Paper, Typography } from "@material-ui/core";
 import ProductContainer from "./ProductContainer";
-
 import { ICartItemDetail } from "../../../types/interfaces";
 
-const ProductsList = ({ cart }: any) => {
+const ProductsList = () => {
   const classes = useStyles();
+
+  const cart = useSelector((state: RootState) => state.cart);
 
   const contentArr = cart.items.map((product: ICartItemDetail) => (
     <Grid item key={product.id}>
       <ProductContainer product={product} />
     </Grid>
   ));
-
-  const load = <div>Loading</div>;
 
   const content = (
     <Paper elevation={7}>
@@ -30,7 +30,7 @@ const ProductsList = ({ cart }: any) => {
     </Paper>
   );
 
-  return <Fragment>{cart.items && cart.isLoading ? load : content}</Fragment>;
+  return <Fragment>{content}</Fragment>;
 };
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -47,8 +47,4 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const mapStateToProps = (state: any) => ({
-  cart: state.cart,
-});
-
-export default connect(mapStateToProps, null)(ProductsList);
+export default ProductsList;

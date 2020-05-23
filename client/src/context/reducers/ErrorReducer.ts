@@ -8,7 +8,7 @@ const initialState = {
   id: null,
 };
 
-export default (state = initialState, action: IAction) => {
+export default (state: any = initialState, action: IAction) => {
   switch (action.type) {
     case GET_ERRORS:
       return {

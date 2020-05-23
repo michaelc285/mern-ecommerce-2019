@@ -16,7 +16,7 @@ const initialState = {
   user: null,
 };
 
-export default (state = initialState, action: any) => {
+export default (state: any = initialState, action: any) => {
   switch (action.type) {
     case USER_LOADING:
       return {
