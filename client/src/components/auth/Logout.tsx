@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import { useDispatch } from "react-redux";
 import { logout } from "../../context/actions/AuthAction";
 import { NavLink } from "react-router-dom";
-import { HOME_PAGE } from "../../context/path";
+import { HOME_PAGE } from "../../types/path";
 
 const Logout = () => {
   const dispatch = useDispatch();

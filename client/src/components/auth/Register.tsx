@@ -16,7 +16,7 @@ import { makeStyles, Theme } from "@material-ui/core/styles";
 import { REGISTER_FAIL } from "../../context/types";
 import Alert from "@material-ui/lab/Alert";
 import { v4 as uuidv4 } from "uuid";
-import { SIGN_IN, MARKET_LANDING } from "../../context/path";
+import { SIGN_IN, MARKET_LANDING } from "../../types/path";
 
 const Register = () => {
   const classes = useStyles();

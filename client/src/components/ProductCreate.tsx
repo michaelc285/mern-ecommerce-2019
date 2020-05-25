@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { createProduct } from "../../context/actions/ProductAction";
-import { ITarget } from "../../types/interfaces";
+import { createProduct } from "../context/actions/ProductAction";
+import { ITarget } from "../types/interfaces";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import {
   Container,

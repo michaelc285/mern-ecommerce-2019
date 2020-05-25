@@ -8,7 +8,7 @@ import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import { Paper, Button, Typography } from "@material-ui/core";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import PaymentIcon from "@material-ui/icons/Payment";
-import { SIGN_IN } from "../../../../context/path";
+import { SIGN_IN } from "../../../../types/path";
 import { IPanel } from "../../../../types/interfaces";
 
 const Panel = ({ product }: IPanel) => {

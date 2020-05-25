@@ -6,7 +6,7 @@ import { getUserHistory } from "../../context/actions/HistoryAction";
 import HistoryContainer from "./section/HistoryContainer";
 import { Typography, Container, Breadcrumbs } from "@material-ui/core";
 import { makeStyles, Theme } from "@material-ui/core/styles";
-import { MARKET_LANDING } from "../../context/path";
+import { MARKET_LANDING } from "../../types/path";
 import LoadingProgress from "../utils/LoadingProgress";
 
 const PurchaseHistoryUser = () => {

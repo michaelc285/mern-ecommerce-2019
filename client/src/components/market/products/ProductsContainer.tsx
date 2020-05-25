@@ -1,5 +1,5 @@
 import React from "react";
-import ProductBox from "../ProductBox";
+import ProductBox from "./Product";
 import { Grid } from "@material-ui/core";
 
 interface IProductsPerPage {

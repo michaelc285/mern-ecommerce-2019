@@ -11,6 +11,7 @@
 
 # config
 /config/default.json
+/client/src/privateinfo.ts
 
 # Image file
 /public

@@ -1,11 +1,11 @@
 import React from "react";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../context/store";
-import { CurrencyFormatter } from "../../utils/NumberFormatter";
-import { addProductToCart } from "../../context/actions/CartAction";
-import { useHistory } from "react-router-dom";
-import { SIGN_UP } from "../../context/path";
+import { RootState } from "../../../context/store";
+import { CurrencyFormatter } from "../../../utils/NumberFormatter";
+import { addProductToCart } from "../../../context/actions/CartAction";
+import { useHistory, NavLink } from "react-router-dom";
+import { SIGN_UP } from "../../../types/path";
 import {
   Button,
   Typography,
@@ -33,24 +33,26 @@ const ProductBox = ({ _id, image, title, price }: IProductBox) => {
 
   return (
     <Card className={classes.root}>
-      <CardActionArea
-        href={`/product/${_id}`}
+      <NavLink
+        to={`/product/${_id}`}
         className="text-decoration-none text-dark"
       >
-        <CardMedia
-          className={classes.img}
-          image={image}
-          title={`${title} - M's Market`}
-        />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
-            {title}
-          </Typography>
-          <Typography variant="h6" color="textSecondary" component="h6">
-            <strong>{CurrencyFormatter(price)}</strong>
-          </Typography>
-        </CardContent>
-      </CardActionArea>
+        <CardActionArea>
+          <CardMedia
+            className={classes.img}
+            image={image}
+            title={`${title} - M's Market`}
+          />
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="h2">
+              {title}
+            </Typography>
+            <Typography variant="h6" color="textSecondary" component="h6">
+              <strong>{CurrencyFormatter(price)}</strong>
+            </Typography>
+          </CardContent>
+        </CardActionArea>
+      </NavLink>
       <CardActions>
         <Button
           variant="outlined"

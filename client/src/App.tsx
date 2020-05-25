@@ -11,7 +11,7 @@ import {
   MARKET_LANDING,
   SIGN_IN,
   SIGN_UP,
-} from "./context/path";
+} from "./types/path";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { loadUser } from "./context/actions/AuthAction";
@@ -21,9 +21,9 @@ import AppFooter from "./components/AppFooter";
 //import AuthPage from "./components/auth/AuthPage";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
-import MarketLanding from "./components/product/MarketLanding";
-import ProductCreate from "./components/product/ProductCreate";
-import ProductDetailPage from "./components/product/DetailPage/ProductDetailPage";
+import MarketLanding from "./components/market/MarketLanding";
+import ProductCreate from "./components/ProductCreate";
+import ProductDetailPage from "./components/market/productDetailPage/ProductDetailPage";
 import CartPage from "./components/cart/CartPage";
 import PurchaseHistoryUser from "./components/history/PurchaseHistoryUser";
 import ErrorPage from "./components/ErrorPage";

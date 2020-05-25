@@ -1,57 +1,67 @@
-import React, { useEffect, useRef } from "react";
-import { IPaypal } from "../../types/interfaces";
+import React, { useEffect, useState } from "react";
+import ReactDOM from "react-dom";
+import axios from "axios";
 
-const PaypalButton = ({ amount, onSuccess }: IPaypal) => {
-  // const [paidFor, setPaidFor] = React.useState(false);
-  // const [error, setError] = React.useState(null);
-  const [loaded, setLoaded] = React.useState(false);
-  let paypalRef = useRef<any>();
+const PaypalButton = (props: any) => {
+  const [sdkReady, setSdkReady] = useState(false);
+
+  const addPaypalSdk = async () => {
+    const result = await axios.get("/api/config/paypal");
+    const clientID = result.data;
+    const script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src =
+      "https://www.paypal.com/sdk/js?client-id=" +
+      clientID +
+      "&disable-funding=credit,card";
+    script.async = true;
+    script.onload = () => setSdkReady(true);
+    document.body.appendChild(script);
+  };
+
+  const createOrder = (data: any, actions: any) =>
+    actions.order.create({
+      purchase_units: [
+        {
+          amount: {
+            currency_code: "USD",
+            value: props.amount,
+          },
+        },
+      ],
+    });
+
+  const onApprove = (data: any, actions: any) =>
+    actions.order
+      .capture()
+      .then((details: any) => props.onSuccess(details, data))
+      .catch((err: any) => console.log(err));
 
   useEffect(() => {
-    (window as any).paypal
-      .Buttons({
-        createOrder: (data: any, actions: any) => {
-          return actions.order.create({
-            purchase_units: [
-              {
-                amount: {
-                  currency_code: "USD",
-                  value: amount,
-                },
-              },
-            ],
-          });
-        },
-        onApprove: async (data: any, actions: any) => {
-          const details = await actions.order.capture();
-          // setPaidFor(true);
+    if (!(window as any).paypal) {
+      addPaypalSdk();
+    }
+    return () => {
+      //
+    };
+  }, []);
 
-          onSuccess(details, data);
-        },
-        onError: (err: any) => {
-          // setError(err);
-          console.error(err);
-        },
-        style: {
-          color: "white",
-        },
-      })
-      .render(paypalRef.current);
-  }, [amount, onSuccess]);
+  if (!sdkReady && !(window as any).paypal) {
+    return <div>Loading...</div>;
+  }
 
-  // if (paidFor) {
-  //   return (
-  //     <div>
-  //       <h1>Congrats, you just bought !</h1>
-  //     </div>
-  //   );
-  // }
+  const Button = (window as any).paypal.Buttons.driver("react", {
+    React,
+    ReactDOM,
+  });
 
   return (
-    <div>
-      {/* {error && <div>Uh oh, an error occurred! {error}</div>} */}
-      <div ref={paypalRef} />
-    </div>
+    <Button
+      {...props}
+      createOrder={(data: any, actions: any) => createOrder(data, actions)}
+      onApprove={(data: any, actions: any) => onApprove(data, actions)}
+      style={{ color: "white" }}
+    />
   );
 };
 

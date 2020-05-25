@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../context/store";
-import ProductMenu from "./menu/ProductFilter";
-import ProductsContainer from "./section/ProductContainer";
-import Pagination from "./section/Pagination";
+import ProductMenu from "./filter/ProductFilter";
+import ProductsContainer from "./products/ProductsContainer";
+import Pagination from "./products/Pagination";
 import { Typography, Container } from "@material-ui/core";
 import { getProducts } from "../../context/actions/ProductAction";
 import LoadingProgres from "../utils/LoadingProgress";

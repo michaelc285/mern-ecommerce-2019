@@ -26,6 +26,7 @@ Also you need to cretae your own config.env and default.json file in `/mern-ecom
 NODE_ENV= <development | production>
 PORT= <Port you want>
 MONGO_URI= <Your MongoDB uri>
+PAYPAL_CLIENT_ID= <Your Paypal Client ID>
 ```
 2.   default.json `/mern-ecommerce/config/default.json`
  ```

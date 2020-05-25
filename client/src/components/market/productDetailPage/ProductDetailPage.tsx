@@ -1,5 +1,5 @@
 import React, { useEffect, Fragment } from "react";
-import { MARKET_LANDING } from "../../../context/path";
+import { MARKET_LANDING } from "../../../types/path";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../context/store";
 import { getProductsById } from "../../../context/actions/ProductAction";

@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import { RootState } from "../context/store";
-import { ADMIN_CREATE_PRODUCT, USER_CART, USER_HISTORY } from "../context/path";
+import { ADMIN_CREATE_PRODUCT, USER_CART, USER_HISTORY } from "../types/path";
 import {
   IconButton,
   Badge,
@@ -76,14 +76,12 @@ const AppNavbar = () => {
   );
 
   const adminMenu = (
-    <MenuItem onClick={handleClose}>
-      <NavLink
-        to={ADMIN_CREATE_PRODUCT}
-        className="text-decoration-none text-primary"
-      >
-        Create Product
-      </NavLink>
-    </MenuItem>
+    <NavLink
+      to={ADMIN_CREATE_PRODUCT}
+      className="text-decoration-none text-primary"
+    >
+      <MenuItem onClick={handleClose}>Create Product</MenuItem>
+    </NavLink>
   );
 
   const AuthedContent = (
@@ -124,19 +122,15 @@ const AppNavbar = () => {
         <MenuItem onClick={handleClose} disabled={true}>
           My account
         </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <NavLink to={USER_CART} className="text-decoration-none text-primary">
-            Cart
-          </NavLink>
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <NavLink
-            to={USER_HISTORY}
-            className="text-decoration-none text-primary"
-          >
-            Records
-          </NavLink>
-        </MenuItem>
+        <NavLink to={USER_CART} className="text-decoration-none text-primary">
+          <MenuItem onClick={handleClose}>Cart</MenuItem>
+        </NavLink>
+        <NavLink
+          to={USER_HISTORY}
+          className="text-decoration-none text-primary"
+        >
+          <MenuItem onClick={handleClose}>Records</MenuItem>
+        </NavLink>
         <MenuItem
           onClick={handleClose}
           className="text-decoration-none text-primary"

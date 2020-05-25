@@ -9,7 +9,7 @@ import ProductsList from "./section/ProductsList";
 import Payment from "./section/Payment";
 import LoadingProgress from "../utils/LoadingProgress";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
-import { MARKET_LANDING } from "../../context/path";
+import { MARKET_LANDING } from "../../types/path";
 import { NavLink } from "react-router-dom";
 
 const CartPage = () => {

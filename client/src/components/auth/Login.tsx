@@ -18,7 +18,7 @@ import {
 import Alert from "@material-ui/lab/Alert";
 import { LOGIN_FAIL } from "../../context/types";
 import { v4 as uuidv4 } from "uuid";
-import { MARKET_LANDING, SIGN_UP } from "../../context/path";
+import { MARKET_LANDING, SIGN_UP } from "../../types/path";
 
 const Login = () => {
   const classes = useStyles();

@@ -36,6 +36,9 @@ if (process.env.NODE_ENV === "development") {
 app.use("/api/users", users);
 app.use("/api/auth", auth);
 app.use("/api/product", product);
+app.get("/api/config/paypal", (req, res) => {
+  res.send(process.env.PAYPAL_CLIENT_ID);
+});
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
