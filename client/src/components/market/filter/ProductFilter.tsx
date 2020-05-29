@@ -27,21 +27,12 @@ const ProductMenu = () => {
   const [searchValue, setSearchValue] = useState<string>("");
   const [price, setPrice] = useState<number[]>([minPrice, maxPrice]);
 
-  const handleSelections = useCallback(
-    (selected: string[]) => setSelections(selected),
-    []
-  );
-  const handleSearchValue = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) =>
-      setSearchValue(event.target.value),
-    []
-  );
-  const handlePrice = useCallback(
-    (priceArr: number[]) => setPrice(priceArr),
-    []
-  );
+  const handleSelections = (selected: string[]) => setSelections(selected);
+  const handleSearchValue = (event: React.ChangeEvent<HTMLInputElement>) =>
+    setSearchValue(event.target.value);
+  const handlePrice = (priceArr: number[]) => setPrice(priceArr);
 
-  const HandleRefreshProducts = useCallback(() => {
+  const HandleRefreshProducts = () => {
     console.log(searchValue);
     const body = {
       searchTerm: searchValue,
@@ -50,9 +41,8 @@ const ProductMenu = () => {
         price,
       },
     };
-    getProducts(body);
-  }, [selections, searchValue, price]);
-
+    dispatch(getProducts(body));
+  };
   const HandleClearProducts = () => {
     // Clean filters
     setSearchValue("");
