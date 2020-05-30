@@ -4,13 +4,10 @@ import { RootState } from "../../context/store";
 import ProductMenu from "./filter/ProductFilter";
 import ProductsContainer from "./products/ProductsContainer";
 import Pagination from "./products/Pagination";
-import { Typography, Container } from "@material-ui/core";
 import { getProducts } from "../../context/actions/ProductAction";
 import LoadingProgres from "../utils/LoadingProgress";
-import { makeStyles, Theme } from "@material-ui/core/styles";
 
 const MarketLanding = () => {
-  const classes = useStyles();
   const dispatch = useDispatch();
   const products = useSelector((state: RootState) => state.product);
 
@@ -40,22 +37,22 @@ const MarketLanding = () => {
   // Component
 
   const NoResult = (
-    <div className={classes.noResult}>
-      <Typography>No relevant result was found</Typography>
+    <div className="h-64 flex justify-center items-center p-5 text-center">
+      <h4 className="text-3xl">No relevant result was found</h4>
     </div>
   );
 
   const Content = (
     <div>
-      <Typography className={classes.resultText}>
+      <h4 className="text-xl p-2">
         {resultCount} {resultCount > 1 ? "Results" : "Result"}
-      </Typography>
+      </h4>
       <div>
         {/* Products */}
         <ProductsContainer products={currentProducts} />
 
         {/* Pagination */}
-        <div className={classes.pagination}>
+        <div className="flex justify-center my-10 p-3">
           <Pagination
             productsPerPage={productsPerPage}
             totalProducts={resultCount}
@@ -67,43 +64,26 @@ const MarketLanding = () => {
   );
 
   return (
-    <Container maxWidth="lg" style={{ minHeight: "100vh" }}>
-      <div style={{ display: "flex", flexDirection: "column", height: "auto" }}>
-        {/* Menu */}
+    <div className="min-h-screen">
+      <div className="container mx-auto">
         <div>
-          <ProductMenu />
-        </div>
+          {/* Menu */}
+          <div>
+            <ProductMenu />
+          </div>
 
-        {/* Content */}
-        {products && products.isLoading ? (
-          <LoadingProgres />
-        ) : products.data && products.data.length > 0 ? (
-          Content
-        ) : (
-          NoResult
-        )}
+          {/* Content */}
+          {products && products.isLoading ? (
+            <LoadingProgres />
+          ) : products.data && products.data.length > 0 ? (
+            Content
+          ) : (
+            NoResult
+          )}
+        </div>
       </div>
-    </Container>
+    </div>
   );
 };
-
-// Style
-
-const useStyles = makeStyles((theme: Theme) => ({
-  noResult: {
-    height: "300px",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  pagination: {
-    display: "flex",
-    justifyContent: "center",
-    padding: "3em",
-  },
-  resultText: {
-    margin: "10px 0 10px 0",
-  },
-}));
 
 export default MarketLanding;

@@ -11,14 +11,7 @@ const SearchBar = ({ handleSearchValue, searchValue }: ISearchBar) => {
   return (
     <Fragment>
       {/* <Typography>Search</Typography> */}
-      <div
-        style={{
-          height: "100%",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
+      <div className="h-full flex justify-center items-center ">
         <FormControl
           style={{
             width: "90%",

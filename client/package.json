@@ -21,10 +21,7 @@
     "antd": "^4.1.4",
     "axios": "^0.19.2",
     "bootstrap": "^4.4.1",
-    "formik": "^2.1.4",
-    "formik-material-ui": "^2.0.0-beta.1",
     "material-ui-dropzone": "^2.5.0",
-    "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.0",
     "react-dom": "^16.13.1",
@@ -42,10 +39,12 @@
     "uuid": "^7.0.3"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "npm run watch:css && react-scripts start",
+    "build": "npm run build:css && react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "build:css": "postcss src/assets/tailwind.css -o src/assets/main.css",
+    "watch:css": "postcss src/assets/tailwind.css -o src/assets/main.css"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -63,5 +62,9 @@
     ]
   },
   "proxy": "http://localhost:5000",
-  "devDependencies": {}
+  "devDependencies": {
+    "autoprefixer": "^9.8.0",
+    "postcss-cli": "^7.1.1",
+    "tailwindcss": "^1.4.6"
+  }
 }

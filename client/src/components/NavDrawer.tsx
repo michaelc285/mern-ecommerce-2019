@@ -9,7 +9,7 @@ import {
   HOME_PAGE,
   SIGN_IN,
   SIGN_UP,
-} from "../types/path";
+} from "../path";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Divider,

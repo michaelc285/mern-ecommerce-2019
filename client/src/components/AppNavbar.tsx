@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import { RootState } from "../context/store";
-import { ADMIN_CREATE_PRODUCT, USER_CART, USER_HISTORY } from "../types/path";
+import { ADMIN_CREATE_PRODUCT, USER_CART, USER_HISTORY } from "../path";
 import {
   IconButton,
   Badge,
@@ -143,7 +143,7 @@ const AppNavbar = () => {
 
   return (
     <div className={classes.root}>
-      <AppBar position="fixed">
+      <AppBar position={"static"}>
         <Toolbar>
           <IconButton
             edge="start"

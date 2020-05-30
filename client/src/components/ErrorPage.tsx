@@ -1,16 +1,16 @@
-import React, { Fragment } from "react";
-import { Typography } from "@material-ui/core/";
+import React from "react";
 
 const ErrorPage = () => {
   return (
-    <Fragment>
-      <div
-        className="d-flex justify-content-center align-items-center"
-        style={{ height: 400 }}
-      >
-        <Typography variant={"h6"}> 404 NOT FOUND</Typography>
+    <div className="h-screen w-screen ">
+      <div className="h-full flex justify-center items-center">
+        <div className="p-3">
+          <h1 className="text-3xl sm:text-6xl font-extrabold font-mono">
+            404 NOT FOUND
+          </h1>
+        </div>
       </div>
-    </Fragment>
+    </div>
   );
 };
 

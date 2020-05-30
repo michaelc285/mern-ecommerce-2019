@@ -54,42 +54,43 @@ const ProductMenu = () => {
   };
 
   return (
-    <ExpansionPanel>
-      <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography>Filter</Typography>
-      </ExpansionPanelSummary>
+    <div className="py-5">
+      <ExpansionPanel>
+        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+          <h1 className="text-xl">Filter</h1>
+        </ExpansionPanelSummary>
 
-      <ExpansionPanelDetails>
-        <div style={{ flexGrow: 1 }}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={4}>
-              <SearchBar
-                handleSearchValue={handleSearchValue}
-                searchValue={searchValue}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={4}>
-              <div>
-                <PriceRangeSlider
-                  handlePrice={handlePrice}
-                  price={price}
-                  min={minPrice}
-                  max={maxPrice}
-                />
+        <ExpansionPanelDetails>
+          <div className="w-full">
+            <div className="flex flex-col items-center">
+              {/* Option Group */}
+              <div className="w-full flex flex-col md:flex-row">
+                {/* Search Bar */}
+                <div className="flex-0 md:flex-1 mb-3 md:mb-0">
+                  <SearchBar
+                    handleSearchValue={handleSearchValue}
+                    searchValue={searchValue}
+                  />
+                </div>
+                {/* Price Range Slider */}
+                <div className="flex-0 md:flex-1 mb-3 md:mb-0">
+                  <PriceRangeSlider
+                    handlePrice={handlePrice}
+                    price={price}
+                    min={minPrice}
+                    max={maxPrice}
+                  />
+                </div>
+                {/* CategorySelection */}
+                <div className="flex-0 md:flex-1 mb-3 md:mb-0">
+                  <CategorySelection
+                    handleSelections={handleSelections}
+                    checked={selections}
+                  />
+                </div>
               </div>
-            </Grid>
-            <hr />
-            <Grid item xs={12} sm={4}>
-              <CategorySelection
-                handleSelections={handleSelections}
-                checked={selections}
-              />
-            </Grid>
 
-            {/* Search Button */}
-            <Grid item xs={12} sm={12}>
-              <hr />
+              {/* Search Button Group*/}
               <div style={{ display: "flex", justifyContent: "center" }}>
                 <ButtonGroup>
                   <Button
@@ -108,11 +109,11 @@ const ProductMenu = () => {
                   </Button>
                 </ButtonGroup>
               </div>
-            </Grid>
-          </Grid>
-        </div>
-      </ExpansionPanelDetails>
-    </ExpansionPanel>
+            </div>
+          </div>
+        </ExpansionPanelDetails>
+      </ExpansionPanel>
+    </div>
   );
 };
 

@@ -1,10 +1,5 @@
 import React, { Fragment } from "react";
-import {
-  FormGroup,
-  FormControlLabel,
-  Checkbox,
-  Typography,
-} from "@material-ui/core";
+import { FormGroup, FormControlLabel, Checkbox } from "@material-ui/core";
 
 interface ICategorySelection {
   handleSelections: Function;
@@ -59,7 +54,7 @@ const CategorySelection = ({
 
   return (
     <div>
-      <Typography>Category</Typography>
+      <h1 className="text-base mb-2">Category</h1>
       <FormGroup row>{renderCheckBoxs()}</FormGroup>
     </div>
   );

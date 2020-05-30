@@ -5,7 +5,7 @@ import { RootState } from "../../../context/store";
 import { CurrencyFormatter } from "../../../utils/NumberFormatter";
 import { addProductToCart } from "../../../context/actions/CartAction";
 import { useHistory, NavLink } from "react-router-dom";
-import { SIGN_UP } from "../../../types/path";
+import { SIGN_UP } from "../../../path";
 import {
   Button,
   Typography,

@@ -18,3 +18,8 @@ export const USER_HISTORY = "/user/history";
  *      ADMIN
  */
 export const ADMIN_CREATE_PRODUCT = "/admin/product/create";
+
+// External
+export const GITHUB_LINK = "https://github.com/michaelc285";
+export const LINKEDIN_LINK = "https://www.linkedin.com/in/mc410/";
+export const EMAIL_ADDRESS = "michaelcth410@gmail.com";
