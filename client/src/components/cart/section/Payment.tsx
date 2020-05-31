@@ -22,7 +22,7 @@ const Payment = ({ totalPayment }: IPayment) => {
 
   return (
     <Fragment>
-      <Paper elevation={7}>
+      <Paper elevation={1}>
         <Grid container direction={"column"}>
           <Grid item className={classes.boxTitle}>
             <Typography className={classes.textContent} variant={"h6"}>

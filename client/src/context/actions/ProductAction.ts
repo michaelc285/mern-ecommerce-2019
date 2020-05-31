@@ -1,9 +1,12 @@
 import {
-  PRODUCT_LOADING,
-  PRODUCT_CREATE_SUCCESS,
-  PRODUCT_CREATE_FAIL,
-  PRODUCT_GET_SUCCESS,
-  PRODUCT_GET_FAIL,
+  PRODUCT_LIST_GET_FAIL,
+  PRODUCT_LIST_GET_SUCCESS,
+  PRODUCT_LIST_CREATE_FAIL,
+  PRODUCT_LIST_CREATE_SUCCESS,
+  PRODUCT_LIST_LOADING,
+  PRODUCT_DETAILS_LOADING,
+  PRODUCT_DETAILS_GET_SUCCESS,
+  PRODUCT_DETAILS_GET_FAIL,
 } from "../types";
 import axios from "axios";
 import { returnErrors } from "./ErrorActions";
@@ -42,10 +45,13 @@ export const createProduct = (
       },
     });
 
-    dispatch({ type: PRODUCT_CREATE_SUCCESS, payload: createProduct.data });
+    dispatch({
+      type: PRODUCT_LIST_CREATE_SUCCESS,
+      payload: createProduct.data,
+    });
   } catch (err) {
     dispatch(returnErrors(err.msg, 500));
-    dispatch({ type: PRODUCT_CREATE_FAIL });
+    dispatch({ type: PRODUCT_LIST_CREATE_FAIL });
   }
 };
 // Get and Search Product
@@ -54,7 +60,7 @@ export const getProducts = (filters: object = {}) => async (
 ) => {
   try {
     // Loading
-    dispatch({ type: PRODUCT_LOADING });
+    dispatch({ type: PRODUCT_LIST_LOADING });
     // Get Data
     const result = await axios.post("/api/product/", filters, {
       headers: {
@@ -62,10 +68,10 @@ export const getProducts = (filters: object = {}) => async (
       },
     });
 
-    dispatch({ type: PRODUCT_GET_SUCCESS, payload: result });
+    dispatch({ type: PRODUCT_LIST_GET_SUCCESS, payload: result });
   } catch (err) {
     dispatch(returnErrors(err.msg, 500));
-    dispatch({ type: PRODUCT_GET_FAIL });
+    dispatch({ type: PRODUCT_LIST_GET_FAIL });
   }
 };
 
@@ -75,16 +81,15 @@ export const getProductsById = (
   type: string = "single"
 ) => async (dispatch: Function) => {
   try {
-    dispatch({ type: PRODUCT_LOADING });
+    dispatch({ type: PRODUCT_DETAILS_LOADING });
 
     const result = await axios.get(
       `/api/product/?id=${productId}&type=${type}`
     );
 
-    dispatch({ type: PRODUCT_GET_SUCCESS, payload: result });
+    dispatch({ type: PRODUCT_DETAILS_GET_SUCCESS, payload: result });
   } catch (err) {
-    console.log(err);
     dispatch(returnErrors(err.message, 500));
-    dispatch({ type: PRODUCT_GET_FAIL });
+    dispatch({ type: PRODUCT_DETAILS_GET_FAIL });
   }
 };

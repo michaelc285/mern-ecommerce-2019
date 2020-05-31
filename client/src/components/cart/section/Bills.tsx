@@ -8,7 +8,7 @@ const Bills = ({ orderTotal, deliveryFee, totalPayment }: IBills) => {
   const classes = useStyles();
   return (
     <Fragment>
-      <Paper elevation={7} className={classes.root}>
+      <Paper elevation={1} className={classes.root}>
         <Grid container direction={"column"}>
           <Grid item xl={12} className={classes.boxTitle}>
             <Typography className={classes.textContent} variant={"h6"}>

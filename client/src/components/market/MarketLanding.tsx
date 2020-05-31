@@ -9,7 +9,7 @@ import LoadingProgres from "../utils/LoadingProgress";
 
 const MarketLanding = () => {
   const dispatch = useDispatch();
-  const products = useSelector((state: RootState) => state.product);
+  const products = useSelector((state: RootState) => state.productList);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(8);

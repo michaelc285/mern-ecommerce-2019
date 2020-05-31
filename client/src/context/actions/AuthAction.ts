@@ -1,5 +1,5 @@
 import axios from "axios";
-import { returnErrors, clearErrors } from "./ErrorActions";
+import { returnErrors } from "./ErrorActions";
 import { IAuthFunction } from "../../types/interfaces";
 //Constant
 import {

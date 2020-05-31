@@ -1,40 +1,69 @@
 import { IAction } from "../../types/interfaces";
 import {
-  PRODUCT_LOADING,
-  PRODUCT_LOADED,
-  PRODUCT_CREATE_SUCCESS,
-  PRODUCT_CREATE_FAIL,
-  PRODUCT_GET_SUCCESS,
-  PRODUCT_GET_FAIL,
+  PRODUCT_LIST_GET_FAIL,
+  PRODUCT_LIST_GET_SUCCESS,
+  PRODUCT_LIST_CREATE_FAIL,
+  PRODUCT_LIST_CREATE_SUCCESS,
+  PRODUCT_LIST_LOADED,
+  PRODUCT_LIST_LOADING,
+  PRODUCT_DETAILS_LOADING,
+  PRODUCT_DETAILS_GET_SUCCESS,
+  PRODUCT_DETAILS_GET_FAIL,
 } from "../types";
 
-const initialState = {
-  isLoading: false,
-  data: null,
-};
-
-export default (state: any = initialState, action: IAction) => {
+export const productListReducer = (
+  state: any = {
+    isLoading: false,
+    data: [],
+  },
+  action: IAction
+) => {
   switch (action.type) {
-    case PRODUCT_LOADING:
+    case PRODUCT_LIST_LOADING:
       return {
         ...state,
         isLoading: true,
-        data: null,
+        data: [],
       };
-    case PRODUCT_CREATE_SUCCESS:
+    case PRODUCT_LIST_CREATE_SUCCESS:
       return {
         ...state,
         isLoading: false,
         data: [],
       };
-    case PRODUCT_GET_SUCCESS:
+    case PRODUCT_LIST_GET_SUCCESS:
       return {
         isLoading: false,
         data: [...action.payload.data.products],
       };
-    case PRODUCT_LOADED:
-    case PRODUCT_CREATE_FAIL:
-    case PRODUCT_GET_FAIL:
+    case PRODUCT_LIST_LOADED:
+    case PRODUCT_LIST_CREATE_FAIL:
+    case PRODUCT_LIST_GET_FAIL:
+    default:
+      return state;
+  }
+};
+
+export const productDetailsReducer = (
+  state: any = {
+    isLoading: false,
+    data: {},
+  },
+  action: IAction
+) => {
+  switch (action.type) {
+    case PRODUCT_DETAILS_LOADING:
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case PRODUCT_DETAILS_GET_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        data: action.payload.data.products[0],
+      };
+    case PRODUCT_DETAILS_GET_FAIL:
     default:
       return state;
   }

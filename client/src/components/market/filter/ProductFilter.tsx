@@ -1,10 +1,8 @@
-import React, { useState, useCallback, useReducer } from "react";
+import React, { useState } from "react";
 import {
   ExpansionPanel,
   ExpansionPanelSummary,
   ExpansionPanelDetails,
-  Typography,
-  Grid,
   Button,
   ButtonGroup,
 } from "@material-ui/core";
@@ -13,7 +11,7 @@ import ClearAllIcon from "@material-ui/icons/ClearAll";
 import CategorySelection from "./section/CategorySelection";
 import PriceRangeSlider from "./section/PriceRangeSlider";
 import SearchBar from "./section/SearchBar";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { getProducts } from "../../../context/actions/ProductAction";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 

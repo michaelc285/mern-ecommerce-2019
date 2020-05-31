@@ -1,9 +1,8 @@
-import React, { useEffect, Fragment } from "react";
-import { makeStyles, Theme } from "@material-ui/core/styles";
+import React, { useEffect } from "react";
 import { RootState } from "../../context/store";
 import { useDispatch, useSelector } from "react-redux";
 import { loadCart } from "../../context/actions/CartAction";
-import { Container, Grid, Typography, Button } from "@material-ui/core";
+import { Grid, Button } from "@material-ui/core";
 import Bills from "./section/Bills";
 import ProductsList from "./section/ProductsList";
 import Payment from "./section/Payment";
@@ -13,7 +12,6 @@ import { MARKET_LANDING } from "../../path";
 import { NavLink } from "react-router-dom";
 
 const CartPage = () => {
-  // const classes = useStyles();
   const dispatch = useDispatch();
 
   const cart = useSelector((state: RootState) => state.cart);
@@ -38,18 +36,9 @@ const CartPage = () => {
   // Components
 
   const nothing = (
-    <div
-      style={{
-        height: "300px",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <div style={{ display: "flex", flexDirection: "column" }}>
-        <Typography variant={"h6"} gutterBottom={true}>
-          Nothing in cart
-        </Typography>
+    <div className="mt-56 mx-auto">
+      <div className="flex flex-col items-center">
+        <h4 className="text-3xl mb-5">Nothing in cart</h4>
         <NavLink to={MARKET_LANDING}>
           <Button
             variant="contained"
@@ -64,49 +53,44 @@ const CartPage = () => {
   );
 
   const shoopingcart = (
-    <Fragment>
-      {/* Products List */}
-      <Grid container spacing={3}>
-        <Grid item xl={8} md={8} xs={12}>
-          <ProductsList />
-        </Grid>
-        {/* Bill */}
-        <Grid item xl={4} md={4} xs={12}>
-          <Grid container direction={"column"} spacing={3}>
-            <Grid item>
-              <Bills
-                orderTotal={orderTotal}
-                deliveryFee={deliveryFee}
-                totalPayment={totalPayment}
-              />
-            </Grid>
-            <Grid item>
-              <Payment totalPayment={totalPayment} />
+    <div className="container mx-auto">
+      <div className="p-2 my-4">
+        {/* Products List */}
+        <Grid container spacing={3}>
+          <Grid item xl={8} md={8} xs={12}>
+            <ProductsList />
+          </Grid>
+          {/* Bill */}
+          <Grid item xl={4} md={4} xs={12}>
+            <Grid container direction={"column"} spacing={3}>
+              <Grid item>
+                <Bills
+                  orderTotal={orderTotal}
+                  deliveryFee={deliveryFee}
+                  totalPayment={totalPayment}
+                />
+              </Grid>
+              <Grid item>
+                <Payment totalPayment={totalPayment} />
+              </Grid>
             </Grid>
           </Grid>
         </Grid>
-      </Grid>
-    </Fragment>
+      </div>
+    </div>
   );
 
   return (
-    <Fragment>
-      <Container maxWidth="md" style={{ minHeight: "100vh" }}>
-        {cart.isLoading ? (
-          <LoadingProgress />
-        ) : cart.items && cart.items.length > 0 ? (
-          shoopingcart
-        ) : (
-          nothing
-        )}
-      </Container>
-    </Fragment>
+    <div className="min-h-screen">
+      {cart.isLoading ? (
+        <LoadingProgress />
+      ) : cart.items && cart.items.length > 0 ? (
+        shoopingcart
+      ) : (
+        nothing
+      )}
+    </div>
   );
 };
-
-// Style
-const useStyles = makeStyles((theme: Theme) => ({
-  loading: {},
-}));
 
 export default CartPage;

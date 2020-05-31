@@ -4,7 +4,6 @@ import { RootState } from "../../context/store";
 import { login } from "../../context/actions/AuthAction";
 
 import { clearErrors } from "../../context/actions/ErrorActions";
-import { makeStyles, Theme } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
 import {
   TextField,
@@ -72,64 +71,66 @@ const Login = () => {
     ));
 
   return (
-    <div className="p-5">
-      <Container maxWidth="sm">
-        <Paper elevation={3} className="p-3">
-          <Typography gutterBottom={true} variant={"h5"}>
-            Sign-In
-          </Typography>
-          {message ? alertMessage : null}
+    <div className="min-h-screen">
+      <div className="p-5">
+        <Container maxWidth="sm">
+          <Paper elevation={3} className="p-3">
+            <Typography gutterBottom={true} variant={"h5"}>
+              Sign-In
+            </Typography>
+            {message ? alertMessage : null}
 
-          <form onSubmit={handleSubmit}>
-            <FormControl fullWidth>
-              <TextField
-                type="email"
-                id="loginEmail"
-                label="Email"
-                variant="outlined"
-                name="loginEmail"
-                className="mb-3"
-                value={email}
-                onChange={handleEmailChange}
-              />
-            </FormControl>
-            <FormControl fullWidth>
-              <TextField
-                type="password"
-                id="loginPassword"
-                label="Password"
-                variant="outlined"
-                name="loginPassword"
-                className="mb-3"
-                value={password}
-                onChange={handlePasswordChange}
-              />
-            </FormControl>
-            <FormControl fullWidth>
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                size="small"
-              >
-                Sign In
-              </Button>
-            </FormControl>
-            <div className="w-100 d-flex flex-column align-items-center">
-              <Typography variant={"subtitle1"}> or</Typography>
-              <Button
-                variant="contained"
-                color="primary"
-                size="small"
-                className="w-100"
-                href={SIGN_UP}
-              >
-                Sign Up
-              </Button>
-            </div>
-          </form>
-        </Paper>
-      </Container>
+            <form onSubmit={handleSubmit}>
+              <FormControl fullWidth>
+                <TextField
+                  type="email"
+                  id="loginEmail"
+                  label="Email"
+                  variant="outlined"
+                  name="loginEmail"
+                  className="mb-3"
+                  value={email}
+                  onChange={handleEmailChange}
+                />
+              </FormControl>
+              <FormControl fullWidth>
+                <TextField
+                  type="password"
+                  id="loginPassword"
+                  label="Password"
+                  variant="outlined"
+                  name="loginPassword"
+                  className="mb-3"
+                  value={password}
+                  onChange={handlePasswordChange}
+                />
+              </FormControl>
+              <FormControl fullWidth>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  size="small"
+                >
+                  Sign In
+                </Button>
+              </FormControl>
+              <div className="w-100 d-flex flex-column align-items-center">
+                <Typography variant={"subtitle1"}> or</Typography>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="small"
+                  className="w-100"
+                  href={SIGN_UP}
+                >
+                  Sign Up
+                </Button>
+              </div>
+            </form>
+          </Paper>
+        </Container>
+      </div>
     </div>
   );
 };

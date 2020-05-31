@@ -4,7 +4,7 @@ import { RootState } from "../../context/store";
 import { NavLink } from "react-router-dom";
 import { getUserHistory } from "../../context/actions/HistoryAction";
 import HistoryContainer from "./section/HistoryContainer";
-import { Typography, Container, Breadcrumbs } from "@material-ui/core";
+import { Typography, Breadcrumbs } from "@material-ui/core";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import { MARKET_LANDING } from "../../path";
 import LoadingProgress from "../utils/LoadingProgress";
@@ -32,26 +32,30 @@ const PurchaseHistoryUser = () => {
   );
 
   return (
-    <Container maxWidth="lg" style={{ minHeight: "100vh" }}>
-      <div className="mb-3">
-        <Breadcrumbs aria-label="breadcrumb">
-          <NavLink
-            to={MARKET_LANDING}
-            className="text-decoration-none text-secondary"
-          >
-            Market
-          </NavLink>
-          <Typography color="textPrimary">History</Typography>
-        </Breadcrumbs>
+    <div className="min-h-screen">
+      <div className="container mx-auto">
+        <div className="mt-10">
+          <div className="mb-3">
+            <Breadcrumbs aria-label="breadcrumb">
+              <NavLink
+                to={MARKET_LANDING}
+                className="text-decoration-none text-secondary"
+              >
+                Market
+              </NavLink>
+              <Typography color="textPrimary">History</Typography>
+            </Breadcrumbs>
+          </div>
+          {history.isLoading ? (
+            <LoadingProgress />
+          ) : history.data && history.data.length > 0 ? (
+            Content
+          ) : (
+            NoHistory
+          )}
+        </div>
       </div>
-      {history.isLoading ? (
-        <LoadingProgress />
-      ) : history.data && history.data.length > 0 ? (
-        Content
-      ) : (
-        NoHistory
-      )}
-    </Container>
+    </div>
   );
 };
 

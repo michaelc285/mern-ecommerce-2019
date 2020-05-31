@@ -12,6 +12,7 @@ import {
   MARKET_LANDING,
   SIGN_IN,
   SIGN_UP,
+  DASHBOARD,
 } from "./path";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { loadUser } from "./context/actions/AuthAction";
@@ -27,7 +28,7 @@ import ProductDetailPage from "./components/market/productDetailPage/ProductDeta
 import CartPage from "./components/cart/CartPage";
 import PurchaseHistoryUser from "./components/history/PurchaseHistoryUser";
 import ErrorPage from "./components/ErrorPage";
-
+import Dashboard from "./components/dashboard/DashboardLanding";
 import { ROLE_ADMIN, ROLE_GUEST, ROLE_USER } from "./context/types";
 
 const App = () => {
@@ -59,6 +60,7 @@ const App = () => {
           <Route path={SIGN_UP} exact component={Register} />
 
           {/* Authorized Route */}
+
           <ProtectedRoute
             exact
             isAuthenticated={isAuthenticated}
@@ -76,6 +78,15 @@ const App = () => {
             component={PurchaseHistoryUser}
           />
           {/* Admin Route */}
+          <ProtectedRoute
+            exact
+            adminRestrict
+            isAuthenticated={isAuthenticated}
+            role={role}
+            authenticationPath={SIGN_UP}
+            path={DASHBOARD}
+            component={Dashboard}
+          />
           <ProtectedRoute
             exact
             adminRestrict

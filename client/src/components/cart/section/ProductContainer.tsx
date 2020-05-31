@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { CurrencyFormatter } from "../../../utils/NumberFormatter";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import {

@@ -3,47 +3,42 @@ import { MARKET_LANDING } from "../../../path";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../context/store";
 import { getProductsById } from "../../../context/actions/ProductAction";
-import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import { NavLink } from "react-router-dom";
-import { Container, Grid, Typography, Breadcrumbs } from "@material-ui/core";
+import { Grid, Typography, Breadcrumbs } from "@material-ui/core";
 import Skeleton from "@material-ui/lab/Skeleton";
 import Panel from "./sections/Panel";
 import Display from "./sections/Display";
 import { IProductDetailPage } from "../../../types/interfaces";
-
 import DisplaySkeleton from "./sections/DisplaySkeleton";
 import PanelSkeleton from "./sections/PanelSkeleton";
 
 const ProductDetailPage = ({ match }: IProductDetailPage) => {
-  const classes = useStyles();
   const productId = match.params.productID;
   const dispatch = useDispatch();
-  const product = useSelector((state: RootState) => state.product);
+  const product = useSelector((state: RootState) => state.productDetails);
 
   useEffect(() => {
     dispatch(getProductsById(productId));
   }, [dispatch, productId]);
 
   // Components
-  const Content = product.data && product.data.length > 0 && (
+  const Content = product.data && (
     <Fragment>
-      <Breadcrumbs aria-label="breadcrumb" style={{ marginBottom: "20px" }}>
-        <NavLink to={MARKET_LANDING} className="text-decoration-none">
+      <Breadcrumbs aria-label="breadcrumb" className="mb-3">
+        <NavLink to={MARKET_LANDING} className="no-underline text-black">
           Market
         </NavLink>
-        <Typography color="textPrimary">{product.data[0].title}</Typography>
+        <Typography color="textPrimary">{product.data.title}</Typography>
       </Breadcrumbs>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <Typography className={classes.typography} variant={"h6"}>
-            {product.data[0].title}
-          </Typography>
+          <Typography variant={"h6"}>{product.data.title}</Typography>
         </Grid>
         <Grid item xs={12} lg={6}>
-          <Display product={product.data[0]} />
+          <Display product={product.data} />
         </Grid>
         <Grid item xs={12} lg={6}>
-          <Panel product={product.data[0]} />
+          <Panel product={product.data} />
         </Grid>
       </Grid>
     </Fragment>
@@ -51,8 +46,8 @@ const ProductDetailPage = ({ match }: IProductDetailPage) => {
 
   const LoadingSkeleton = (
     <Fragment>
-      <Breadcrumbs aria-label="breadcrumb" style={{ marginBottom: "20px" }}>
-        <NavLink to={MARKET_LANDING} className="text-decoration-none">
+      <Breadcrumbs aria-label="breadcrumb" className="mb-3">
+        <NavLink to={MARKET_LANDING} className="no-underline text-black">
           Market
         </NavLink>
         <Skeleton variant="text" animation="wave" style={{ width: "250px" }} />
@@ -76,9 +71,13 @@ const ProductDetailPage = ({ match }: IProductDetailPage) => {
   );
 
   return (
-    <Container maxWidth="lg" className={classes.root}>
-      {product && product.isLoading ? LoadingSkeleton : Content}
-    </Container>
+    <div className="min-h-screen">
+      <div className="container mx-auto">
+        <div className="my-12">
+          {product && product.isLoading ? LoadingSkeleton : Content}
+        </div>
+      </div>
+    </div>
   );
 };
 
@@ -94,23 +93,5 @@ const ProductDetailPage = ({ match }: IProductDetailPage) => {
 //   createAt: "",
 //   updateAt: "",
 // };
-
-// Styles
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      flexGrow: 1,
-
-      minHeight: "100vh",
-    },
-    paper: {
-      padding: theme.spacing(2),
-      textAlign: "center",
-      color: theme.palette.text.secondary,
-      height: "20vh",
-    },
-    typography: {},
-  })
-);
 
 export default ProductDetailPage;

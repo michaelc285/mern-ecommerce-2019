@@ -18,7 +18,7 @@ const ProductsList = () => {
   ));
 
   const content = (
-    <Paper elevation={7}>
+    <Paper elevation={1}>
       <div className={classes.boxTitle}>
         <Typography className={classes.textMargin} variant={"h6"}>
           Product List
