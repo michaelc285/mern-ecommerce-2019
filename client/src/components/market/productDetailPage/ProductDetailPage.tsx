@@ -23,75 +23,82 @@ const ProductDetailPage = ({ match }: IProductDetailPage) => {
 
   // Components
   const Content = product.data && (
-    <Fragment>
-      <Breadcrumbs aria-label="breadcrumb" className="mb-3">
-        <NavLink to={MARKET_LANDING} className="no-underline text-black">
-          Market
-        </NavLink>
-        <Typography color="textPrimary">{product.data.title}</Typography>
-      </Breadcrumbs>
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <Typography variant={"h6"}>{product.data.title}</Typography>
+    <div className="min-h-screen">
+      <div className="container mx-auto">
+        <Breadcrumbs aria-label="breadcrumb" className="my-3">
+          <NavLink to={MARKET_LANDING} className="no-underline text-black">
+            Market
+          </NavLink>
+          <Typography color="textPrimary">{product.data.title}</Typography>
+        </Breadcrumbs>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Typography variant={"h6"}>{product.data.title}</Typography>
+          </Grid>
+          <Grid item xs={12} lg={6}>
+            <Display product={product.data} />
+          </Grid>
+          <Grid item xs={12} lg={6}>
+            <Panel product={product.data} />
+          </Grid>
         </Grid>
-        <Grid item xs={12} lg={6}>
-          <Display product={product.data} />
-        </Grid>
-        <Grid item xs={12} lg={6}>
-          <Panel product={product.data} />
-        </Grid>
-      </Grid>
-    </Fragment>
+      </div>
+    </div>
   );
 
   const LoadingSkeleton = (
-    <Fragment>
-      <Breadcrumbs aria-label="breadcrumb" className="mb-3">
-        <NavLink to={MARKET_LANDING} className="no-underline text-black">
-          Market
-        </NavLink>
-        <Skeleton variant="text" animation="wave" style={{ width: "250px" }} />
-      </Breadcrumbs>
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
+    <div className="min-h-screen">
+      <div className="container mx-auto">
+        <Breadcrumbs aria-label="breadcrumb" className="my-3">
+          <NavLink to={MARKET_LANDING} className="no-underline text-black">
+            Market
+          </NavLink>
           <Skeleton
             variant="text"
             animation="wave"
             style={{ width: "250px" }}
           />
+        </Breadcrumbs>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Skeleton
+              variant="text"
+              animation="wave"
+              style={{ width: "250px" }}
+            />
+          </Grid>
+          <Grid item xs={12} lg={6}>
+            <DisplaySkeleton />
+          </Grid>
+          <Grid item xs={12} lg={6}>
+            <PanelSkeleton />
+          </Grid>
         </Grid>
-        <Grid item xs={12} lg={6}>
-          <DisplaySkeleton />
-        </Grid>
-        <Grid item xs={12} lg={6}>
-          <PanelSkeleton />
-        </Grid>
-      </Grid>
-    </Fragment>
+      </div>
+    </div>
   );
 
-  return (
-    <div className="min-h-screen">
-      <div className="container mx-auto">
-        <div className="my-12">
-          {product && product.isLoading ? LoadingSkeleton : Content}
+  const ProductNotFound = (
+    <div className="h-screen w-screen ">
+      <div className="h-full flex justify-center items-center">
+        <div className="p-3">
+          <h1 className="text-3xl sm:text-6xl font-extrabold font-mono">
+            PRODUCT NOT FOUND
+          </h1>
         </div>
       </div>
     </div>
   );
-};
 
-// const productTemplate = {
-//   _id: "",
-//   title: "string",
-//   type: "",
-//   price: 0,
-//   description: "",
-//   images: [],
-//   quantity: 0,
-//   sold: 0,
-//   createAt: "",
-//   updateAt: "",
-// };
+  return (
+    <Fragment>
+      {product.isLoading
+        ? LoadingSkeleton
+        : product.data
+        ? Content
+        : ProductNotFound}
+    </Fragment>
+  );
+};
 
 export default ProductDetailPage;

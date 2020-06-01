@@ -63,7 +63,7 @@ const AppNavbar = () => {
   );
 
   return (
-    <AppBar position={"static"}>
+    <AppBar position={"static"} style={{ backgroundColor: "gray" }}>
       <Toolbar>
         <div className="flex-grow-1">
           <IconButton

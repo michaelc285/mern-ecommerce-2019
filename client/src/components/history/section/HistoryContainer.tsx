@@ -1,5 +1,5 @@
 import React from "react";
-import { CurrencyFormatter } from "../../../utils/NumberFormatter";
+import { CurrencyFormatter, DateFormatter } from "../../../utils/Formatter";
 import { NavLink } from "react-router-dom";
 import {
   ExpansionPanel,
@@ -11,10 +11,6 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { IHistoryContainer } from "../../../types/interfaces";
 
 const HistoryContainer = ({ history }: IHistoryContainer) => {
-  // ms to  YYYY-MM-DD  HH:MM
-  const date = new Date(history.purchaseAt);
-  const formattedDate = date.toISOString().slice(0, 16).replace(/T/g, " ");
-
   // init totalPrice
   let totalPrice = 0;
 
@@ -91,7 +87,7 @@ const HistoryContainer = ({ history }: IHistoryContainer) => {
             <Typography>
               <strong>Date:</strong>&nbsp;
             </Typography>
-            <Typography>{formattedDate}</Typography>
+            <Typography>{DateFormatter(history.purchaseAt)}</Typography>
           </div>
 
           <div

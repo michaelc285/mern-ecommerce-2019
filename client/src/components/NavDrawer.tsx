@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, Fragment } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../context/store";
 import { NavLink } from "react-router-dom";
@@ -10,7 +10,8 @@ import {
   SIGN_IN,
   SIGN_UP,
   USER_CART,
-  DASHBOARD,
+  PRODUCT_CONTROL_PANEL,
+  USER_CONTROL_PANEL,
 } from "../path";
 import { makeStyles } from "@material-ui/core/styles";
 import {
@@ -32,6 +33,8 @@ import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import DashboardIcon from "@material-ui/icons/Dashboard";
+import FolderSharedIcon from "@material-ui/icons/FolderShared";
+import FolderIcon from "@material-ui/icons/Folder";
 
 const NavDrawer = ({ toggleDrawer, toggle }: any) => {
   const dispatch = useDispatch();
@@ -39,24 +42,23 @@ const NavDrawer = ({ toggleDrawer, toggle }: any) => {
   const { isAuthenticated, user } = useSelector(
     (state: RootState) => state.auth
   );
-  const [open, setOpen] = React.useState(false);
+  const [accountOpen, setAccountOpen] = useState(false);
+  const [dashboardOpen, setDashboardOpen] = useState(false);
 
-  const handleClick = () => {
-    setOpen(!open);
-  };
-
+  const handleAccountClick = () => setAccountOpen(!accountOpen);
+  const handleDashboardClick = () => setDashboardOpen(!dashboardOpen);
   // -----------------------------------------------------------
   // For User
   const MyAccount = (
-    <List>
-      <ListItem button onClick={handleClick}>
+    <Fragment>
+      <ListItem button onClick={handleAccountClick}>
         <ListItemIcon>
           <AccountBoxIcon />
         </ListItemIcon>
         <ListItemText primary="My Account" />
-        {open ? <ExpandLess /> : <ExpandMore />}
+        {accountOpen ? <ExpandLess /> : <ExpandMore />}
       </ListItem>
-      <Collapse in={open} timeout="auto" unmountOnExit>
+      <Collapse in={accountOpen} timeout="auto" unmountOnExit>
         {/* Cart */}
         <List component="div" disablePadding>
           <NavLink exact to={USER_CART} style={{ textDecoration: "none" }}>
@@ -93,20 +95,53 @@ const NavDrawer = ({ toggleDrawer, toggle }: any) => {
           </ListItem>
         </List>
       </Collapse>
-    </List>
+    </Fragment>
   );
 
   // -----------------------------------------------------------
   // For Admin
   const AdminPanel = (
-    <NavLink exact to={DASHBOARD} style={{ textDecoration: "none" }}>
-      <ListItem button onClick={toggleDrawer(!toggle)}>
+    <Fragment>
+      <ListItem button onClick={handleDashboardClick}>
         <ListItemIcon>
           <DashboardIcon />
         </ListItemIcon>
         <ListItemText primary={"Dashboard"} className="text-black" />
+        {dashboardOpen ? <ExpandLess /> : <ExpandMore />}
       </ListItem>
-    </NavLink>
+      <Collapse in={dashboardOpen} timeout="auto" unmountOnExit>
+        {/* Product */}
+        <List component="div" disablePadding>
+          {/* User Control*/}
+          <NavLink
+            exact
+            to={USER_CONTROL_PANEL}
+            style={{ textDecoration: "none" }}
+          >
+            <ListItem button onClick={toggleDrawer(!toggle)}>
+              <ListItemIcon className="ml-4">
+                <FolderSharedIcon />
+              </ListItemIcon>
+              <ListItemText primary="User" className="text-black" />
+            </ListItem>
+          </NavLink>
+
+          {/* Product Control */}
+          <NavLink
+            exact
+            to={PRODUCT_CONTROL_PANEL}
+            style={{ textDecoration: "none" }}
+          >
+            <ListItem button onClick={toggleDrawer(!toggle)}>
+              <ListItemIcon className="ml-4">
+                <FolderIcon />
+              </ListItemIcon>
+              <ListItemText primary="Product" className="text-black" />
+            </ListItem>
+          </NavLink>
+        </List>
+      </Collapse>
+    </Fragment>
   );
 
   // -----------------------------------------------------------
@@ -139,12 +174,13 @@ const NavDrawer = ({ toggleDrawer, toggle }: any) => {
   // Menu Body
   const content = (
     <div className={`${classes.list}`}>
-      {/* Auth Panel  */}
-      {isAuthenticated ? MyAccount : AuthPanel}
-
       {/* Panel */}
       <List>
+        {/* User Panel  */}
+        {isAuthenticated ? MyAccount : AuthPanel}
+        {/* Admin Panel */}
         {isAuthenticated && user.role === 1 && AdminPanel}
+        {/* Common Pannel */}
         <NavLink exact to={HOME_PAGE} style={{ textDecoration: "none" }}>
           <ListItem button onClick={toggleDrawer(!toggle)}>
             <ListItemIcon>

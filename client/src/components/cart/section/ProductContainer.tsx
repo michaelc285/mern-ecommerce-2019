@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { CurrencyFormatter } from "../../../utils/NumberFormatter";
+import { CurrencyFormatter } from "../../../utils/Formatter";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import {
   Typography,
@@ -22,14 +22,14 @@ const ProductContainer = ({ product }: any) => {
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const quantityNumber = Number(event.target.value);
-    dispatch(updateProductInCart(product.id, quantityNumber));
+    dispatch(updateProductInCart(product._id, quantityNumber));
   };
 
   // Gen options 1-99
   let options = [];
   for (let i = 1; i < 100; i++)
     options.push(
-      <option key={`${product.id}-${i}`} value={i}>
+      <option key={`${product._id}-${i}`} value={i}>
         {i}
       </option>
     );
@@ -41,7 +41,7 @@ const ProductContainer = ({ product }: any) => {
         variant="filled"
         value={quantity}
         onChange={handleChange}
-        name={`${product.id} - selection`}
+        name={`${product._id} - selection`}
         inputProps={{ "aria-label": "quantity" }}
       >
         {options}
@@ -64,7 +64,7 @@ const ProductContainer = ({ product }: any) => {
         </div>
         <div className="flex-grow-1  ml-2">
           <NavLink
-            to={`/product/${product.id}`}
+            to={`/product/${product._id}`}
             className="text-decoration-none"
           >
             <Typography>{product.title}</Typography>
@@ -86,7 +86,7 @@ const ProductContainer = ({ product }: any) => {
           <IconButton
             style={{ padding: 1 }}
             aria-label="remove"
-            onClick={() => dispatch(removeProductFromCart(product.id))}
+            onClick={() => dispatch(removeProductFromCart(product._id))}
           >
             <DeleteForeverIcon />
           </IconButton>

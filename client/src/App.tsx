@@ -7,12 +7,13 @@ import ProtectedRoute from "./hoc/ProtectedRoute";
 import {
   USER_CART,
   USER_HISTORY,
-  ADMIN_CREATE_PRODUCT,
+  CREATE_PRODUCT,
   PRODUCT_PAGE,
   MARKET_LANDING,
   SIGN_IN,
   SIGN_UP,
-  DASHBOARD,
+  PRODUCT_CONTROL_PANEL,
+  USER_CONTROL_PANEL,
 } from "./path";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { loadUser } from "./context/actions/AuthAction";
@@ -23,12 +24,13 @@ import AppFooter from "./components/AppFooter";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import MarketLanding from "./components/market/MarketLanding";
-import ProductCreate from "./components/ProductCreate";
+import ProductCreate from "./components/dashboard/product/ProductCreate";
 import ProductDetailPage from "./components/market/productDetailPage/ProductDetailPage";
 import CartPage from "./components/cart/CartPage";
 import PurchaseHistoryUser from "./components/history/PurchaseHistoryUser";
 import ErrorPage from "./components/ErrorPage";
-import Dashboard from "./components/dashboard/DashboardLanding";
+import ProductControlPanelLanding from "./components/dashboard/product/ProductControlPanelLanding";
+import UserControlPanelLanding from "./components/dashboard/user/UserControlPanelLanding";
 import { ROLE_ADMIN, ROLE_GUEST, ROLE_USER } from "./context/types";
 
 const App = () => {
@@ -84,8 +86,8 @@ const App = () => {
             isAuthenticated={isAuthenticated}
             role={role}
             authenticationPath={SIGN_UP}
-            path={DASHBOARD}
-            component={Dashboard}
+            path={PRODUCT_CONTROL_PANEL}
+            component={ProductControlPanelLanding}
           />
           <ProtectedRoute
             exact
@@ -93,7 +95,16 @@ const App = () => {
             isAuthenticated={isAuthenticated}
             role={role}
             authenticationPath={SIGN_UP}
-            path={ADMIN_CREATE_PRODUCT}
+            path={USER_CONTROL_PANEL}
+            component={UserControlPanelLanding}
+          />
+          <ProtectedRoute
+            exact
+            adminRestrict
+            isAuthenticated={isAuthenticated}
+            role={role}
+            authenticationPath={SIGN_UP}
+            path={CREATE_PRODUCT}
             component={ProductCreate}
           />
 

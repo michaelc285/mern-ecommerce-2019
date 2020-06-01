@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { CurrencyFormatter } from "../../../utils/NumberFormatter";
+import { CurrencyFormatter } from "../../../utils/Formatter";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import { Paper, Grid, Typography } from "@material-ui/core";
 import { IBills } from "../../../types/interfaces";

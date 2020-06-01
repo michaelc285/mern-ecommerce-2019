@@ -9,6 +9,9 @@ import {
   PRODUCT_DETAILS_LOADING,
   PRODUCT_DETAILS_GET_SUCCESS,
   PRODUCT_DETAILS_GET_FAIL,
+  PRODUCT_EDIT_DELETE_FAIL,
+  PRODUCT_EDIT_DELETE_SUCCESS,
+  PRODUCT_EDIT_LOADING,
 } from "../types";
 
 export const productListReducer = (
@@ -64,6 +67,21 @@ export const productDetailsReducer = (
         data: action.payload.data.products[0],
       };
     case PRODUCT_DETAILS_GET_FAIL:
+    default:
+      return state;
+  }
+};
+
+export const productEditReducer = (
+  state: any = { isLoading: false },
+  action: IAction
+) => {
+  switch (action.type) {
+    case PRODUCT_EDIT_LOADING:
+      return { ...state, isLoading: true };
+    case PRODUCT_EDIT_DELETE_SUCCESS:
+      return { ...state, isLoading: false };
+    case PRODUCT_EDIT_DELETE_FAIL:
     default:
       return state;
   }

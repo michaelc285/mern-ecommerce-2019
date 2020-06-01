@@ -1,4 +1,5 @@
 const Product = require("../models/Products");
+const User = require("../models/Users");
 const multer = require("multer");
 const path = require("path");
 // Set Storage Engine
@@ -201,5 +202,62 @@ exports.getProductsByID = async (req, res) => {
     });
   }
 };
-//Update Product (by ID)
-//Remove Product
+
+/**
+ * @desc   Delete Product by ID
+ * @route  GET /api/product/remove?id={productId}
+ * @access Private Admin
+ */
+exports.deleteProductsByID = async (req, res) => {
+  try {
+    const userID = req.user.userId;
+    if (!req.query.productId)
+      throw Error("Please provide product id that you want to delete");
+    const productID = req.query.productId;
+
+    const user = await User.findById(userID);
+    if (!user) throw Error("User not found");
+    if (user.role !== 1) throw Error("This API for admin only");
+
+    const result = await Product.findOneAndRemove({ _id: { $in: productID } });
+    if (!result) throw Error("Product Delete fail");
+
+    res.status(200).json({
+      success: true,
+      data: result,
+    });
+  } catch (err) {
+    return res.status(400).json({
+      success: false,
+      error: err.message,
+    });
+  }
+};
+
+/**
+ * @desc   Update Product by ID
+ * @route  POST /api/product/update?id={productId}
+ * @access Private Admin
+ */
+exports.updateProductsByID = async (req, res) => {
+  try {
+    const userID = req.user.userId;
+    console.log(req.body);
+    const user = await User.findById(userID);
+    if (!user) throw Error("User not found");
+    if (user.role !== 1) throw Error("This API for admin only");
+
+    const result = await Product.findOneAndUpdate({ _id: { $in: productID } });
+    if (!result) throw Error("Product Update fail");
+
+    res.status(200).json({
+      success: true,
+      data: result,
+    });
+  } catch (err) {
+    return res.status(400).json({
+      success: false,
+      error: err.message,
+    });
+  }
+};

@@ -7,6 +7,9 @@ import {
   PRODUCT_DETAILS_LOADING,
   PRODUCT_DETAILS_GET_SUCCESS,
   PRODUCT_DETAILS_GET_FAIL,
+  PRODUCT_EDIT_DELETE_FAIL,
+  PRODUCT_EDIT_LOADING,
+  PRODUCT_EDIT_DELETE_SUCCESS,
 } from "../types";
 import axios from "axios";
 import { returnErrors } from "./ErrorActions";
@@ -91,5 +94,25 @@ export const getProductsById = (
   } catch (err) {
     dispatch(returnErrors(err.message, 500));
     dispatch({ type: PRODUCT_DETAILS_GET_FAIL });
+  }
+};
+
+// Delete Product by Id
+export const deleteProductById = (productId: string) => async (
+  dispatch: Function,
+  getState: Function
+) => {
+  try {
+    dispatch({ type: PRODUCT_EDIT_LOADING });
+
+    await axios.get(`/api/product/remove?productId=${productId}`, {
+      headers: { authorization: `Bearer ${getState().auth.token}` },
+    });
+
+    dispatch({ type: PRODUCT_EDIT_DELETE_SUCCESS });
+    getProducts();
+  } catch (err) {
+    dispatch(returnErrors(err.message, 500));
+    dispatch({ type: PRODUCT_EDIT_DELETE_FAIL });
   }
 };

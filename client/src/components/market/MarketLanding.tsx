@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../context/store";
-import ProductMenu from "./filter/ProductFilter";
+import ProductFilter from "./filter/ProductFilter";
 import ProductsContainer from "./products/ProductsContainer";
 import Pagination from "./products/Pagination";
 import { getProducts } from "../../context/actions/ProductAction";
@@ -69,7 +69,7 @@ const MarketLanding = () => {
         <div>
           {/* Menu */}
           <div>
-            <ProductMenu />
+            <ProductFilter />
           </div>
 
           {/* Content */}

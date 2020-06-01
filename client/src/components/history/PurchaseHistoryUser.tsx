@@ -8,6 +8,7 @@ import { Typography, Breadcrumbs } from "@material-ui/core";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import { MARKET_LANDING } from "../../path";
 import LoadingProgress from "../utils/LoadingProgress";
+// import HistoryTable from "./section/HistoryTable";
 
 const PurchaseHistoryUser = () => {
   const classes = useStyles();
@@ -34,7 +35,7 @@ const PurchaseHistoryUser = () => {
   return (
     <div className="min-h-screen">
       <div className="container mx-auto">
-        <div className="mt-10">
+        <div className="my-10">
           <div className="mb-3">
             <Breadcrumbs aria-label="breadcrumb">
               <NavLink

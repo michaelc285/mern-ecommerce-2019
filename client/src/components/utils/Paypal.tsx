@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import ReactDOM from "react-dom";
 import axios from "axios";
 
 const PaypalButton = (props: any) => {
   const [sdkReady, setSdkReady] = useState(false);
+  const isCurrent = useRef(true);
 
   const addPaypalSdk = async () => {
     const result = await axios.get("/api/config/paypal");
@@ -15,7 +16,9 @@ const PaypalButton = (props: any) => {
       clientID +
       "&disable-funding=credit,card";
     script.async = true;
-    script.onload = () => setSdkReady(true);
+    if (isCurrent.current) {
+      script.onload = () => setSdkReady(true);
+    }
     document.body.appendChild(script);
   };
 
@@ -38,11 +41,17 @@ const PaypalButton = (props: any) => {
       .catch((err: any) => console.log(err));
 
   useEffect(() => {
-    if (!(window as any).paypal) {
-      addPaypalSdk();
+    if (isCurrent.current) {
+      if (!(window as any).paypal) {
+        addPaypalSdk();
+      }
     }
+  }, []);
+
+  useEffect(() => {
     return () => {
-      //
+      // Called when the component is going to unmount
+      isCurrent.current = false;
     };
   }, []);
 

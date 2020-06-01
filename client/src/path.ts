@@ -17,8 +17,9 @@ export const USER_HISTORY = "/user/history";
 /**
  *      ADMIN
  */
-export const DASHBOARD = "/admin/dashboard";
-export const ADMIN_CREATE_PRODUCT = "/admin/dashboard/product/create";
+export const PRODUCT_CONTROL_PANEL = "/admin/dashboard/product";
+export const USER_CONTROL_PANEL = "/admin/dashboard/user";
+export const CREATE_PRODUCT = "/admin/dashboard/product/create";
 
 // External
 export const GITHUB_LINK = "https://github.com/michaelc285";

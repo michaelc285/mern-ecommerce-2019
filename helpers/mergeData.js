@@ -11,19 +11,18 @@ exports.mergeCartAndProduct = async (cartArr) => {
       .select("images title type price");
     if (!productInfoArr) throw Error("Product info search error");
 
-    //Combine and match cart data with images
-    let resultArr = [...cartArr];
-    resultArr.forEach((item, i) => {
-      productInfoArr.forEach((info) => {
-        if (item.id == info._id) {
-          resultArr[i].images = info.images;
-          resultArr[i].title = info.title;
-          resultArr[i].type = info.type;
-          resultArr[i].price = info.price;
+    //Merge user require product quantity with product details info
+
+    productInfoArr.forEach((productInfo, index) => {
+      cartArr.forEach((cart) => {
+        if (cart.id == productInfo._id) {
+          productInfoArr[index].quantity = cart.quantity;
+          productInfoArr[index].date = cart.date;
         }
       });
     });
-    return resultArr;
+
+    return productInfoArr;
   } catch (err) {
     console.log(err.message);
     return err;

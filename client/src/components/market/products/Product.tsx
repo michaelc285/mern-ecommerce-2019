@@ -2,7 +2,7 @@ import React from "react";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../context/store";
-import { CurrencyFormatter } from "../../../utils/NumberFormatter";
+import { CurrencyFormatter } from "../../../utils/Formatter";
 import { addProductToCart } from "../../../context/actions/CartAction";
 import { useHistory, NavLink } from "react-router-dom";
 import { SIGN_UP } from "../../../path";

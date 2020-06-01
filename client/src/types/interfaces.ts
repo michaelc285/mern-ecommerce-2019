@@ -116,7 +116,7 @@ export interface ICartItem {
 }
 
 export interface ICartItemDetail {
-  id: string;
+  _id: string;
   title: string;
   price: number;
   quantity: number;

@@ -52,66 +52,64 @@ const ProductMenu = () => {
   };
 
   return (
-    <div className="py-5">
-      <ExpansionPanel>
-        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-          <h1 className="text-xl">Filter</h1>
-        </ExpansionPanelSummary>
+    <ExpansionPanel>
+      <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+        <h1 className="text-xl">Filter</h1>
+      </ExpansionPanelSummary>
 
-        <ExpansionPanelDetails>
-          <div className="w-full">
-            <div className="flex flex-col items-center">
-              {/* Option Group */}
-              <div className="w-full flex flex-col md:flex-row">
-                {/* Search Bar */}
-                <div className="flex-0 md:flex-1 mb-3 md:mb-0">
-                  <SearchBar
-                    handleSearchValue={handleSearchValue}
-                    searchValue={searchValue}
-                  />
-                </div>
-                {/* Price Range Slider */}
-                <div className="flex-0 md:flex-1 mb-3 md:mb-0">
-                  <PriceRangeSlider
-                    handlePrice={handlePrice}
-                    price={price}
-                    min={minPrice}
-                    max={maxPrice}
-                  />
-                </div>
-                {/* CategorySelection */}
-                <div className="flex-0 md:flex-1 mb-3 md:mb-0">
-                  <CategorySelection
-                    handleSelections={handleSelections}
-                    checked={selections}
-                  />
-                </div>
+      <ExpansionPanelDetails>
+        <div className="w-full">
+          <div className="flex flex-col items-center">
+            {/* Option Group */}
+            <div className="w-full flex flex-col md:flex-row">
+              {/* Search Bar */}
+              <div className="flex-0 md:flex-1 mb-3 md:mb-0">
+                <SearchBar
+                  handleSearchValue={handleSearchValue}
+                  searchValue={searchValue}
+                />
               </div>
-
-              {/* Search Button Group*/}
-              <div style={{ display: "flex", justifyContent: "center" }}>
-                <ButtonGroup>
-                  <Button
-                    startIcon={<SearchIcon />}
-                    size="large"
-                    onClick={HandleRefreshProducts}
-                  >
-                    Submit
-                  </Button>
-                  <Button
-                    endIcon={<ClearAllIcon />}
-                    size="large"
-                    onClick={HandleClearProducts}
-                  >
-                    Clear
-                  </Button>
-                </ButtonGroup>
+              {/* Price Range Slider */}
+              <div className="flex-0 md:flex-1 mb-3 md:mb-0">
+                <PriceRangeSlider
+                  handlePrice={handlePrice}
+                  price={price}
+                  min={minPrice}
+                  max={maxPrice}
+                />
+              </div>
+              {/* CategorySelection */}
+              <div className="flex-0 md:flex-1 mb-3 md:mb-0">
+                <CategorySelection
+                  handleSelections={handleSelections}
+                  checked={selections}
+                />
               </div>
             </div>
+
+            {/* Search Button Group*/}
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <ButtonGroup>
+                <Button
+                  startIcon={<SearchIcon />}
+                  size="large"
+                  onClick={HandleRefreshProducts}
+                >
+                  Submit
+                </Button>
+                <Button
+                  endIcon={<ClearAllIcon />}
+                  size="large"
+                  onClick={HandleClearProducts}
+                >
+                  Clear
+                </Button>
+              </ButtonGroup>
+            </div>
           </div>
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
-    </div>
+        </div>
+      </ExpansionPanelDetails>
+    </ExpansionPanel>
   );
 };
 

@@ -12,7 +12,7 @@ const ProductsList = () => {
   const cart = useSelector((state: RootState) => state.cart);
 
   const contentArr = cart.items.map((product: ICartItemDetail) => (
-    <Grid item key={product.id}>
+    <Grid item key={product._id}>
       <ProductContainer product={product} />
     </Grid>
   ));
