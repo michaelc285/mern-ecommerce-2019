@@ -1,5 +1,6 @@
 import React, { useEffect, Suspense } from "react";
 import { Route, Switch } from "react-router-dom";
+import LinearProgress from "@material-ui/core/LinearProgress";
 import "./assets/main.css";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "./context/store";
@@ -14,6 +15,7 @@ import {
   SIGN_UP,
   PRODUCT_CONTROL_PANEL,
   USER_CONTROL_PANEL,
+  ROOT,
 } from "./path";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { loadUser } from "./context/actions/AuthAction";
@@ -21,6 +23,7 @@ import { loadUser } from "./context/actions/AuthAction";
 import AppNavbar from "./components/AppNavbar";
 import AppFooter from "./components/AppFooter";
 //import AuthPage from "./components/auth/AuthPage";
+import Home from "./components/home/Home";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import MarketLanding from "./components/market/MarketLanding";
@@ -46,15 +49,23 @@ const App = () => {
     user && user.role ? (user.role === 1 ? ROLE_ADMIN : ROLE_USER) : ROLE_GUEST;
 
   return (
-    <Suspense fallback={<div>Loading</div>}>
-      <div>
+    <Suspense
+      fallback={
+        <div className="h-screen">
+          <div className="flex justify-center items-center">
+            <LinearProgress />
+          </div>
+        </div>
+      }
+    >
+      <div className="bg-white">
         {/* !!! Add a top cotainer here to display some pic for decoration  */}
         {/* <TopContainer /> */}
 
         <AppNavbar />
         <Switch>
           {/* Public Route */}
-          <Route path="/" exact component={MarketLanding} />
+          <Route path={ROOT} exact component={Home} />
           <Route path={MARKET_LANDING} exact component={MarketLanding} />
           <Route path={PRODUCT_PAGE} exact component={ProductDetailPage} />
           {/* <Route path={AUTH_PAGE} exact component={AuthPage} /> */}
@@ -67,7 +78,7 @@ const App = () => {
             exact
             isAuthenticated={isAuthenticated}
             role={role}
-            authenticationPath={SIGN_UP}
+            authenticationPath={SIGN_IN}
             path={USER_CART}
             component={CartPage}
           />
@@ -75,7 +86,7 @@ const App = () => {
             exact
             isAuthenticated={isAuthenticated}
             role={role}
-            authenticationPath={SIGN_UP}
+            authenticationPath={SIGN_IN}
             path={USER_HISTORY}
             component={PurchaseHistoryUser}
           />
@@ -85,7 +96,7 @@ const App = () => {
             adminRestrict
             isAuthenticated={isAuthenticated}
             role={role}
-            authenticationPath={SIGN_UP}
+            authenticationPath={SIGN_IN}
             path={PRODUCT_CONTROL_PANEL}
             component={ProductControlPanelLanding}
           />
@@ -94,7 +105,7 @@ const App = () => {
             adminRestrict
             isAuthenticated={isAuthenticated}
             role={role}
-            authenticationPath={SIGN_UP}
+            authenticationPath={SIGN_IN}
             path={USER_CONTROL_PANEL}
             component={UserControlPanelLanding}
           />
@@ -103,7 +114,7 @@ const App = () => {
             adminRestrict
             isAuthenticated={isAuthenticated}
             role={role}
-            authenticationPath={SIGN_UP}
+            authenticationPath={SIGN_IN}
             path={CREATE_PRODUCT}
             component={ProductCreate}
           />

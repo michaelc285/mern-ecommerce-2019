@@ -38,7 +38,7 @@ const CartPage = () => {
   const nothing = (
     <div className="mt-56 mx-auto">
       <div className="flex flex-col items-center">
-        <h4 className="text-3xl mb-5">Nothing in cart</h4>
+        <h4 className="text-3xl mb-5 font-mono">Nothing In Cart</h4>
         <NavLink to={MARKET_LANDING}>
           <Button
             variant="contained"

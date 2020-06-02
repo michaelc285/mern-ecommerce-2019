@@ -9,11 +9,9 @@ import MenuIcon from "@material-ui/icons/Menu";
 import NavDrawer from "./NavDrawer";
 
 const AppNavbar = () => {
-  const { isAuthenticated, user } = useSelector(
-    (state: RootState) => state.auth
-  );
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
   const cart = useSelector((state: RootState) => state.cart);
-  const [cartLength, setCartLength] = useState(50);
+  const [cartLength, setCartLength] = useState(0);
   const [toggle, setToggle] = useState(false);
   // const toggle = () => setIsOpen(!isOpen);
 
@@ -33,18 +31,13 @@ const AppNavbar = () => {
   };
 
   useEffect(() => {
-    if (isAuthenticated) {
-      let num = 0;
-      if (cart.items && cart.items.length > 0) {
-        num = calCartItem(cart.items);
-      } else if (user.cart.length > 0) {
-        num = calCartItem(user.cart);
-      } else {
-        num = 0;
-      }
-      setCartLength(num);
+    if (cart.items.length > 0) {
+      const totalItem = calCartItem(cart.items);
+      setCartLength(totalItem);
+    } else {
+      setCartLength(0);
     }
-  }, [isAuthenticated, user, cart]);
+  }, [cart, isAuthenticated]);
 
   //------------------------------------------
   // Authed Content

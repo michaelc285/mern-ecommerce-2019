@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
-import { Paper } from "@material-ui/core";
+import React, { useState, Fragment } from "react";
 import { IProduct } from "../../../../types/interfaces";
 import Carousel from "react-bootstrap/Carousel";
 
@@ -9,7 +7,6 @@ interface IDisplay {
 }
 
 const Display = ({ product }: IDisplay) => {
-  const classes = useStyles();
   const [index, setIndex] = useState(0);
   const handleSelect = (selectedIndex: number, e: any) =>
     setIndex(selectedIndex);
@@ -17,7 +14,7 @@ const Display = ({ product }: IDisplay) => {
   const slideItem = product.images.map((image, index) => (
     <Carousel.Item key={`${product._id}-${index}`}>
       <img
-        className={classes.img}
+        className="w-full h-auto"
         src={`/${image}`}
         alt={`${product.title}-${index}`}
       />
@@ -25,30 +22,12 @@ const Display = ({ product }: IDisplay) => {
   ));
 
   return (
-    <Paper className={classes.paper} elevation={4}>
+    <Fragment>
       <Carousel activeIndex={index} onSelect={handleSelect} indicators={false}>
         {slideItem}
       </Carousel>
-    </Paper>
+    </Fragment>
   );
 };
-
-// Styles
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      flexGrow: 1,
-    },
-    paper: {
-      height: "400px",
-      padding: theme.spacing(2),
-      textAlign: "center",
-      color: theme.palette.text.secondary,
-    },
-    img: {
-      maxHeight: "370px",
-    },
-  })
-);
 
 export default Display;

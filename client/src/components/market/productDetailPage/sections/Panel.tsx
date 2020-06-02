@@ -1,11 +1,11 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../context/store";
 import { CurrencyFormatter } from "../../../../utils/Formatter";
 import { addProductToCart } from "../../../../context/actions/CartAction";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
-import { Paper, Button, Typography } from "@material-ui/core";
+import { Button, Typography } from "@material-ui/core";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import PaymentIcon from "@material-ui/icons/Payment";
 import { SIGN_IN } from "../../../../path";
@@ -18,7 +18,7 @@ const Panel = ({ product }: IPanel) => {
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
   return (
-    <Paper className={classes.paper} elevation={4}>
+    <Fragment>
       <div className={classes.infoGroup}>
         <div className={classes.priceBox}>
           <Typography>
@@ -27,9 +27,9 @@ const Panel = ({ product }: IPanel) => {
         </div>
         <div className={classes.descriptionBox}>
           <Typography>
-            <strong>Dscription</strong>
+            <strong>Description</strong>
           </Typography>
-          <Typography>{product.description}</Typography>
+          <Typography>{textReducer(product.description)}</Typography>
         </div>
         <div className={classes.soldBox}>
           <Typography>
@@ -37,7 +37,7 @@ const Panel = ({ product }: IPanel) => {
           </Typography>
         </div>
       </div>
-      <div className="d-flex justify-content-center flex-column flex-md-row flex-xl-row">
+      <div className="flex justify-center ">
         <Button
           startIcon={<AddShoppingCartIcon />}
           variant="outlined"
@@ -47,7 +47,7 @@ const Panel = ({ product }: IPanel) => {
               ? dispatch(addProductToCart(product._id))
               : history.push(SIGN_IN);
           }}
-          className="mr-0 mr-md-3 mr-lg-3 mr-xl-3 mb-1 mb-md-0 mb-lg-0 mb-xl-0"
+          className=" mr-2"
         >
           Add to Cart
         </Button>
@@ -60,8 +60,12 @@ const Panel = ({ product }: IPanel) => {
           Buy
         </Button>
       </div>
-    </Paper>
+    </Fragment>
   );
+};
+
+const textReducer = (text: string) => {
+  return text;
 };
 
 // Styles

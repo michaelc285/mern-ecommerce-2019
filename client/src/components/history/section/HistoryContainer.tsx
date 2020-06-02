@@ -10,24 +10,20 @@ import {
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { IHistoryContainer } from "../../../types/interfaces";
 
-const HistoryContainer = ({ history }: IHistoryContainer) => {
+const HistoryContainer = ({ data }: IHistoryContainer) => {
   // init totalPrice
   let totalPrice = 0;
-
   // record in row
-  const content = history.history.map((item, index) => {
+  const content = data.history.map((item, index) => {
     totalPrice += item.price * item.quantity;
     return (
-      <ExpansionPanelDetails key={`${history.id}-${index}`}>
+      <ExpansionPanelDetails key={`${data.id}-${index}`}>
         <div className="w-100 d-flex flex-column flex-lg-row flex-md-row">
           <div className="w-75">
             <Typography variant={"caption"}>
               <strong>Product Name</strong>
             </Typography>
-            <NavLink
-              to={`/product/${item.id}`}
-              className="text-decoration-none"
-            >
+            <NavLink to={`/product/${item.id}`} exact className="no-underline">
               <Typography>{item.name}</Typography>
             </NavLink>
           </div>
@@ -76,7 +72,7 @@ const HistoryContainer = ({ history }: IHistoryContainer) => {
         <div className="w-100 d-flex flex-column flex-md-row flex-lg-row flex-xl-row">
           <div className="p2 flex-grow-1">
             <Typography>
-              <strong>Order:</strong> {history.id}
+              <strong>Order:</strong> {data.id}
             </Typography>
           </div>
 
@@ -87,7 +83,7 @@ const HistoryContainer = ({ history }: IHistoryContainer) => {
             <Typography>
               <strong>Date:</strong>&nbsp;
             </Typography>
-            <Typography>{DateFormatter(history.purchaseAt)}</Typography>
+            <Typography>{DateFormatter(data.purchaseAt)}</Typography>
           </div>
 
           <div

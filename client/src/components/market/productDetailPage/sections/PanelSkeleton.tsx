@@ -1,13 +1,12 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
-import { Paper } from "@material-ui/core";
 import Skeleton from "@material-ui/lab/Skeleton";
 
 const Panel = () => {
   const classes = useStyles();
 
   return (
-    <Paper className={classes.paper} elevation={4}>
+    <Fragment>
       <div className={classes.infoGroup}>
         <div className={classes.priceBox}>
           {/* <Typography>
@@ -53,7 +52,7 @@ const Panel = () => {
           />
         </div>
       </div>
-    </Paper>
+    </Fragment>
   );
 };
 

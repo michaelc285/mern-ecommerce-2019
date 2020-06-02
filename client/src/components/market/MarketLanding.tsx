@@ -2,30 +2,29 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../context/store";
 import ProductFilter from "./filter/ProductFilter";
-import ProductsContainer from "./products/ProductsContainer";
+import ProductsGridArea from "./products/ProductsGridArea";
 import Pagination from "./products/Pagination";
 import { getProducts } from "../../context/actions/ProductAction";
-import LoadingProgres from "../utils/LoadingProgress";
+import Skeleton from "@material-ui/lab/Skeleton";
+import { Paper } from "@material-ui/core";
+import SkeletonArea from "./products/SkeletonArea";
 
 const MarketLanding = () => {
   const dispatch = useDispatch();
-  const products = useSelector((state: RootState) => state.productList);
-
+  const { isLoading, data } = useSelector(
+    (state: RootState) => state.productList
+  );
+  const resultCount = data.length;
   const [currentPage, setCurrentPage] = useState(1);
-  const [productsPerPage] = useState(8);
+  const [productsPerPage] = useState(6);
 
-  let currentProducts = [];
-  let resultCount = 0;
-  if (products.data) {
-    // Get current product
-    const indexOfLastProduct = currentPage * productsPerPage;
-    const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-    currentProducts = products.data.slice(
-      indexOfFirstProduct,
-      indexOfLastProduct
-    );
-    resultCount = products.data.length;
-  }
+  //let currentProducts = [];
+  // let resultCount = 0;
+
+  // Get current product
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  let currentProducts = data.slice(indexOfFirstProduct, indexOfLastProduct);
 
   // Change page
   const paginate = (e: any, pageNumber: number) => setCurrentPage(pageNumber);
@@ -45,11 +44,13 @@ const MarketLanding = () => {
   const Content = (
     <div>
       <h4 className="text-xl p-2">
-        {resultCount} {resultCount > 1 ? "Results" : "Result"}
+        {resultCount > 1 ? `${resultCount} Results` : `${resultCount} Result`}
       </h4>
       <div>
         {/* Products */}
-        <ProductsContainer products={currentProducts} />
+        <div className="py-3 px-3">
+          <ProductsGridArea products={currentProducts} />
+        </div>
 
         {/* Pagination */}
         <div className="flex justify-center my-10 p-3">
@@ -63,23 +64,39 @@ const MarketLanding = () => {
     </div>
   );
 
+  const LoadingContent = (
+    <div>
+      <h4 className="text-xl p-2">
+        <Skeleton variant="text" width="25%" />
+      </h4>
+      <div>
+        {/* Products */}
+        <div className="py-3 px-3 mb-6">
+          <SkeletonArea NumberOfBox={productsPerPage} />
+        </div>
+      </div>
+    </div>
+  );
+
   return (
-    <div className="min-h-screen">
+    <div>
       <div className="container mx-auto">
-        <div>
+        <div className="mt-10">
           {/* Menu */}
           <div>
             <ProductFilter />
           </div>
 
           {/* Content */}
-          {products && products.isLoading ? (
-            <LoadingProgres />
-          ) : products.data && products.data.length > 0 ? (
-            Content
-          ) : (
-            NoResult
-          )}
+          <div className="mt-3">
+            <Paper elevation={2}>
+              {isLoading
+                ? LoadingContent
+                : data.length > 0
+                ? Content
+                : NoResult}
+            </Paper>
+          </div>
         </div>
       </div>
     </div>

@@ -7,7 +7,7 @@ import {
 } from "../types";
 const initialState = {
   isLoading: false,
-  data: null,
+  data: [],
 };
 
 export default (state = initialState, action: IAction) => {
@@ -26,7 +26,7 @@ export default (state = initialState, action: IAction) => {
     case HISTORY_CLEAR:
       return {
         isLoading: false,
-        data: null,
+        data: [],
       };
     case HISTORY_GET_FAIL:
     default:

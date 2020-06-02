@@ -1,6 +1,7 @@
 import axios from "axios";
 import { returnErrors } from "./ErrorActions";
 import { IAuthFunction } from "../../types/interfaces";
+import { loadCart } from "./CartAction";
 //Constant
 import {
   USER_LOADED,
@@ -19,25 +20,29 @@ import {
 export const loadUser = () => async (dispatch: Function) => {
   //Loading
   dispatch({ type: USER_LOADING });
+  try {
+    //Loaded ///api/auth/refresh_token
+    const response = await fetch("/api/auth/refresh_token", {
+      method: "POST",
+      credentials: "include", // Cookie,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
-  //Loaded ///api/auth/refresh_token
-  const response = await fetch("/api/auth/refresh_token", {
-    method: "POST",
-    credentials: "include", // Cookie,
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+    const result = await response.json();
 
-  const result = await response.json();
-
-  if (result.success) {
-    // User loaded then update access token and auth turn to true
-    dispatch({ type: USER_LOADED, payload: result });
-  } else {
-    // fail token to null auth turn to false
-    dispatch(returnErrors(result.error, 500));
-    dispatch({ type: AUTH_ERROR });
+    if (result.success) {
+      // User loaded then update access token and auth turn to true
+      dispatch({ type: USER_LOADED, payload: result });
+      dispatch(loadCart());
+    } else {
+      // fail token to null auth turn to false
+      dispatch(returnErrors(result.error, 500));
+      dispatch({ type: AUTH_ERROR });
+    }
+  } catch (err) {
+    console.log(err);
   }
 };
 
@@ -111,6 +116,7 @@ export const logout = () => async (dispatch: Function) => {
     dispatch({ type: LOGOUT_SUCCESS });
     dispatch({ type: HISTORY_CLEAR });
     dispatch({ type: CART_CLEAR });
+
     return true;
   } else {
     dispatch(returnErrors(result.error, 500));

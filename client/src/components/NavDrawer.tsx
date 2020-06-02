@@ -6,12 +6,12 @@ import { logout } from "../context/actions/AuthAction";
 import {
   MARKET_LANDING,
   USER_HISTORY,
-  HOME_PAGE,
   SIGN_IN,
   SIGN_UP,
   USER_CART,
   PRODUCT_CONTROL_PANEL,
   USER_CONTROL_PANEL,
+  ROOT,
 } from "../path";
 import { makeStyles } from "@material-ui/core/styles";
 import {
@@ -181,7 +181,7 @@ const NavDrawer = ({ toggleDrawer, toggle }: any) => {
         {/* Admin Panel */}
         {isAuthenticated && user.role === 1 && AdminPanel}
         {/* Common Pannel */}
-        <NavLink exact to={HOME_PAGE} style={{ textDecoration: "none" }}>
+        <NavLink exact to={ROOT} style={{ textDecoration: "none" }}>
           <ListItem button onClick={toggleDrawer(!toggle)}>
             <ListItemIcon>
               <HomeIcon />

@@ -26,6 +26,7 @@ export default (state = initialState, action: IAction) => {
         ...state,
         isLoading: true,
       };
+
     case CART_UPDATE_SUCCESS:
     case CART_BUY_FAIL:
     case CART_GET_SUCCESS:

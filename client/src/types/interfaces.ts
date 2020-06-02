@@ -178,11 +178,6 @@ export interface IHistory {
   history: IOrderProduct[];
 }
 
-export interface IPurchaseHistoryUser {
-  getUserHistory(): void;
-  history: { isLoading: boolean; data: IHistory[] };
-}
-
 export interface IHistoryContainer {
-  history: IHistory;
+  data: IHistory;
 }

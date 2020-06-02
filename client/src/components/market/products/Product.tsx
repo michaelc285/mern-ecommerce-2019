@@ -32,10 +32,10 @@ const ProductBox = ({ _id, image, title, price }: IProductBox) => {
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
   return (
-    <Card className={classes.root}>
+    <Card>
       <NavLink
         to={`/product/${_id}`}
-        className="text-decoration-none text-dark"
+        className="text-decoration-none text-dark "
       >
         <CardActionArea>
           <CardMedia
@@ -73,9 +73,6 @@ const ProductBox = ({ _id, image, title, price }: IProductBox) => {
 
 // Style
 const useStyles = makeStyles((theme: Theme) => ({
-  root: {
-    maxWidth: 345,
-  },
   img: {
     height: "220px",
   },

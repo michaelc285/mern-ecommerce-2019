@@ -6,7 +6,7 @@ import { LINKEDIN_LINK, GITHUB_LINK, EMAIL_ADDRESS } from "../path";
 
 const AppFooter = () => {
   return (
-    <footer className="pt-5 pb-2 bg-gray-800 text-white">
+    <footer className=" pt-5 pb-2 bg-gray-800 text-white">
       <div className="container mx-auto ">
         <div className="flex flex-col items-center justify-around">
           {/* External link group*/}

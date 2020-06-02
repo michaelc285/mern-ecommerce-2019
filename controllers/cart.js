@@ -196,7 +196,7 @@ exports.buyProcessDone = async (req, res) => {
       return {
         purchaseAt: Date.now(),
         name: item.title,
-        id: item.id,
+        id: item._id,
         price: item.price,
         quantity: item.quantity,
         orderID: req.body.data.orderID,

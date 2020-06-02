@@ -56,7 +56,14 @@ const PaypalButton = (props: any) => {
   }, []);
 
   if (!sdkReady && !(window as any).paypal) {
-    return <div>Loading...</div>;
+    return (
+      <button
+        disabled
+        className="border border-gray-400 rounded px-16 py-1 uppercase mb-1"
+      >
+        Loading
+      </button>
+    );
   }
 
   const Button = (window as any).paypal.Buttons.driver("react", {

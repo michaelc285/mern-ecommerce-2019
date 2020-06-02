@@ -1,8 +1,8 @@
 /**
  *     GUEST
  */
+export const ROOT = "/";
 export const AUTH_PAGE = "/auth";
-export const HOME_PAGE = "/";
 export const SIGN_IN = "/user/sign_in";
 export const SIGN_UP = "/user/sign_up";
 export const PRODUCT_PAGE = "/product/:productID";

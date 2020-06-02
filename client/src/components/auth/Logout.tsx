@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import { useDispatch } from "react-redux";
 import { logout } from "../../context/actions/AuthAction";
 import { NavLink } from "react-router-dom";
-import { HOME_PAGE } from "../../path";
+import { ROOT } from "../../path";
 
 const Logout = () => {
   const dispatch = useDispatch();
@@ -14,7 +14,7 @@ const Logout = () => {
   return (
     <Fragment>
       <NavLink
-        to={HOME_PAGE}
+        to={ROOT}
         onClick={handleLogout}
         className="text-decoration-none text-primary"
       >

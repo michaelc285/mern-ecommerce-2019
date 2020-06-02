@@ -1,18 +1,18 @@
 import React from "react";
-import ProductBox from "./Product";
+import Product from "./Product";
 import { Grid } from "@material-ui/core";
 
 interface IProductsPerPage {
   products: object[];
 }
 
-const ProductsContainer = ({ products }: IProductsPerPage) => {
+const ProductsGridArea = ({ products }: IProductsPerPage) => {
   return (
-    <div style={{ minHeight: "80vh" }}>
+    <div>
       <Grid container spacing={3}>
         {products.map((product: any) => (
-          <Grid item xl={3} lg={3} md={3} sm={6} xs={12} key={product._id}>
-            <ProductBox
+          <Grid item md={4} sm={6} xs={12} key={product._id}>
+            <Product
               _id={product._id}
               image={product.images[0]}
               title={product.title}
@@ -25,4 +25,4 @@ const ProductsContainer = ({ products }: IProductsPerPage) => {
   );
 };
 
-export default ProductsContainer;
+export default ProductsGridArea;

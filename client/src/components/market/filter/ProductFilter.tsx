@@ -16,7 +16,7 @@ import { getProducts } from "../../../context/actions/ProductAction";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 const minPrice = 0;
-const maxPrice = 9999;
+const maxPrice = 1000;
 
 const ProductMenu = () => {
   const dispatch = useDispatch();
@@ -31,7 +31,7 @@ const ProductMenu = () => {
   const handlePrice = (priceArr: number[]) => setPrice(priceArr);
 
   const HandleRefreshProducts = () => {
-    console.log(searchValue);
+    //console.log(searchValue);
     const body = {
       searchTerm: searchValue,
       filters: {
