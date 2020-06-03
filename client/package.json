@@ -19,12 +19,12 @@
     "@types/react-select": "^3.0.12",
     "@types/reactstrap": "^8.4.2",
     "@types/uuid": "^7.0.3",
-    "antd": "^4.1.4",
+    "autoprefixer": "^9.8.0",
     "axios": "^0.19.2",
     "bootstrap": "^4.4.1",
-    "js-cookie": "^2.2.1",
     "material-table": "^1.59.0",
     "material-ui-dropzone": "^2.5.0",
+    "postcss-cli": "^7.1.1",
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.0",
     "react-dom": "^16.13.1",
@@ -38,8 +38,8 @@
     "redux": "^4.0.5",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.3.0",
-    "typescript": "^3.8.3",
-    "uuid": "^7.0.3"
+    "tailwindcss": "^1.4.6",
+    "typescript": "^3.8.3"
   },
   "scripts": {
     "start": "npm run watch:css && react-scripts start",
@@ -65,9 +65,5 @@
     ]
   },
   "proxy": "http://localhost:5000",
-  "devDependencies": {
-    "autoprefixer": "^9.8.0",
-    "postcss-cli": "^7.1.1",
-    "tailwindcss": "^1.4.6"
-  }
+  "devDependencies": {}
 }
