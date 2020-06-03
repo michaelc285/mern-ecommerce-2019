@@ -40,7 +40,8 @@
     "redux-thunk": "^2.3.0",
     "typescript": "^3.8.3",
     "uuid": "^7.0.3",
-    "tailwindcss": "^1.4.6"
+    "tailwindcss": "^1.4.6",
+    "postcss-cli": "^7.1.1"
   },
   "scripts": {
     "start": "npm run watch:css && react-scripts start",
@@ -67,7 +68,6 @@
   },
   "proxy": "http://localhost:5000",
   "devDependencies": {
-    "autoprefixer": "^9.8.0",
-    "postcss-cli": "^7.1.1"
+    "autoprefixer": "^9.8.0"
   }
 }
