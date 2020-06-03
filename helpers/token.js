@@ -1,6 +1,6 @@
 const { sign } = require("jsonwebtoken");
 const config = require("config");
-const REFRESH_TOKEN_COOKIE_PATH = require("../constant/path.js");
+const REFRESH_TOKEN_COOKIE_PATH = require("../constant/path");
 
 // -------------Create-------------------
 
@@ -30,6 +30,7 @@ const sendAccessToken = (req, res, accesstoken, userInfo) => {
       history: userInfo.history,
     },
   });
+  console.log("Token: Send Access Token Success".green);
 };
 
 const sendRefreshToken = (res, token) => {
@@ -37,6 +38,7 @@ const sendRefreshToken = (res, token) => {
     httpOnly: true,
     path: REFRESH_TOKEN_COOKIE_PATH,
   });
+  console.log("Token: Send Refresh Token Success".green);
 };
 
 module.exports = {

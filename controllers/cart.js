@@ -63,11 +63,15 @@ exports.AddProductToCart = async (req, res) => {
     const cart = updateUser.cart;
     const result = await mergeCartAndProduct(cart);
 
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
       cart: result,
     });
+
+    console.log("Cart: Add product to cart success".green);
+    return;
   } catch (err) {
+    console.log(`Cart: Add product to cart fail Msg ${err.message}`.green);
     return res.status(400).json({
       success: false,
       error: err.message,
@@ -101,11 +105,17 @@ exports.removeProductFromCart = async (req, res) => {
     const cart = user.cart;
     const result = await mergeCartAndProduct(cart);
 
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
       cart: result,
     });
+
+    console.log("Cart: Remove product from cart success".green);
+    return;
   } catch (err) {
+    console.log(
+      `Cart: Remove product from cart fail Msg: ${err.message}`.green
+    );
     return res.status(400).json({
       success: false,
       error: err.message,
@@ -134,7 +144,10 @@ exports.loadCart = async (req, res) => {
       success: true,
       cart: result,
     });
+    console.log("Cart: Load cart success".green);
+    return;
   } catch (err) {
+    console.log(`Cart: Load cart fail Msg:${err.message}`.red);
     res.status(400).json({
       success: false,
       error: err.message,
@@ -168,11 +181,16 @@ exports.updateProductInCart = async (req, res) => {
     const cart = user.cart;
     const result = await mergeCartAndProduct(cart);
 
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
       cart: result,
     });
+    conosle.log("Cart: Update product quantity in cart success".green);
+    return;
   } catch (err) {
+    conosle.log(
+      `Cart: Update product quantity in cart fail ${err.message}`.green
+    );
     return res.status(401).json({
       success: false,
       error: err.message,
@@ -267,10 +285,14 @@ exports.buyProcessDone = async (req, res) => {
     res.status(200).json({
       success: true,
     });
+    console.log("Cart: Buy process success".green);
+    return;
   } catch (err) {
     res.status(400).json({
       success: false,
       error: err.message,
     });
+    console.log(`Cart: Buy process fail Msg:{err.message}`.red);
+    return;
   }
 };

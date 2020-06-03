@@ -93,6 +93,7 @@ export const login = ({ email, password }: IAuthFunction) => async (
 
   if (result.success) {
     dispatch({ type: LOGIN_SUCCESS, payload: result });
+    dispatch(loadCart());
   } else {
     dispatch(
       returnErrors(result.error, result.status, LOGIN_FAIL, result.labels)

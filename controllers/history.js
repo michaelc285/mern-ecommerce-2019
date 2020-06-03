@@ -11,11 +11,14 @@ exports.getHistory = async (req, res) => {
 
     const result = await User.findById(userId).select("history");
 
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
       history: result.history,
     });
+    console.log("History: Get History Success".green);
+    return;
   } catch (err) {
+    console.log(`History: Get History Fail Msg: ${err.message}`.red);
     return res.status(400).json({
       success: false,
       error: err.message,

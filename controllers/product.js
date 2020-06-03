@@ -58,19 +58,23 @@ exports.uploadImage = (req, res) => {
     }
 
     if (req.files == undefined) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         error: "No file(s) uploaded",
       });
+      console.log("Product: Image(s) uploaded fail 'undefined'".red);
+      return;
     } else {
       // file path array
       const pathArr = req.files.map((file) => `uploads/${file.filename}`);
 
-      return res.status(200).json({
+      res.status(200).json({
         success: true,
         msg: "File(s) uploaded",
         filesPath: pathArr,
       });
+      console.log(`Product: ${pathArr.length} image(s) uploaded`.green);
+      return;
     }
   });
 };
@@ -104,18 +108,22 @@ exports.createProduct = async (req, res) => {
     const savedProduct = newProduct.save();
     if (!savedProduct) throw Error("Something went wrong saving the product");
 
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
       products: {
         id: savedProduct._id,
         title: savedProduct.title,
       },
     });
+    console.log("Product: Create Prodcut Success".green);
+    return;
   } catch (err) {
-    return res.status(400).json({
+    console.log(`Product: Create product fail Msg: ${err.message}`.red);
+    res.status(400).json({
       success: false,
       error: err.message,
     });
+    return;
   }
 };
 
@@ -158,16 +166,20 @@ exports.getProducts = async (req, res) => {
       products = await Product.find(findArguments);
     }
 
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
       products,
       postSize: products.length,
     });
+    console.log(`Product: Get products scucess`.green);
+    return;
   } catch (err) {
-    return res.status(400).json({
+    res.status(400).json({
       success: false,
       error: err.message,
     });
+    console.log(`Product: Get product fail Msg: ${err.message}`.red);
+    return;
   }
 };
 
@@ -194,8 +206,12 @@ exports.getProductsByID = async (req, res) => {
     const products = await Product.find({ _id: { $in: productId } });
     if (!products) throw Error("PRODUCT_NOT_FOUND");
 
-    return res.status(200).json({ success: true, products });
+    res.status(200).json({ success: true, products });
+
+    console.log("Product: Get product by id sucess".green);
+    return;
   } catch (err) {
+    console.log(`Product: Get products by id fail Msg: ${err.message}`.red);
     return res.status(400).json({
       success: false,
       error: err.message,
@@ -226,7 +242,10 @@ exports.deleteProductsByID = async (req, res) => {
       success: true,
       data: result,
     });
+    console.log("Product: Delete product success".green);
+    return;
   } catch (err) {
+    console.log(`Product: Delete product fail Msg: ${err.message} `.red);
     return res.status(400).json({
       success: false,
       error: err.message,
@@ -254,7 +273,11 @@ exports.updateProductsByID = async (req, res) => {
       success: true,
       data: result,
     });
+    console.log("Product: Update product by id success".green);
+
+    return;
   } catch (err) {
+    console.log(`Product: Update product by id fail Msg: ${err.message}`.red);
     return res.status(400).json({
       success: false,
       error: err.message,

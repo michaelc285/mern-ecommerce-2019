@@ -62,7 +62,10 @@ exports.loginUser = async (req, res, next) => {
     // Send token. Refresh token as cookie and access token as regular response
     sendRefreshToken(res, refreshToken);
     sendAccessToken(req, res, accessToken, user);
+    console.log("Auth: Login Success".green);
+    return;
   } catch (err) {
+    console.log(`Auth: Login Process error: ${err.message}`.red);
     if (err.message === USER_NOT_FOUND || err.message === INVALID_PASSWORD) {
       return res.status(401).json({
         success: false,
@@ -128,7 +131,10 @@ exports.registerUser = async (req, res, next) => {
     // Send token. Refresh token as cookie and access token as regular response
     sendRefreshToken(res, refreshToken);
     sendAccessToken(req, res, accessToken, user);
+    console.log("Auth: Register success".green);
+    return;
   } catch (err) {
+    console.log(`Auth: Login Process error: ${err.message}`.red);
     if (err.name === "MongoError") {
       return res.status(400).json({
         success: false,
@@ -168,11 +174,14 @@ exports.logoutUser = async (req, res, next) => {
       { token: undefined }
     );
 
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
       message: "LOGOUT_SUCCESS",
     });
+    console.log("Auth: Logout Success".green);
+    return;
   } catch (err) {
+    console.log(`Auth: Logout Process error: ${err.message}`.red);
     res.status(400).json({
       success: false,
       error: err.message,
@@ -195,7 +204,7 @@ exports.refresh_token = async (req, res, next) => {
 
     // Verify token
     let payload = null;
-    payload = jwt.verify(token, REFRESH_JWT_SECRET);
+    payload = jwt.verify(token, process.env.REFRESH_JWT_TOKEN_SECRET);
 
     // Find id in token with db
     const user = await User.findById(payload.userId);
@@ -213,8 +222,11 @@ exports.refresh_token = async (req, res, next) => {
     //   success: true,
     //   accesstoken: accessToken,
     // });
-    return sendAccessToken(req, res, accessToken, user);
+    sendAccessToken(req, res, accessToken, user);
+    console.log("Auth: Token Refresh Success".green);
+    return;
   } catch (err) {
+    console.log(`Auth: Token Refresh Process error: ${err.message}`.red);
     return res.status(400).json({
       success: false,
       error: err.message,
@@ -233,11 +245,14 @@ exports.getUser = async (req, res, next) => {
     const user = await User.findById(req.user.id).select("-password");
     if (!user) throw Error(USER_NOT_FOUND);
 
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
       data: user,
     });
+    console.log("Auth: Get User Success".green);
+    return;
   } catch (err) {
+    console.log(`Auth: Get User Process error: ${err.message}`.red);
     return res.status(400).json({
       success: false,
       error: err.message,
