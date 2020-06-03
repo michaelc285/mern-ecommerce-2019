@@ -2,7 +2,7 @@ const config = require("config");
 const jwt = require("jsonwebtoken");
 
 const dotenv = require("dotenv");
-dotenv.config({ path: "./config/config.env" });
+dotenv.config({ path: "../config/config.env" });
 
 const auth = (req, res, next) => {
   // accesstoken => `Bearer abcdasjoivj2091u4012cna9821h9`

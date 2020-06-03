@@ -19,7 +19,7 @@ const {
 } = require("../constant/types.js");
 const dotenv = require("dotenv");
 const REFRESH_TOKEN_COOKIE_PATH = require("../constant/path.js");
-dotenv.config({ path: "./config/config.env" });
+dotenv.config({ path: "../config/config.env" });
 // Model
 const User = require("../models/Users");
 
