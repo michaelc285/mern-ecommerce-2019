@@ -2,9 +2,6 @@ const { sign } = require("jsonwebtoken");
 const config = require("config");
 const REFRESH_TOKEN_COOKIE_PATH = require("../constant/path.js");
 
-const dotenv = require("dotenv");
-dotenv.config({ path: "../config/config.env" });
-
 // -------------Create-------------------
 
 const createAccessToken = (userId) => {
