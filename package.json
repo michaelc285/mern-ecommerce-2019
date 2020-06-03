@@ -1,5 +1,5 @@
 {
-  "name": "server",
+  "name": "mern-ecommerce",
   "version": "1.0.0",
   "description": "e-commerce backend",
   "main": "server.js",
