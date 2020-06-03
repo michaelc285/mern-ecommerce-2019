@@ -1,18 +1,20 @@
 const { sign } = require("jsonwebtoken");
 const config = require("config");
-const ACCESS_JWT_SECRET = config.get("ACCESS_JWT_TOKEN_SECRET");
-const REFRESH_JWT_SECRET = config.get("REFRESH_JWT_TOKEN_SECRET");
 const REFRESH_TOKEN_COOKIE_PATH = require("../constant/path.js");
+
+const dotenv = require("dotenv");
+dotenv.config({ path: "./config/config.env" });
+
 // -------------Create-------------------
 
 const createAccessToken = (userId) => {
-  return sign({ userId }, ACCESS_JWT_SECRET, {
+  return sign({ userId }, process.env.ACCESS_JWT_TOKEN_SECRET, {
     expiresIn: "1d",
   });
 };
 
 const createRefreshToken = (userId) => {
-  return sign({ userId }, REFRESH_JWT_SECRET, {
+  return sign({ userId }, process.env.REFRESH_JWT_TOKEN_SECRET, {
     expiresIn: "30d",
   });
 };

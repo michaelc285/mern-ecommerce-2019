@@ -1,6 +1,8 @@
 const config = require("config");
 const jwt = require("jsonwebtoken");
-const ACCESS_JWT_SECRET = config.get("ACCESS_JWT_TOKEN_SECRET");
+
+const dotenv = require("dotenv");
+dotenv.config({ path: "./config/config.env" });
 
 const auth = (req, res, next) => {
   // accesstoken => `Bearer abcdasjoivj2091u4012cna9821h9`
@@ -16,7 +18,7 @@ const auth = (req, res, next) => {
 
   try {
     // Verify token
-    const decoded = jwt.verify(token, ACCESS_JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.ACCESS_JWT_TOKEN_SECRET);
     // Add user from payload
     req.user = decoded;
     next();

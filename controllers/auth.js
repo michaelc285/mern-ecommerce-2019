@@ -17,8 +17,9 @@ const {
   TOKEN_NOT_MATCH,
   TOKEN_NOT_FOUND,
 } = require("../constant/types.js");
+const dotenv = require("dotenv");
 const REFRESH_TOKEN_COOKIE_PATH = require("../constant/path.js");
-const REFRESH_JWT_SECRET = config.get("REFRESH_JWT_TOKEN_SECRET");
+dotenv.config({ path: "./config/config.env" });
 // Model
 const User = require("../models/Users");
 
@@ -159,7 +160,7 @@ exports.logoutUser = async (req, res, next) => {
 
     // Verify token
     let payload = null;
-    payload = jwt.verify(token, REFRESH_JWT_SECRET);
+    payload = jwt.verify(token, process.env.REFRESH_JWT_TOKEN_SECRET);
 
     // Clear cookie
     res.clearCookie("refreshtoken", { path: REFRESH_TOKEN_COOKIE_PATH });
