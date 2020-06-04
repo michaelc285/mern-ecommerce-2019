@@ -20,20 +20,15 @@ Client `Path: /mern-ecommerce/client`
 
   
 
-Also you need to cretae your own config.env and default.json file in `/mern-ecommerce/config`, here are the templates and contents you need to have
-1. config.env   `/mern-ecommerce/config/config.env`
+Also you need to cretae your own config.env file in `/mern-ecommerce/config`, here are the contents you need to have in
+config.env   `/mern-ecommerce/config/config.env`
 ```
 NODE_ENV= <development | production>
 PORT= <Port you want>
 MONGO_URI= <Your MongoDB uri>
 PAYPAL_CLIENT_ID= <Your Paypal Client ID>
-```
-2.   default.json `/mern-ecommerce/config/default.json`
- ```
-{
-"ACCESS_JWT_TOKEN_SECRET": <Your Access Token Secert>,
-"REFRESH_JWT_TOKEN_SECRET": <Your Refresh Token Secert>"
-}
+ACCESS_JWT_TOKEN_SECRET=<Your Access Token Secert>
+REFRESH_JWT_TOKEN_SECRET=<Your Refresh Token Secert>
 ```
   
   
