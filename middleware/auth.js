@@ -18,8 +18,10 @@ const auth = (req, res, next) => {
     const decoded = jwt.verify(token, process.env.ACCESS_JWT_TOKEN_SECRET);
     // Add user from payload
     req.user = decoded;
+    console.log("Mid Auth: Token Valid".green);
     next();
   } catch (err) {
+    console.log("Mid Auth: Token Invalid".red);
     res.status(401).json({ msg: "Token is not valid" });
   }
 };

@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const auth = require("../../middleware/auth");
+const admin = require("../../middleware/admin");
 const { getHistory } = require("../../controllers/history");
-const { getUsers, deleteUser } = require("../../controllers/users");
+const { getUsers, updateUser, deleteUser } = require("../../controllers/users");
 const {
   AddProductToCart,
   removeProductFromCart,
@@ -11,9 +12,11 @@ const {
   buyProcessDone,
 } = require("../../controllers/cart");
 
-router.route("/").get(auth, getUsers);
-
-router.route("/:id").delete(auth, deleteUser);
+router
+  .route("/")
+  .get(auth, admin, getUsers)
+  .put(auth, admin, updateUser)
+  .delete(auth, admin, deleteUser);
 
 router.route("/history").get(auth, getHistory);
 

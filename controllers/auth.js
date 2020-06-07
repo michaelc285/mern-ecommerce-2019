@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs");
-const config = require("config");
 const jwt = require("jsonwebtoken");
+const { hashPassword } = require("../helpers/hashPassword");
 const {
   createAccessToken,
   createRefreshToken,
@@ -17,10 +17,9 @@ const {
   TOKEN_NOT_MATCH,
   TOKEN_NOT_FOUND,
 } = require("../constant/types.js");
-const dotenv = require("dotenv");
 // Model
 const User = require("../models/Users");
-
+const REFRESH_TOKEN_COOKIE_PATH = require("../constant/path");
 /**
  * @desc   Login User
  * @route  POST /api/auth/login
@@ -108,14 +107,7 @@ exports.registerUser = async (req, res, next) => {
 
   try {
     // Hash the password
-    const hashedPassword = await new Promise((resolve, reject) => {
-      bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(password, salt, (err, hash) => {
-          if (err) reject(err);
-          resolve(hash);
-        });
-      });
-    });
+    const hashedPassword = await hashPassword(password);
 
     // Insert the user in mongoDB
     const user = await User.create({ name, email, password: hashedPassword });
