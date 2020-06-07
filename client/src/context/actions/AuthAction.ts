@@ -14,6 +14,16 @@ import {
   REGISTER_SUCCESS,
   CART_CLEAR,
   HISTORY_CLEAR,
+  GET_USERS_LIST_FAIL,
+  GET_USERS_LIST_SUCCESS,
+  DELETE_USERS_FAIL,
+  DELETE_USERS_SUCCESS,
+  UPDATE_USERS_FAIL,
+  UPDATE_USERS_SUCCESS,
+  USER_DETAILS_LOADING,
+  USER_LIST_LOADING,
+  GET_USER_DETAILS_SUCCESS,
+  GET_USER_DETAILS_FAIL,
 } from "../types";
 
 // Load User and get access token
@@ -117,10 +127,45 @@ export const logout = () => async (dispatch: Function) => {
     dispatch({ type: LOGOUT_SUCCESS });
     dispatch({ type: HISTORY_CLEAR });
     dispatch({ type: CART_CLEAR });
-
-    return true;
   } else {
     dispatch(returnErrors(result.error, 500));
-    return false;
+  }
+};
+
+// Get Users
+export const getUsers = () => async (
+  dispatch: Function,
+  getState: Function
+) => {
+  try {
+    dispatch({ type: USER_LIST_LOADING });
+
+    const result = await axios.get(`/api/users?type=all`, {
+      headers: { authorization: `Bearer ${getState().auth.token}` },
+    });
+
+    dispatch({ type: GET_USERS_LIST_SUCCESS, payload: result });
+  } catch (err) {
+    dispatch(returnErrors(err.message, 500));
+    dispatch({ type: GET_USERS_LIST_FAIL });
+  }
+};
+
+// Get Users By ID
+export const getUserById = (userId: string) => async (
+  dispatch: Function,
+  getState: Function
+) => {
+  try {
+    dispatch({ type: USER_DETAILS_LOADING });
+
+    const result = await axios.get(`/api/users?id=${userId}&type=single`, {
+      headers: { authorization: `Bearer ${getState().auth.token}` },
+    });
+
+    dispatch({ type: GET_USER_DETAILS_SUCCESS, payload: result });
+  } catch (err) {
+    dispatch(returnErrors(err.message, 500));
+    dispatch({ type: GET_USER_DETAILS_FAIL });
   }
 };

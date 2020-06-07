@@ -102,14 +102,13 @@ const ProductControlPanelLanding = () => {
                   </thead>
                   {!isLoading && <tbody>{Rows}</tbody>}
                 </table>
-
-                <div className="flex justify-center my-10 p-3">
-                  <Pagination
-                    productsPerPage={productsPerPage}
-                    totalProducts={resultCount}
-                    paginate={paginate}
-                  />
-                </div>
+              </div>
+              <div className="flex justify-center my-10 p-3">
+                <Pagination
+                  productsPerPage={productsPerPage}
+                  totalProducts={resultCount}
+                  paginate={paginate}
+                />
               </div>
             </Paper>
           </div>
