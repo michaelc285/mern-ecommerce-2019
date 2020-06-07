@@ -5,6 +5,8 @@ import { RootState } from "../../../context/store";
 import { Paper } from "@material-ui/core";
 import Pagination from "../../market/products/Pagination";
 import { DateFormatter } from "../../../utils/Formatter";
+import { NavLink } from "react-router-dom";
+import { Button } from "@material-ui/core";
 
 const UserControlPanelLanding = () => {
   const dispatch = useDispatch();
@@ -40,6 +42,7 @@ const UserControlPanelLanding = () => {
           Edit
         </button>
         <span>{" | "}</span>
+
         <button className="text-blue-600" onClick={() => console.log(row._id)}>
           Delete
         </button>
@@ -49,49 +52,54 @@ const UserControlPanelLanding = () => {
 
   return (
     <div className="min-h-screen">
-      <div className="container mx-auto" style={{ border: "1px solid red" }}>
-        <div className="flex">
-          <button className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
-            UserControlPanelLanding
-          </button>
-        </div>
+      <div className="container mx-auto">
+        <div className="mt-8">
+          <div className="flex flex-wrap mb-3">
+            <NavLink exact to={"/#"} style={{ textDecoration: "none" }}>
+              <Button variant="outlined" color="secondary" className="mr-3 ">
+                Create User
+              </Button>
+            </NavLink>
+          </div>
 
-        {/* Table */}
-        <div className="mb-3">
-          <Paper elevation={2} className="p-3">
-            <div className="overflow-x-auto">
-              <div className="mb-3">
-                <h4 className="text-2xl">
-                  {resultCount > 1
-                    ? `${resultCount} Results`
-                    : `${resultCount} Result`}
-                </h4>
+          {/* Table */}
+          <div className="mb-3">
+            <Paper elevation={2} className="p-3">
+              <div className="overflow-x-auto">
+                <div className="mb-3">
+                  <h4 className="text-2xl">
+                    {resultCount > 1
+                      ? `${resultCount} Results`
+                      : `${resultCount} Result`}
+                  </h4>
+                </div>
+
+                <table className="table-auto">
+                  <thead>
+                    <tr>
+                      <th className="px-3 py-2">Index</th>
+                      <th className="px-3 py-2">ID</th>
+                      <th className="px-3 py-2">Name</th>
+                      <th className="px-3 py-2">Role</th>
+                      <th className="px-3 py-2">Email</th>
+                      <th className="px-3 py-2">History</th>
+                      <th className="px-3 py-2">Cart</th>
+                      <th className="px-3 py-2">Reg. Date</th>
+                      <th className="px-3 py-2">Options</th>
+                    </tr>
+                  </thead>
+                  {!isLoading && <tbody>{Rows}</tbody>}
+                </table>
               </div>
-
-              <table className="table-auto">
-                <thead>
-                  <tr>
-                    <th className="px-3 py-2">Index</th>
-                    <th className="px-3 py-2">ID</th>
-                    <th className="px-3 py-2">Name</th>
-                    <th className="px-3 py-2">Role</th>
-                    <th className="px-3 py-2">Email</th>
-                    <th className="px-3 py-2">History</th>
-                    <th className="px-3 py-2">Cart</th>
-                    <th className="px-3 py-2">Reg. Date</th>
-                  </tr>
-                </thead>
-                {!isLoading && <tbody>{Rows}</tbody>}
-              </table>
-            </div>
-            <div className="flex justify-center my-10 p-3">
-              <Pagination
-                productsPerPage={resultsPerPage}
-                totalProducts={resultCount}
-                paginate={paginate}
-              />
-            </div>
-          </Paper>
+              <div className="flex justify-center my-10 p-3">
+                <Pagination
+                  productsPerPage={resultsPerPage}
+                  totalProducts={resultCount}
+                  paginate={paginate}
+                />
+              </div>
+            </Paper>
+          </div>
         </div>
       </div>
     </div>
