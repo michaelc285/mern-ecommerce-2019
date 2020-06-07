@@ -1,13 +1,14 @@
 
-# My first E-Commerce website
 
+# My first e-commerce webapp
 
-  
+<img src="https://github.com/michaelc285/mern-ecommerce/blob/master/readmeImage/sample1.png?raw=true" width="400">
+
+<img src="https://github.com/michaelc285/mern-ecommerce/blob/master/readmeImage/cartLanding.jpg?raw=true" width="400">
 
 ## Getting Started
 
   
-
 First step is to install the dependencies
 
 Server `Path: /mern-ecommerce`
@@ -35,12 +36,30 @@ REFRESH_JWT_TOKEN_SECRET=<Your Refresh Token Secert>
 
 After that you need to return to `/mern-ecommerce` to start both server and client by typing <br/>`$ npm run dev` .
 
-  
+## About This App 
 
+
+```
+Role
+	|- Admin
+		|- MyAccount
+			|- Cart
+			|- History
+			|- Logout
+		|- Dashboard
+			|- ProductsControlPanel
+			|- UsersControlPanel
+	|- User
+		|- MyAccount
+			|- Cart
+			|- History
+			|- Logout
+	|- Guest
+		|- SIGN UP
+		|- SIGN IN
+
+```
 ## FAQ
-
-  
-
 - Objective ? 
 	- This project is a pratice for me to learn modern framework and webapp.
 
