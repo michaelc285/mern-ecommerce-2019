@@ -186,24 +186,23 @@ exports.getProducts = async (req, res) => {
 /**
  * @desc   Get Products by ID(s)
  * @route  GET /api/product?id={productId}&type=single
- * @route  GET /api/product?id={productIds}&type=array
  * @access public
  */
 exports.getProductsByID = async (req, res) => {
   try {
     if (!req.query.id) throw Error("Please provide product id(s)");
-    if (
-      !req.query.type ||
-      (req.query.type !== "single" && req.query.type !== "array")
-    )
-      throw Error('type should only be "array" or "single"');
 
-    let productId = req.query.id;
+    const productId = req.query.id;
 
-    if (req.query.type === "array") {
-      productId = productId.split(",").map((id) => id);
-    }
-    const products = await Product.find({ _id: { $in: productId } });
+    const products = await Product.findOneAndUpdate(
+      { _id: productId },
+      {
+        $inc: {
+          views: 1,
+        },
+      },
+      { new: true }
+    );
     if (!products) throw Error("PRODUCT_NOT_FOUND");
 
     res.status(200).json({ success: true, products });

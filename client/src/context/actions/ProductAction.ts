@@ -79,16 +79,13 @@ export const getProducts = (filters: object = {}) => async (
 };
 
 // Get Product by Id
-export const getProductsById = (
-  productId: string | string[],
-  type: string = "single"
-) => async (dispatch: Function) => {
+export const getProductsById = (productId: string) => async (
+  dispatch: Function
+) => {
   try {
     dispatch({ type: PRODUCT_DETAILS_LOADING });
 
-    const result = await axios.get(
-      `/api/product/?id=${productId}&type=${type}`
-    );
+    const result = await axios.get(`/api/product/?id=${productId}`);
 
     dispatch({ type: PRODUCT_DETAILS_GET_SUCCESS, payload: result });
   } catch (err) {
