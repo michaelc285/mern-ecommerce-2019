@@ -9,10 +9,12 @@ import {
   REGISTER_SUCCESS,
   GET_USERS_LIST_FAIL,
   GET_USERS_LIST_SUCCESS,
-  DELETE_USERS_FAIL,
-  DELETE_USERS_SUCCESS,
+  DELETE_USER_FAIL,
+  DELETE_USER_SUCCESS,
+  DELETE_USER_LOADING,
   UPDATE_USERS_FAIL,
   UPDATE_USERS_SUCCESS,
+  DELETE_USER_CLEAR,
   USER_DETAILS_LOADING,
   USER_LIST_LOADING,
   GET_USER_DETAILS_SUCCESS,
@@ -86,6 +88,22 @@ export const userDetailsReducer = (
     case GET_USER_DETAILS_SUCCESS:
       return { ...state, isLoading: false, data: action.payload.data.user };
     case GET_USER_DETAILS_FAIL:
+    default:
+      return state;
+  }
+};
+
+export const userDeleteReducer = (
+  state: any = { isLoading: false, success: false },
+  action: any
+) => {
+  switch (action.type) {
+    case DELETE_USER_LOADING:
+      return { ...state, isLoading: true };
+    case DELETE_USER_SUCCESS:
+      return { ...state, isLoading: false, success: true };
+    case DELETE_USER_FAIL:
+    case DELETE_USER_CLEAR:
     default:
       return state;
   }

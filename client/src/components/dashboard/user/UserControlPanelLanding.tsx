@@ -73,7 +73,7 @@ const UserControlPanelLanding = () => {
             <Paper elevation={2} className="p-3">
               <div className="overflow-x-auto">
                 <div className="mb-3">
-                  <h4 className="text-2xl">
+                  <h4 className="text-2xl text-indigo-900">
                     {resultCount > 1
                       ? `${resultCount} Results`
                       : `${resultCount} Result`}

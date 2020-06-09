@@ -13,10 +13,12 @@ import { IHistoryUserDetailsPage } from "../../../../types/interfaces";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 const History = ({ data }: IHistoryUserDetailsPage) => {
-  if (data === undefined) {
+  if (data === undefined || data.length <= 0) {
     return (
-      <div className="h-32 flex justify-center items-center">
-        <CircularProgress color="secondary" />
+      <div className="h-32">
+        <div className="h-full flex justify-center items-center text-gray-700 text-lg font-mono">
+          <p>No History</p>
+        </div>
       </div>
     );
   }
@@ -27,7 +29,7 @@ const History = ({ data }: IHistoryUserDetailsPage) => {
         <TableHead>
           <TableRow>
             <TableCell />
-            <TableCell>Order</TableCell>
+            <TableCell>Order ID</TableCell>
             <TableCell align="right">Date</TableCell>
             <TableCell align="right">Products Total</TableCell>
             <TableCell align="right">Delivery Fee </TableCell>

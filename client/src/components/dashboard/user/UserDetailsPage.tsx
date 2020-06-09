@@ -1,12 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { NavLink, Redirect } from "react-router-dom";
 import { IUserDetailsPage } from "../../../types/interfaces";
 import { RootState } from "../../../context/store";
-import { getUserById } from "../../../context/actions/AuthAction";
+import { USER_CONTROL_PANEL } from "../../../path";
+import {
+  getUserById,
+  deleteUser,
+  clearDeleteUserState,
+} from "../../../context/actions/AuthAction";
+
 // Components
 import {
   Button,
   LinearProgress,
+  Breadcrumbs,
+  Typography,
   FormGroup,
   FormControlLabel,
   Switch,
@@ -19,6 +28,7 @@ const UserDetailsPage = ({ match }: IUserDetailsPage) => {
   const { isLoading, data } = useSelector(
     (state: RootState) => state.userDetails
   );
+  const deleteState = useSelector((state: RootState) => state.userDelete);
   const [isReadOnly, setIsReadOnly] = useState({ name: true });
   const [name, setName] = useState("");
 
@@ -33,8 +43,20 @@ const UserDetailsPage = ({ match }: IUserDetailsPage) => {
   };
 
   useEffect(() => {
-    dispatch(getUserById(userID));
-  }, [dispatch, userID]);
+    if (deleteState.success === false) {
+      dispatch(getUserById(userID));
+    }
+
+    return () => {
+      if (deleteState.success) {
+        dispatch(clearDeleteUserState());
+      }
+    };
+  }, [dispatch, userID, deleteState.success]);
+
+  if (deleteState.success === true) {
+    return <Redirect to={{ pathname: USER_CONTROL_PANEL }} />;
+  }
 
   if (isLoading) {
     return (
@@ -43,6 +65,16 @@ const UserDetailsPage = ({ match }: IUserDetailsPage) => {
       </div>
     );
   }
+
+  //Components
+  const NoHistory = (
+    <div className="h-32">
+      <div className="h-full flex justify-center items-center text-gray-700 text-lg font-mono">
+        <p>No History</p>
+      </div>
+    </div>
+  );
+
   // Id
   // name
   // Role
@@ -53,12 +85,26 @@ const UserDetailsPage = ({ match }: IUserDetailsPage) => {
   // Submit Button
   // Delete User
   return (
-    <div className="h-screen">
+    <div className="min-h-screen">
       <div className="container mx-auto">
         <div className="mt-16">
+          <div className="mb-6">
+            <Breadcrumbs aria-label="breadcrumb">
+              <NavLink
+                exact
+                to={USER_CONTROL_PANEL}
+                style={{ textDecoration: "none" }}
+              >
+                User Control Panel
+              </NavLink>
+              <Typography color="textPrimary">
+                {`${data._id} - ${data.name}`}
+              </Typography>
+            </Breadcrumbs>
+          </div>
           {/* Profile Update */}
           <div className="mb-6">
-            <h4 className="font-semibold">{data._id}'s Profile</h4>
+            <h4 className="font-semibold">Profile</h4>
             <hr />
             <form onSubmit={handleSubmit}>
               <Button
@@ -76,7 +122,8 @@ const UserDetailsPage = ({ match }: IUserDetailsPage) => {
           <div className="mb-6">
             <h4 className="font-semibold">History</h4>
             <hr />
-            {<History data={data.history} />}
+
+            <History data={data.history} />
           </div>
           {/* History End */}
           {/* Delete Account */}
@@ -93,7 +140,7 @@ const UserDetailsPage = ({ match }: IUserDetailsPage) => {
                 variant="contained"
                 color="secondary"
                 size="small"
-                onClick={() => console.log(`Delete ${data._id}`)}
+                onClick={() => dispatch(deleteUser(userID))}
               >
                 Delete Account
               </Button>

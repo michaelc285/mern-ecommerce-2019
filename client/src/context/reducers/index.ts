@@ -3,6 +3,7 @@ import {
   authReducer,
   userDetailsReducer,
   usersListReducer,
+  userDeleteReducer,
 } from "../reducers/AuthReducer";
 import errorReducer from "../reducers/ErrorReducer";
 import {
@@ -16,6 +17,7 @@ export default combineReducers({
   auth: authReducer,
   userList: usersListReducer,
   userDetails: userDetailsReducer,
+  userDelete: userDeleteReducer,
   cart: cartReducer,
   error: errorReducer,
   history: HistoryReducer,

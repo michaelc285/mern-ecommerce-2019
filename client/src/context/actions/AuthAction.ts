@@ -16,10 +16,12 @@ import {
   HISTORY_CLEAR,
   GET_USERS_LIST_FAIL,
   GET_USERS_LIST_SUCCESS,
-  DELETE_USERS_FAIL,
-  DELETE_USERS_SUCCESS,
+  DELETE_USER_FAIL,
+  DELETE_USER_SUCCESS,
+  DELETE_USER_LOADING,
   UPDATE_USERS_FAIL,
   UPDATE_USERS_SUCCESS,
+  DELETE_USER_CLEAR,
   USER_DETAILS_LOADING,
   USER_LIST_LOADING,
   GET_USER_DETAILS_SUCCESS,
@@ -169,3 +171,24 @@ export const getUserById = (userId: string) => async (
     dispatch({ type: GET_USER_DETAILS_FAIL });
   }
 };
+
+export const deleteUser = (userId: string) => async (
+  dispatch: Function,
+  getState: Function
+) => {
+  try {
+    dispatch({ type: DELETE_USER_LOADING });
+
+    await axios.delete(`/api/users?id=${userId}`, {
+      headers: { authorization: `Bearer ${getState().auth.token}` },
+    });
+
+    dispatch({ type: DELETE_USER_SUCCESS });
+  } catch (err) {
+    dispatch(returnErrors(err.message, 500));
+    dispatch({ type: DELETE_USER_FAIL });
+  }
+};
+
+export const clearDeleteUserState = () => (dispatch: Function) =>
+  dispatch({ type: DELETE_USER_CLEAR });
