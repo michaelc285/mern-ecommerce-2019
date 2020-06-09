@@ -14,22 +14,24 @@ exports.getUsers = async (req, res, next) => {
       const userId = req.query.id;
       if (!userId) throw Error("Please provide user id");
 
-      const user = await User.findOne({ _id: userId });
+      const user = await User.findOne({ _id: userId }).select(
+        "-token -password"
+      );
 
       if (!user) throw Error("User not found");
 
       res.status(200).json({
         success: true,
-        data: user,
+        user,
       });
     } else if (type === "all") {
-      const user = await User.find();
-      if (!user) throw Error("User not found");
+      const users = await User.find().select("-token -password");
+      if (!users) throw Error("User not found");
 
       res.status(200).json({
         success: true,
-        count: user.length,
-        data: user,
+        count: users.length,
+        users,
       });
     } else {
       throw Error("type should be all / single");

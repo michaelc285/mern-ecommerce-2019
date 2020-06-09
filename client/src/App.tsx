@@ -9,13 +9,14 @@ import {
   USER_CART,
   USER_HISTORY,
   CREATE_PRODUCT,
-  PRODUCT_PAGE,
+  PRODUCT_DETAILS_PAGE,
   MARKET_LANDING,
   SIGN_IN,
   SIGN_UP,
   PRODUCT_CONTROL_PANEL,
   USER_CONTROL_PANEL,
   ROOT,
+  USER_DETAILS_PAGE,
 } from "./path";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { loadUser } from "./context/actions/AuthAction";
@@ -34,6 +35,7 @@ import PurchaseHistoryUser from "./components/history/PurchaseHistoryUser";
 import ErrorPage from "./components/ErrorPage";
 import ProductControlPanelLanding from "./components/dashboard/product/ProductControlPanelLanding";
 import UserControlPanelLanding from "./components/dashboard/user/UserControlPanelLanding";
+import UserDetailsPage from "./components/dashboard/user/UserDetailsPage";
 import { ROLE_ADMIN, ROLE_GUEST, ROLE_USER } from "./context/types";
 
 const App = () => {
@@ -67,7 +69,11 @@ const App = () => {
           {/* Public Route */}
           <Route path={ROOT} exact component={Home} />
           <Route path={MARKET_LANDING} exact component={MarketLanding} />
-          <Route path={PRODUCT_PAGE} exact component={ProductDetailPage} />
+          <Route
+            path={PRODUCT_DETAILS_PAGE}
+            exact
+            component={ProductDetailPage}
+          />
           {/* <Route path={AUTH_PAGE} exact component={AuthPage} /> */}
           <Route path={SIGN_IN} exact component={Login} />
           <Route path={SIGN_UP} exact component={Register} />
@@ -91,15 +97,7 @@ const App = () => {
             component={PurchaseHistoryUser}
           />
           {/* Admin Route */}
-          <ProtectedRoute
-            exact
-            adminRestrict
-            isAuthenticated={isAuthenticated}
-            role={role}
-            authenticationPath={SIGN_IN}
-            path={PRODUCT_CONTROL_PANEL}
-            component={ProductControlPanelLanding}
-          />
+          {/* User Control Panel */}
           <ProtectedRoute
             exact
             adminRestrict
@@ -109,6 +107,27 @@ const App = () => {
             path={USER_CONTROL_PANEL}
             component={UserControlPanelLanding}
           />
+          <ProtectedRoute
+            exact
+            adminRestrict
+            isAuthenticated={isAuthenticated}
+            role={role}
+            authenticationPath={SIGN_IN}
+            path={USER_DETAILS_PAGE}
+            component={UserDetailsPage}
+          />
+
+          {/* Product Control Panel */}
+          <ProtectedRoute
+            exact
+            adminRestrict
+            isAuthenticated={isAuthenticated}
+            role={role}
+            authenticationPath={SIGN_IN}
+            path={PRODUCT_CONTROL_PANEL}
+            component={ProductControlPanelLanding}
+          />
+
           <ProtectedRoute
             exact
             adminRestrict

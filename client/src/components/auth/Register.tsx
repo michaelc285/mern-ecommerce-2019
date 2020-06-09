@@ -16,6 +16,7 @@ import { REGISTER_FAIL } from "../../context/types";
 import Alert from "@material-ui/lab/Alert";
 import { v4 as uuidv4 } from "uuid";
 import { SIGN_IN, MARKET_LANDING } from "../../path";
+import { NavLink } from "react-router-dom";
 
 const Register = () => {
   const history = useHistory();
@@ -54,6 +55,7 @@ const Register = () => {
       setMessage(null);
     }
 
+    // If Auth success go to Market Landing page
     if (isAuthenticated) {
       history.push(MARKET_LANDING);
       clearErrors();
@@ -127,15 +129,11 @@ const Register = () => {
             </form>
             <div className="w-100 d-flex flex-column align-items-center">
               <Typography variant={"subtitle1"}> or</Typography>
-              <Button
-                variant="contained"
-                color="primary"
-                size="small"
-                className="w-100"
-                href={SIGN_IN}
-              >
-                Sign In
-              </Button>
+              <NavLink exact to={SIGN_IN} style={{ textDecoration: "none" }}>
+                <Button variant="contained" color="primary" size="small">
+                  Sign In
+                </Button>
+              </NavLink>
             </div>
           </Paper>
         </Container>

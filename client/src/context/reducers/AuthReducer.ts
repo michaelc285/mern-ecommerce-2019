@@ -70,7 +70,7 @@ export const usersListReducer = (
     case USER_LIST_LOADING:
       return { ...state, isLoading: true };
     case GET_USERS_LIST_SUCCESS:
-      return { ...state, isLoading: false, data: action.payload.data.data };
+      return { ...state, isLoading: false, data: action.payload.data.users };
     case GET_USERS_LIST_FAIL:
     default:
       return state;
@@ -84,7 +84,7 @@ export const userDetailsReducer = (
     case USER_DETAILS_LOADING:
       return { ...state, isLoading: true };
     case GET_USER_DETAILS_SUCCESS:
-      return { ...state, isLoading: false, user: action.payload.data };
+      return { ...state, isLoading: false, data: action.payload.data.user };
     case GET_USER_DETAILS_FAIL:
     default:
       return state;

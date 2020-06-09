@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUsers } from "../../../context/actions/AuthAction";
 import { RootState } from "../../../context/store";
-import { Paper } from "@material-ui/core";
+import { Paper, LinearProgress } from "@material-ui/core";
 import Pagination from "../../market/products/Pagination";
 import { DateFormatter } from "../../../utils/Formatter";
 import { NavLink } from "react-router-dom";
 import { Button } from "@material-ui/core";
+import { USER_CONTROL_PANEL } from "../../../path";
 
 const UserControlPanelLanding = () => {
   const dispatch = useDispatch();
@@ -30,32 +31,37 @@ const UserControlPanelLanding = () => {
   const Rows = currentResults.map((row: any, index: number) => (
     <tr className={(index + 1) % 2 === 0 ? "bg-gray-200" : ""} key={row._id}>
       <td className="border px-3 py-2">{indexOfFirstResult + index + 1}</td>
-      <td className="border px-3 py-2">{row._id}</td>
+      <td className="border px-3 py-2">
+        <NavLink
+          to={`${USER_CONTROL_PANEL}/${row._id}`}
+          style={{ textDecoration: "none" }}
+        >
+          {row._id}
+        </NavLink>
+      </td>
       <td className="border px-3 py-2">{row.name}</td>
-      <td className="border px-3 py-2">{row.role}</td>
+      <td className="border px-3 py-2">{row.role === 1 ? "Admin" : "User"}</td>
       <td className="border px-3 py-2">{row.email}</td>
       <td className="border px-3 py-2">{row.history.length}</td>
       <td className="border px-3 py-2">{row.cart.length}</td>
       <td className="border px-3 py-2">{DateFormatter(row.register_date)}</td>
-      <td className="border px-3 py-2">
-        <button className="text-blue-600" onClick={() => console.log(row._id)}>
-          Edit
-        </button>
-        <span>{" | "}</span>
-
-        <button className="text-blue-600" onClick={() => console.log(row._id)}>
-          Delete
-        </button>
-      </td>
     </tr>
   ));
+
+  if (isLoading) {
+    return (
+      <div className="h-screen">
+        <LinearProgress color="secondary" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen">
       <div className="container mx-auto">
         <div className="mt-8">
           <div className="flex flex-wrap mb-3">
-            <NavLink exact to={"/#"} style={{ textDecoration: "none" }}>
+            <NavLink to="/#" style={{ textDecoration: "none" }}>
               <Button variant="outlined" color="secondary" className="mr-3 ">
                 Create User
               </Button>
@@ -85,10 +91,9 @@ const UserControlPanelLanding = () => {
                       <th className="px-3 py-2">History</th>
                       <th className="px-3 py-2">Cart</th>
                       <th className="px-3 py-2">Reg. Date</th>
-                      <th className="px-3 py-2">Options</th>
                     </tr>
                   </thead>
-                  {!isLoading && <tbody>{Rows}</tbody>}
+                  <tbody>{Rows}</tbody>
                 </table>
               </div>
               <div className="flex justify-center my-10 p-3">

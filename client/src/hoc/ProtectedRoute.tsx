@@ -27,7 +27,7 @@ export default class ProtectedRoute extends Route<IProtectedRoute> {
       } else {
         // If user's account role is not admin redirect to 404 page
 
-        return <Redirect to={{ pathname: "*" }} />;
+        return <Redirect to={{ pathname: "/*" }} />;
       }
     } else {
       // Does not have Role Restrict

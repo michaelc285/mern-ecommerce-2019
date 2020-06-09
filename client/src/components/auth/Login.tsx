@@ -18,6 +18,7 @@ import Alert from "@material-ui/lab/Alert";
 import { LOGIN_FAIL } from "../../context/types";
 import { v4 as uuidv4 } from "uuid";
 import { MARKET_LANDING, SIGN_UP } from "../../path";
+import { NavLink } from "react-router-dom";
 
 const Login = () => {
   const history = useHistory();
@@ -117,15 +118,16 @@ const Login = () => {
               </FormControl>
               <div className="w-100 d-flex flex-column align-items-center">
                 <Typography variant={"subtitle1"}> or</Typography>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  size="small"
-                  className="w-100"
-                  href={SIGN_UP}
-                >
-                  Sign Up
-                </Button>
+                <NavLink exact to={SIGN_UP} style={{ textDecoration: "none" }}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    className="w-100"
+                  >
+                    Sign Up
+                  </Button>
+                </NavLink>
               </div>
             </form>
           </Paper>

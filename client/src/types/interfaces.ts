@@ -181,3 +181,19 @@ export interface IHistory {
 export interface IHistoryContainer {
   data: IHistory;
 }
+
+// ***************
+//  User Control Panel
+// ***************
+
+export interface IUserDetailsPage {
+  match: any;
+}
+
+export interface IHistoryRow {
+  data: IHistory;
+}
+
+export interface IHistoryUserDetailsPage {
+  data: IHistory[];
+}

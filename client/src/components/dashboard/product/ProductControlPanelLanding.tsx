@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { CREATE_PRODUCT } from "../../../path";
 import { useSelector, useDispatch } from "react-redux";
-import { Button } from "@material-ui/core";
+import { Button, LinearProgress } from "@material-ui/core";
 import { RootState } from "../../../context/store";
 import { getProducts } from "../../../context/actions/ProductAction";
 import { DateFormatter } from "../../../utils/Formatter";
@@ -57,6 +57,14 @@ const ProductControlPanelLanding = () => {
     </tr>
   ));
 
+  if (isLoading) {
+    return (
+      <div className="h-screen">
+        <LinearProgress color="secondary" />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen">
       <div className="container mx-auto">
@@ -100,7 +108,8 @@ const ProductControlPanelLanding = () => {
                       <th className="px-3 py-2">Options</th>
                     </tr>
                   </thead>
-                  {!isLoading && <tbody>{Rows}</tbody>}
+
+                  <tbody>{Rows}</tbody>
                 </table>
               </div>
               <div className="flex justify-center my-10 p-3">
