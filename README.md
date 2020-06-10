@@ -1,14 +1,14 @@
 
 
-# My first E-Commerce website
+# My first e-commerce webapp
 
+<img src="https://github.com/michaelc285/mern-ecommerce/blob/master/readmeImage/sample1.png?raw=true" width="400">
 
-  
+<img src="https://github.com/michaelc285/mern-ecommerce/blob/master/readmeImage/cartLanding.jpg?raw=true" width="400">
 
 ## Getting Started
 
   
-
 First step is to install the dependencies
 
 Server `Path: /mern-ecommerce`
@@ -40,7 +40,7 @@ After that you need to return to `/mern-ecommerce` to start both server and clie
 
 
 ```
-Role:
+Role
 	|- Admin
 		|- MyAccount
 			|- Cart
@@ -64,4 +64,4 @@ Role:
 	- This project is a pratice for me to learn modern framework and webapp.
 
 - What have you learned in this project ?
-	-	OAuth 2.0, JWT token, RESTful API, NoSQL database (MongoDB), MVC Pattern, ReactJS, Redux, ExpressJS, NodeJS, TypeScript, Bootstrap, tailwindcss, Material-UI etc...
+	-	OAuth 2.0, JWT token, RESTful API, NoSQL database (MongoDB), MVC Pattern, ReactJS, Redux, ExpressJS, NodeJS, TypeScript, Bootstrap, Material-UI etc...
