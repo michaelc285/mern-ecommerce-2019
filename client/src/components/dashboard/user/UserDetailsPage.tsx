@@ -16,11 +16,10 @@ import {
   LinearProgress,
   Breadcrumbs,
   Typography,
-  FormGroup,
-  FormControlLabel,
-  Switch,
+  CircularProgress,
 } from "@material-ui/core";
 import History from "./section/History";
+import ProfileUpdate from "./section/ProfileUpdate";
 
 const UserDetailsPage = ({ match }: IUserDetailsPage) => {
   const userID = match.params.userID;
@@ -29,35 +28,28 @@ const UserDetailsPage = ({ match }: IUserDetailsPage) => {
     (state: RootState) => state.userDetails
   );
   const deleteState = useSelector((state: RootState) => state.userDelete);
-  const [isReadOnly, setIsReadOnly] = useState({ name: true });
-  const [name, setName] = useState("");
-
-  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setName(event.target.value);
-    console.log(name);
-  };
-
-  const handleSubmit = (event: any) => {
-    event.preventDefault();
-    console.log("Submitted");
-  };
+  const userUpdateByAdminState = useSelector(
+    (state: RootState) => state.userUpdateByADmin
+  );
 
   useEffect(() => {
     if (deleteState.success === false) {
       dispatch(getUserById(userID));
     }
-
+    // When Unmount
     return () => {
       if (deleteState.success) {
         dispatch(clearDeleteUserState());
       }
     };
-  }, [dispatch, userID, deleteState.success]);
+  }, [dispatch, userID, deleteState.success, userUpdateByAdminState.isLoading]);
 
+  // Delete Account Success
   if (deleteState.success === true) {
     return <Redirect to={{ pathname: USER_CONTROL_PANEL }} />;
   }
 
+  // User details loading
   if (isLoading) {
     return (
       <div className="h-screen">
@@ -66,24 +58,6 @@ const UserDetailsPage = ({ match }: IUserDetailsPage) => {
     );
   }
 
-  //Components
-  const NoHistory = (
-    <div className="h-32">
-      <div className="h-full flex justify-center items-center text-gray-700 text-lg font-mono">
-        <p>No History</p>
-      </div>
-    </div>
-  );
-
-  // Id
-  // name
-  // Role
-  // Reg date
-  // Email
-  // Cart
-  // History
-  // Submit Button
-  // Delete User
   return (
     <div className="min-h-screen">
       <div className="container mx-auto">
@@ -103,23 +77,15 @@ const UserDetailsPage = ({ match }: IUserDetailsPage) => {
             </Breadcrumbs>
           </div>
           {/* Profile Update */}
-          <div className="mb-6">
+          <div className="mb-16">
             <h4 className="font-semibold">Profile</h4>
             <hr />
-            <form onSubmit={handleSubmit}>
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                size="small"
-              >
-                Update Profile
-              </Button>
-            </form>
+
+            <ProfileUpdate data={data} userId={userID} />
           </div>
           {/* Profile Update End */}
           {/* History */}
-          <div className="mb-6">
+          <div className="mb-16">
             <h4 className="font-semibold">History</h4>
             <hr />
 
@@ -127,7 +93,7 @@ const UserDetailsPage = ({ match }: IUserDetailsPage) => {
           </div>
           {/* History End */}
           {/* Delete Account */}
-          <div className="mb-6">
+          <div className="mb-16">
             <h4 className="font-semibold text-red-600">Delete Account</h4>
             <hr />
             <div>

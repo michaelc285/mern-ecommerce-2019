@@ -197,3 +197,10 @@ export interface IHistoryRow {
 export interface IHistoryUserDetailsPage {
   data: IHistory[];
 }
+
+export interface IUserUpdateBody {
+  name: string;
+  email: string;
+  role?: boolean | number;
+  password?: string;
+}

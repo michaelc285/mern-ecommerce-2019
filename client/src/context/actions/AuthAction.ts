@@ -21,6 +21,7 @@ import {
   DELETE_USER_LOADING,
   UPDATE_USERS_FAIL,
   UPDATE_USERS_SUCCESS,
+  UPDATE_USER_LOADING,
   DELETE_USER_CLEAR,
   USER_DETAILS_LOADING,
   USER_LIST_LOADING,
@@ -172,6 +173,7 @@ export const getUserById = (userId: string) => async (
   }
 };
 
+// Delete User by Admin
 export const deleteUser = (userId: string) => async (
   dispatch: Function,
   getState: Function
@@ -190,5 +192,24 @@ export const deleteUser = (userId: string) => async (
   }
 };
 
+// Clear delete user reducer state
 export const clearDeleteUserState = () => (dispatch: Function) =>
   dispatch({ type: DELETE_USER_CLEAR });
+
+// Update user by admin
+export const userUpdateByAdmin = (userId: string, content: object) => async (
+  dispatch: Function,
+  getState: Function
+) => {
+  try {
+    dispatch({ type: UPDATE_USER_LOADING });
+
+    await axios.put(`/api/users?id=${userId}`, content, {
+      headers: { authorization: `Bearer ${getState().auth.token}` },
+    });
+
+    dispatch({ type: UPDATE_USERS_SUCCESS });
+  } catch (err) {
+    dispatch({ type: UPDATE_USERS_FAIL });
+  }
+};

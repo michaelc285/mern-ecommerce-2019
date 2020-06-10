@@ -49,8 +49,8 @@ exports.getUsers = async (req, res, next) => {
 };
 
 /**
- * @desc   Update user Email/Password/Name
- * @route  PUT /api/user?id
+ * @desc   Update user Email / Password / Name / Role
+ * @route  PUT /api/users?id
  * @access Private
  */
 exports.updateUser = async (req, res) => {
@@ -63,7 +63,7 @@ exports.updateUser = async (req, res) => {
     }
 
     let updateContents = {};
-
+    console.log(req.body);
     // Check email
     if (req.body.email) {
       updateContents["email"] = req.body.email;
@@ -80,13 +80,19 @@ exports.updateUser = async (req, res) => {
     }
 
     // Check role
-    if (req.body.role) {
-      if (req.body.role !== 0 || req.body.role !== 1)
-        throw Error("Role shold be 0 / 1");
+    if (req.body.role !== undefined) {
+      if (typeof req.body.role === "boolean") {
+        req.body.role ? (req.body.role = 1) : (req.body.role = 0);
+      }
+
+      if (req.body.role !== 1 && req.body.role !== 0) {
+        throw Error("Role field only accept 1 / 0.  1 = Admin, 0 = User");
+      }
 
       updateContents["role"] = req.body.role;
     }
 
+    console.log(updateContents);
     const user = await User.findOneAndUpdate({ _id: userId }, updateContents, {
       new: true,
     });
@@ -129,7 +135,5 @@ exports.deleteUser = async (req, res, next) => {
   }
 };
 
-// Update User by Admin
 // Update User by User
-// Remove User by Admin
 // Remove User by User

@@ -14,6 +14,7 @@ import {
   DELETE_USER_LOADING,
   UPDATE_USERS_FAIL,
   UPDATE_USERS_SUCCESS,
+  UPDATE_USER_LOADING,
   DELETE_USER_CLEAR,
   USER_DETAILS_LOADING,
   USER_LIST_LOADING,
@@ -104,6 +105,21 @@ export const userDeleteReducer = (
       return { ...state, isLoading: false, success: true };
     case DELETE_USER_FAIL:
     case DELETE_USER_CLEAR:
+    default:
+      return state;
+  }
+};
+
+export const userUpdateByAdminReducer = (
+  state: any = { isLoading: false, success: false },
+  action: any
+) => {
+  switch (action.type) {
+    case UPDATE_USER_LOADING:
+      return { ...state, isLoading: true };
+    case UPDATE_USERS_SUCCESS:
+      return { ...state, isLoading: false, success: true };
+    case UPDATE_USERS_FAIL:
     default:
       return state;
   }

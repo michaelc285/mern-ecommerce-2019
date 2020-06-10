@@ -28,7 +28,11 @@ const ProductDetailPage = ({ match }: IProductDetailPage) => {
     <div className="min-h-screen ">
       <div className="container mx-auto">
         <Breadcrumbs aria-label="breadcrumb" className="my-3">
-          <NavLink to={MARKET_LANDING} className="no-underline text-black">
+          <NavLink
+            to={MARKET_LANDING}
+            className="text-black"
+            style={{ textDecoration: "none" }}
+          >
             Market
           </NavLink>
           <Typography color="textPrimary">{data.title}</Typography>
