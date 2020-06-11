@@ -2,7 +2,7 @@ const User = require("../models/Users");
 const Product = require("../models/Products");
 const Payment = require("../models/Payment");
 const async = require("async");
-const { mergeCartAndProduct } = require("../helpers/mergeData");
+const { mergeCartAndProduct } = require("../utils/mergeData");
 /**
  * @desc   Add product to cart
  * @route  GET /api/users/cart/add?productId={productId}

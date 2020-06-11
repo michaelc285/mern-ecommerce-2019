@@ -199,8 +199,8 @@ export interface IHistoryUserDetailsPage {
 }
 
 export interface IUserUpdateBody {
-  name: string;
-  email: string;
+  name?: string;
+  email?: string;
   role?: boolean | number;
   password?: string;
 }

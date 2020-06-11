@@ -19,10 +19,11 @@ import {
   DELETE_USER_FAIL,
   DELETE_USER_SUCCESS,
   DELETE_USER_LOADING,
-  UPDATE_USERS_FAIL,
-  UPDATE_USERS_SUCCESS,
+  UPDATE_USER_FAIL,
+  UPDATE_USER_SUCCESS,
+  UPDATE_USER_CLEAN,
   UPDATE_USER_LOADING,
-  DELETE_USER_CLEAR,
+  DELETE_USER_CLEAN,
   USER_DETAILS_LOADING,
   USER_LIST_LOADING,
   GET_USER_DETAILS_SUCCESS,
@@ -149,7 +150,7 @@ export const getUsers = () => async (
 
     dispatch({ type: GET_USERS_LIST_SUCCESS, payload: result });
   } catch (err) {
-    dispatch(returnErrors(err.message, 500));
+    dispatch(returnErrors(err.response.data, err.response.status));
     dispatch({ type: GET_USERS_LIST_FAIL });
   }
 };
@@ -168,7 +169,7 @@ export const getUserById = (userId: string) => async (
 
     dispatch({ type: GET_USER_DETAILS_SUCCESS, payload: result });
   } catch (err) {
-    dispatch(returnErrors(err.message, 500));
+    dispatch(returnErrors(err.response.data, err.response.status));
     dispatch({ type: GET_USER_DETAILS_FAIL });
   }
 };
@@ -187,14 +188,14 @@ export const deleteUser = (userId: string) => async (
 
     dispatch({ type: DELETE_USER_SUCCESS });
   } catch (err) {
-    dispatch(returnErrors(err.message, 500));
+    dispatch(returnErrors(err.response.data, err.response.status));
     dispatch({ type: DELETE_USER_FAIL });
   }
 };
 
 // Clear delete user reducer state
-export const clearDeleteUserState = () => (dispatch: Function) =>
-  dispatch({ type: DELETE_USER_CLEAR });
+export const cleanDeleteUserState = () => (dispatch: Function) =>
+  dispatch({ type: DELETE_USER_CLEAN });
 
 // Update user by admin
 export const userUpdateByAdmin = (userId: string, content: object) => async (
@@ -208,8 +209,13 @@ export const userUpdateByAdmin = (userId: string, content: object) => async (
       headers: { authorization: `Bearer ${getState().auth.token}` },
     });
 
-    dispatch({ type: UPDATE_USERS_SUCCESS });
+    dispatch({ type: UPDATE_USER_SUCCESS });
   } catch (err) {
-    dispatch({ type: UPDATE_USERS_FAIL });
+    dispatch(returnErrors(err.response.data, err.response.status));
+    dispatch({ type: UPDATE_USER_FAIL, payload: err.response });
   }
 };
+
+// Clear update user reducer state
+export const cleanUpdateUserState = () => (dispatch: Function) =>
+  dispatch({ type: UPDATE_USER_CLEAN });

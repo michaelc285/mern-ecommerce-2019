@@ -10,7 +10,6 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import HistoryRow from "./HistoryRow";
 import { IHistoryUserDetailsPage } from "../../../../types/interfaces";
-import CircularProgress from "@material-ui/core/CircularProgress";
 
 const History = ({ data }: IHistoryUserDetailsPage) => {
   if (data === undefined || data.length <= 0) {

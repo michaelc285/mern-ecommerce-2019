@@ -31,7 +31,7 @@ export const loadCart = () => async (
 
     dispatch({ type: CART_GET_SUCCESS, payload: result });
   } catch (err) {
-    dispatch(returnErrors(err.message, 500));
+    dispatch(returnErrors(err.response.data, err.response.status));
     dispatch({ type: CART_GET_FAIL });
   }
 };
@@ -55,7 +55,7 @@ export const addProductToCart = (productId: string) => async (
 
     dispatch({ type: CART_ADD_SUCCESS, payload: result });
   } catch (err) {
-    dispatch(returnErrors(err.message, 500));
+    dispatch(returnErrors(err.response.data, err.response.status));
     dispatch({ type: CART_ADD_FAIL });
   }
 };
@@ -79,7 +79,7 @@ export const removeProductFromCart = (productId: string) => async (
 
     dispatch({ type: CART_REMOVE_SUCCESS, payload: result });
   } catch (err) {
-    dispatch(returnErrors(err.message, 500));
+    dispatch(returnErrors(err.response.data, err.response.status));
     dispatch({ type: CART_REMOVE_FAIL });
   }
 };
@@ -103,7 +103,7 @@ export const updateProductInCart = (
 
     dispatch({ type: CART_UPDATE_SUCCESS, payload: result });
   } catch (err) {
-    dispatch(returnErrors(err.message, 500));
+    dispatch(returnErrors(err.response.data, err.response.status));
     dispatch({ type: CART_UPDATE_FAIL });
   }
 };
@@ -136,7 +136,7 @@ export const buyProcess = (details: any, data: any) => async (
     // Success
     dispatch({ type: CART_BUY_SUCCESS });
   } catch (err) {
-    dispatch(returnErrors(err.message, 500));
+    dispatch(returnErrors(err.response.data, err.response.status));
     dispatch({ type: CART_BUY_FAIL });
   }
 };

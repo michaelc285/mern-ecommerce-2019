@@ -1,6 +1,6 @@
 const User = require("../models/Users");
 const bcrypt = require("bcryptjs");
-const { hashPassword } = require("../helpers/hashPassword");
+const { hashPassword } = require("../utils/hashPassword");
 /**
  * @desc   Get user
  * @route  GET /api/users
@@ -63,20 +63,41 @@ exports.updateUser = async (req, res) => {
     }
 
     let updateContents = {};
-    console.log(req.body);
+    let errors = [];
     // Check email
     if (req.body.email) {
-      updateContents["email"] = req.body.email;
+      // Check Email exist or not
+      const emailExist = await User.findOne({
+        email: req.body.email,
+      }).catch((err) =>
+        console.log(`Users: email validation error ${err.message}`.red)
+      );
+      // If exist push msg to errros[], if not allow it add in to updateContents
+      if (emailExist) {
+        errors.push("EMAIL_EXIST");
+      } else {
+        updateContents["email"] = req.body.email;
+      }
     }
 
     // Check Name
-    if (req.body.name) {
-      updateContents["name"] = req.body.name;
+    if (req.body.name !== undefined) {
+      // Name length should be within 1 - 50
+      if (req.body.name.length < 1 || req.body.name.length > 50) {
+        errors.push("NAME_LENGTH");
+      } else {
+        updateContents["name"] = req.body.name;
+      }
     }
 
     // Check password
-    if (req.body.password) {
-      updateContents["password"] = await hashPassword(req.body.password);
+    if (req.body.password !== undefined) {
+      // Password Format: length should be within 4-16
+      if (req.body.password.length < 4 || req.body.password.length > 16) {
+        errors.push("PASSWORD_FORMAT");
+      } else {
+        updateContents["password"] = await hashPassword(req.body.password);
+      }
     }
 
     // Check role
@@ -92,7 +113,18 @@ exports.updateUser = async (req, res) => {
       updateContents["role"] = req.body.role;
     }
 
-    console.log(updateContents);
+    if (errors.length > 0) {
+      res.status(422).json({
+        success: false,
+        errors,
+      });
+      console.log(errors);
+      console.log(
+        `Users: update user fail, ${errors.length} field(s) fail`.red
+      );
+      return;
+    }
+
     const user = await User.findOneAndUpdate({ _id: userId }, updateContents, {
       new: true,
     });
@@ -107,6 +139,7 @@ exports.updateUser = async (req, res) => {
       success: false,
       error: err.message,
     });
+
     console.log(`Users: Update user fail Msg: ${err.message}`.red);
     return;
   }

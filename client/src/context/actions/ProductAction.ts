@@ -53,7 +53,7 @@ export const createProduct = (
       payload: createProduct.data,
     });
   } catch (err) {
-    dispatch(returnErrors(err.msg, 500));
+    dispatch(returnErrors(err.response.data, err.response.status));
     dispatch({ type: PRODUCT_LIST_CREATE_FAIL });
   }
 };
@@ -73,7 +73,7 @@ export const getProducts = (filters: object = {}) => async (
 
     dispatch({ type: PRODUCT_LIST_GET_SUCCESS, payload: result });
   } catch (err) {
-    dispatch(returnErrors(err.msg, 500));
+    dispatch(returnErrors(err.response.data, err.response.status));
     dispatch({ type: PRODUCT_LIST_GET_FAIL });
   }
 };
@@ -89,7 +89,7 @@ export const getProductsById = (productId: string) => async (
 
     dispatch({ type: PRODUCT_DETAILS_GET_SUCCESS, payload: result });
   } catch (err) {
-    dispatch(returnErrors(err.message, 500));
+    dispatch(returnErrors(err.response.data, err.response.status));
     dispatch({ type: PRODUCT_DETAILS_GET_FAIL });
   }
 };
@@ -109,7 +109,7 @@ export const deleteProductById = (productId: string) => async (
     dispatch({ type: PRODUCT_EDIT_DELETE_SUCCESS });
     getProducts();
   } catch (err) {
-    dispatch(returnErrors(err.message, 500));
+    dispatch(returnErrors(err.response.data, err.response.status));
     dispatch({ type: PRODUCT_EDIT_DELETE_FAIL });
   }
 };

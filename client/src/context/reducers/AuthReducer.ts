@@ -12,10 +12,11 @@ import {
   DELETE_USER_FAIL,
   DELETE_USER_SUCCESS,
   DELETE_USER_LOADING,
-  UPDATE_USERS_FAIL,
-  UPDATE_USERS_SUCCESS,
+  UPDATE_USER_FAIL,
+  UPDATE_USER_SUCCESS,
+  UPDATE_USER_CLEAN,
   UPDATE_USER_LOADING,
-  DELETE_USER_CLEAR,
+  DELETE_USER_CLEAN,
   USER_DETAILS_LOADING,
   USER_LIST_LOADING,
   GET_USER_DETAILS_SUCCESS,
@@ -104,22 +105,35 @@ export const userDeleteReducer = (
     case DELETE_USER_SUCCESS:
       return { ...state, isLoading: false, success: true };
     case DELETE_USER_FAIL:
-    case DELETE_USER_CLEAR:
+    case DELETE_USER_CLEAN:
     default:
       return state;
   }
 };
 
 export const userUpdateByAdminReducer = (
-  state: any = { isLoading: false, success: false },
+  state: any = { isLoading: false, success: false, errors: [] },
   action: any
 ) => {
   switch (action.type) {
     case UPDATE_USER_LOADING:
       return { ...state, isLoading: true };
-    case UPDATE_USERS_SUCCESS:
-      return { ...state, isLoading: false, success: true };
-    case UPDATE_USERS_FAIL:
+    case UPDATE_USER_SUCCESS:
+      return { ...state, isLoading: false, success: true, errors: [] };
+    case UPDATE_USER_FAIL:
+      return {
+        ...state,
+        isLoading: false,
+        success: false,
+        errors: [...action.payload.data.errors],
+      };
+    case UPDATE_USER_CLEAN:
+      return {
+        ...state,
+        isLoading: false,
+        success: false,
+        errors: [],
+      };
     default:
       return state;
   }

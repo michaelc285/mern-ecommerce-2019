@@ -1,12 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { userUpdateByAdmin } from "../../../../context/actions/AuthAction";
 import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../../context/store";
 import { IUserUpdateBody } from "../../../../types/interfaces";
+import {
+  getUserById,
+  cleanUpdateUserState,
+} from "../../../../context/actions/AuthAction";
 // Components
-import { Button, Switch, FormControlLabel } from "@material-ui/core";
+import {
+  Button,
+  Switch,
+  FormControlLabel,
+  CircularProgress,
+} from "@material-ui/core";
 
 const ProfileUpdate = ({ data, userId }: any) => {
   const dispatch = useDispatch();
+  const { isLoading, success, errors } = useSelector(
+    (state: RootState) => state.userUpdateByAdmin
+  );
+
   const [content, setContent] = useState({
     name: data.name,
     email: data.email,
@@ -14,7 +28,7 @@ const ProfileUpdate = ({ data, userId }: any) => {
     role: data.role ? true : false,
   });
 
-  // Handle
+  // HandleChange
   const handleChangeTextContent = (
     event: React.FormEvent<HTMLInputElement>
   ) => {
@@ -28,11 +42,19 @@ const ProfileUpdate = ({ data, userId }: any) => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const body: IUserUpdateBody = {
-      name: content.name,
-      email: content.email,
-      role: content.role === true ? 1 : 0,
-    };
+    const body: IUserUpdateBody = {};
+    if (content.name !== data.name) {
+      body["name"] = content.name;
+    }
+
+    if (content.email !== data.email) {
+      body["email"] = content.email;
+    }
+
+    const role = content.role === true ? 1 : 0;
+    if (role !== data.role) {
+      body["role"] = role;
+    }
 
     if (content.password) {
       body["password"] = content.password;
@@ -41,56 +63,121 @@ const ProfileUpdate = ({ data, userId }: any) => {
     dispatch(userUpdateByAdmin(userId, body));
   };
 
+  useEffect(() => {
+    // If success refresh data and clean
+    if (success === true) {
+      dispatch(cleanUpdateUserState());
+      dispatch(getUserById(userId));
+    }
+  }, [dispatch, userId, success]);
+
   return (
-    <div>
+    <div className="relative">
+      {/* Loading Spinner*/}
+      {isLoading && (
+        <div className="h-full w-full z-10 absolute flex justify-center items-center bg-white opacity-75">
+          <CircularProgress color="primary" />
+        </div>
+      )}
+      {/* Loading Spinner */}
       <form onSubmit={handleSubmit}>
         {/* Name */}
-        <div className="mb-3">
-          <h6>Name</h6>
+        <div className="p-1 mb-3">
+          <label
+            htmlFor="name_input"
+            className="block uppercase tracking-wide text-gray-700 text-sm font-bold mb-2"
+          >
+            Name
+          </label>
           <input
-            className="bg-white focus:outline-none focus:shadow-outline border border-gray-300 placeholder-current rounded-lg py-2 px-4 block w-full sm:w-4/12 appearance-none leading-normal"
+            id="name_input"
+            className={` focus:outline-none focus:shadow-outline border-2 ${
+              errors.includes("NAME_LENGTH")
+                ? "border-red-500 bg-red-100"
+                : "border-gray-300 bg-white"
+            } rounded-lg py-2 px-4 block w-full sm:w-8/12 md:w-6/12 appearance-none leading-normal`}
             type="text"
             name="name"
             value={content.name}
             onChange={handleChangeTextContent}
-            // placeholder={data.name}
           />
+          {errors.includes("NAME_LENGTH") && (
+            <p className="text-sm text-red-500 py-1">
+              Name's length should be within 1 - 50
+            </p>
+          )}
         </div>
         {/* Name End */}
         {/* Email */}
-        <div className="mb-3">
-          <h6>Email</h6>
+        <div className="p-1 mb-3">
+          <label
+            htmlFor="email_input"
+            className="block uppercase tracking-wide text-gray-700 text-sm font-bold mb-2"
+          >
+            Email
+          </label>
           <input
-            className="bg-white focus:outline-none focus:shadow-outline border border-gray-300 placeholder-current rounded-lg py-2 px-4 block w-full sm:w-6/12 appearance-none leading-normal"
+            id="email_input"
+            className={` focus:outline-none focus:shadow-outline border-2 ${
+              errors.includes("EMAIL_EXIST")
+                ? "border-red-500 bg-red-100"
+                : "border-gray-300 bg-white"
+            } rounded-lg py-2 px-4 block w-full sm:w-10/12 md:w-8/12 appearance-none leading-normal`}
             type="email"
             name="email"
             value={content.email}
             onChange={handleChangeTextContent}
-            // placeholder={data.email}
           />
+          {errors.includes("EMAIL_EXIST") && (
+            <p className="text-sm text-red-500 py-1">
+              An email already exisits
+            </p>
+          )}
         </div>
         {/* Email End */}
         {/* Password */}
-        <div className="mb-3">
-          <h6>Password</h6>
+        <div className="p-1 mb-3">
+          <label
+            htmlFor="password_input"
+            className="block uppercase tracking-wide text-gray-700 text-sm font-bold mb-2"
+          >
+            Password
+          </label>
           <input
-            className="bg-white focus:outline-none focus:shadow-outline border border-gray-300 placeholder-current rounded-lg py-2 px-4 block w-full sm:w-4/12 appearance-none leading-normal"
+            id="password_input"
+            className={` focus:outline-none focus:shadow-outline border-2 ${
+              errors.includes("PASSWORD_FORMAT")
+                ? "border-red-500 bg-red-100"
+                : "border-gray-300 bg-white"
+            } rounded-lg py-2 px-4 block w-full sm:w-8/12 md:w-6/12 appearance-none leading-normal`}
             type="password"
             name="password"
             value={content.password}
             onChange={handleChangeTextContent}
           />
+          {errors.includes("PASSWORD_FORMAT") && (
+            <p className="text-sm text-red-500 py-1">
+              Password's length should be within 4 - 16
+            </p>
+          )}
         </div>
         {/* Password End */}
         {/* Role */}
-        <div className="mb-3">
-          <h6>Role</h6>
+        <div className="p-1 mb-3">
+          <label
+            htmlFor="switch_group"
+            className="block uppercase tracking-wide text-gray-700 text-sm font-bold mb-2"
+          >
+            Role
+          </label>
           <FormControlLabel
+            id="switch_group"
             control={
               <Switch
                 checked={content.role}
                 onChange={handleChangeTextContent}
                 name="role"
+                aria-label="role_switch"
               />
             }
             label={content.role ? "Admin" : "User"}
@@ -98,9 +185,24 @@ const ProfileUpdate = ({ data, userId }: any) => {
         </div>
         {/* Role End */}
         {/* Submit Button */}
-        <Button type="submit" variant="contained" color="primary">
-          Update Profile
-        </Button>
+        <div className="p-1 mb-3">
+          <Button
+            aria-label="submit_button"
+            type="submit"
+            variant="contained"
+            color="primary"
+            disabled={
+              content.name === data.name &&
+              content.email === data.email &&
+              content.role === (data.role === 1 ? true : false) &&
+              content.password.length === 0
+                ? true
+                : false
+            }
+          >
+            Update Profile
+          </Button>
+        </div>
       </form>
     </div>
   );

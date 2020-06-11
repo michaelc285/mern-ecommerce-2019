@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, Redirect } from "react-router-dom";
 import { IUserDetailsPage } from "../../../types/interfaces";
@@ -7,7 +7,8 @@ import { USER_CONTROL_PANEL } from "../../../path";
 import {
   getUserById,
   deleteUser,
-  clearDeleteUserState,
+  cleanDeleteUserState,
+  cleanUpdateUserState,
 } from "../../../context/actions/AuthAction";
 
 // Components
@@ -16,7 +17,6 @@ import {
   LinearProgress,
   Breadcrumbs,
   Typography,
-  CircularProgress,
 } from "@material-ui/core";
 import History from "./section/History";
 import ProfileUpdate from "./section/ProfileUpdate";
@@ -28,21 +28,21 @@ const UserDetailsPage = ({ match }: IUserDetailsPage) => {
     (state: RootState) => state.userDetails
   );
   const deleteState = useSelector((state: RootState) => state.userDelete);
-  const userUpdateByAdminState = useSelector(
-    (state: RootState) => state.userUpdateByADmin
-  );
 
   useEffect(() => {
+    // DeleteState success default false, if delete is false fetch user data.
     if (deleteState.success === false) {
       dispatch(getUserById(userID));
     }
+
     // When Unmount
     return () => {
       if (deleteState.success) {
-        dispatch(clearDeleteUserState());
+        dispatch(cleanDeleteUserState());
       }
+      dispatch(cleanUpdateUserState());
     };
-  }, [dispatch, userID, deleteState.success, userUpdateByAdminState.isLoading]);
+  }, [dispatch, userID, deleteState.success]);
 
   // Delete Account Success
   if (deleteState.success === true) {
@@ -60,8 +60,8 @@ const UserDetailsPage = ({ match }: IUserDetailsPage) => {
 
   return (
     <div className="min-h-screen">
-      <div className="container mx-auto">
-        <div className="mt-16">
+      <div className="container mx-auto" style={{ border: "1p solid red" }}>
+        <div className="py-16" style={{ border: "1p solid red" }}>
           <div className="mb-6">
             <Breadcrumbs aria-label="breadcrumb">
               <NavLink

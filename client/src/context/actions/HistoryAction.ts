@@ -19,7 +19,7 @@ export const getUserHistory = () => async (
 
     dispatch({ type: HISTORY_GET_SUCCESS, payload: result.data });
   } catch (err) {
-    dispatch(returnErrors(err.message, 500));
+    dispatch(returnErrors(err.response.data, err.response.status));
     return dispatch({ type: HISTORY_GET_FAIL });
   }
 };

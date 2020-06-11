@@ -1,12 +1,12 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { hashPassword } = require("../helpers/hashPassword");
+const { hashPassword } = require("../utils/hashPassword");
 const {
   createAccessToken,
   createRefreshToken,
   sendAccessToken,
   sendRefreshToken,
-} = require("../helpers/token");
+} = require("../utils/token");
 const {
   MISSING_NAME,
   MISSING_EMAIL,

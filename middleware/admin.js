@@ -13,7 +13,7 @@ const admin = async (req, res, next) => {
     next();
   } catch (err) {
     console.log(`Admin: Msg: ${err.message}`.red);
-    res.status(404).json({
+    res.status(401).json({
       success: false,
       msg: err.message,
     });

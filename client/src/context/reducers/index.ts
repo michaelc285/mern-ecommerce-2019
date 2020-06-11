@@ -19,7 +19,7 @@ export default combineReducers({
   userList: usersListReducer,
   userDetails: userDetailsReducer,
   userDelete: userDeleteReducer,
-  userUpdateByADmin: userUpdateByAdminReducer,
+  userUpdateByAdmin: userUpdateByAdminReducer,
   cart: cartReducer,
   error: errorReducer,
   history: HistoryReducer,
