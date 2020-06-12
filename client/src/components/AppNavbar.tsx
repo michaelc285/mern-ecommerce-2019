@@ -58,7 +58,7 @@ const AppNavbar = () => {
   return (
     <AppBar position={"static"} style={{ backgroundColor: "gray" }}>
       <Toolbar>
-        <div className="flex-grow-1">
+        <div className="flex-grow">
           <IconButton
             edge="start"
             color="inherit"

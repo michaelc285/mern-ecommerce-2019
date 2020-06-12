@@ -19,11 +19,10 @@ const Panel = ({ product }: IPanel) => {
 
   return (
     <Fragment>
-      <div className={classes.infoGroup}>
+      <div className="flex-grow flex flex-col text-xl font-normal">
         <div className={classes.priceBox}>
-          <Typography>
-            <strong>Price</strong> {CurrencyFormatter(product.price)}
-          </Typography>
+          <span className="font-semibold mr-3">Price</span>{" "}
+          {CurrencyFormatter(product.price)}
         </div>
         <div className={classes.descriptionBox}>
           <Typography>
@@ -37,20 +36,21 @@ const Panel = ({ product }: IPanel) => {
           </Typography>
         </div>
       </div>
-      <div className="flex justify-center ">
-        <Button
-          startIcon={<AddShoppingCartIcon />}
-          variant="outlined"
-          size="large"
-          onClick={() => {
-            isAuthenticated
-              ? dispatch(addProductToCart(product._id))
-              : history.push(SIGN_IN);
-          }}
-          className=" mr-2"
-        >
-          Add to Cart
-        </Button>
+      <div className="flex justify-center">
+        <div className="mr-3">
+          <Button
+            startIcon={<AddShoppingCartIcon />}
+            variant="outlined"
+            size="large"
+            onClick={() => {
+              isAuthenticated
+                ? dispatch(addProductToCart(product._id))
+                : history.push(SIGN_IN);
+            }}
+          >
+            Add to Cart
+          </Button>
+        </div>
         <Button
           startIcon={<PaymentIcon />}
           variant="outlined"
@@ -75,15 +75,9 @@ const useStyles = makeStyles((theme: Theme) =>
       height: "400px",
       padding: theme.spacing(2),
       color: theme.palette.text.secondary,
-
       display: "flex",
       flexDirection: "column",
       justifyContent: "flex-start",
-    },
-    infoGroup: {
-      flexGrow: 1,
-      display: "flex",
-      flexDirection: "column",
     },
     priceBox: {
       flex: 2,

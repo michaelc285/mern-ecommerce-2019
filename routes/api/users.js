@@ -3,7 +3,12 @@ const router = express.Router();
 const auth = require("../../middleware/auth");
 const admin = require("../../middleware/admin");
 const { getHistory } = require("../../controllers/history");
-const { getUsers, updateUser, deleteUser } = require("../../controllers/users");
+const {
+  getUsers,
+  updateUser,
+  deleteUser,
+  createAccountByAdmin,
+} = require("../../controllers/users");
 const {
   AddProductToCart,
   removeProductFromCart,
@@ -12,11 +17,17 @@ const {
   buyProcessDone,
 } = require("../../controllers/cart");
 
+/**
+ *  Route
+ */
+
 router
   .route("/")
   .get(auth, admin, getUsers)
   .put(auth, admin, updateUser)
   .delete(auth, admin, deleteUser);
+
+router.route("/create").post(auth, admin, createAccountByAdmin);
 
 router.route("/history").get(auth, getHistory);
 

@@ -1,6 +1,7 @@
 import React, { useEffect, Suspense } from "react";
 import { Route, Switch } from "react-router-dom";
 import LinearProgress from "@material-ui/core/LinearProgress";
+import "bootstrap/dist/css/bootstrap.min.css";
 import "./assets/main.css";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "./context/store";
@@ -17,13 +18,13 @@ import {
   USER_CONTROL_PANEL,
   ROOT,
   USER_DETAILS_PAGE,
+  CREATE_ACCOUNT,
 } from "./path";
-import "bootstrap/dist/css/bootstrap.min.css";
 import { loadUser } from "./context/actions/AuthAction";
-//import TopContainer from "./components/TopContainer";
+import { ROLE_ADMIN, ROLE_GUEST, ROLE_USER } from "./context/types";
+// Components
 import AppNavbar from "./components/AppNavbar";
 import AppFooter from "./components/AppFooter";
-//import AuthPage from "./components/auth/AuthPage";
 import Home from "./components/home/Home";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
@@ -36,7 +37,7 @@ import ErrorPage from "./components/ErrorPage";
 import ProductControlPanelLanding from "./components/dashboard/product/ProductControlPanelLanding";
 import UserControlPanelLanding from "./components/dashboard/user/UserControlPanelLanding";
 import UserDetailsPage from "./components/dashboard/user/UserDetailsPage";
-import { ROLE_ADMIN, ROLE_GUEST, ROLE_USER } from "./context/types";
+import UserCreate from "./components/dashboard/user/UserCreate";
 
 const App = () => {
   const auth = useSelector((state: RootState) => state.auth);
@@ -78,7 +79,7 @@ const App = () => {
           <Route path={SIGN_IN} exact component={Login} />
           <Route path={SIGN_UP} exact component={Register} />
 
-          {/* Authorized Route */}
+          {/* User Route */}
 
           <ProtectedRoute
             exact
@@ -115,6 +116,15 @@ const App = () => {
             authenticationPath={SIGN_IN}
             path={USER_DETAILS_PAGE}
             component={UserDetailsPage}
+          />
+          <ProtectedRoute
+            exact
+            adminRestrict
+            isAuthenticated={isAuthenticated}
+            role={role}
+            authenticationPath={SIGN_IN}
+            path={CREATE_ACCOUNT}
+            component={UserCreate}
           />
 
           {/* Product Control Panel */}

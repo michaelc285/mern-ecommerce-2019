@@ -1,14 +1,21 @@
 import React, { useEffect, Fragment } from "react";
-import { MARKET_LANDING } from "../../../path";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../context/store";
 import { getProductsById } from "../../../context/actions/ProductAction";
 import { NavLink } from "react-router-dom";
-import { Typography, Breadcrumbs, Paper } from "@material-ui/core";
+import { MARKET_LANDING } from "../../../path";
+import { IProductDetailPage } from "../../../types/interfaces";
+
+// Components
+import {
+  Typography,
+  Breadcrumbs,
+  Paper,
+  LinearProgress,
+} from "@material-ui/core";
 import Skeleton from "@material-ui/lab/Skeleton";
 import Panel from "./sections/Panel";
 import Display from "./sections/Display";
-import { IProductDetailPage } from "../../../types/interfaces";
 import DisplaySkeleton from "./sections/DisplaySkeleton";
 import PanelSkeleton from "./sections/PanelSkeleton";
 
@@ -27,27 +34,31 @@ const ProductDetailPage = ({ match }: IProductDetailPage) => {
   const Content = (
     <div className="min-h-screen ">
       <div className="container mx-auto">
-        <Breadcrumbs aria-label="breadcrumb" className="my-3">
-          <NavLink
-            to={MARKET_LANDING}
-            className="text-black"
-            style={{ textDecoration: "none" }}
-          >
-            Market
-          </NavLink>
-          <Typography color="textPrimary">{data.title}</Typography>
-        </Breadcrumbs>
-
-        <div className="">
-          <div className="">
-            <Typography variant={"h6"}>{data.title}</Typography>
+        <div className="py-6">
+          <div className="mt-4 mb-6">
+            <Breadcrumbs aria-label="breadcrumb">
+              <NavLink
+                to={MARKET_LANDING}
+                className="text-black"
+                style={{ textDecoration: "none" }}
+              >
+                Market
+              </NavLink>
+              <Typography color="textPrimary">{data.title}</Typography>
+            </Breadcrumbs>
           </div>
-          <div className="">
+          {/*  Title */}
+          <div className="mb-3">
+            <h4 className="font-semibold text-2xl">{data.title}</h4>
+          </div>
+          {/* Carousel */}
+          <div className="mb-3">
             <Paper elevation={2} className="p-6 mb-3">
               <Display product={data} />
             </Paper>
           </div>
-          <div className="">
+          {/* Product description */}
+          <div className="mb-3">
             <Paper elevation={2} className="p-6 mb-3">
               <Panel product={data} />
             </Paper>
@@ -59,32 +70,37 @@ const ProductDetailPage = ({ match }: IProductDetailPage) => {
 
   const LoadingSkeleton = (
     <div className="min-h-screen">
+      <LinearProgress color="secondary" />
       <div className="container mx-auto">
-        <Breadcrumbs aria-label="breadcrumb" className="my-3">
-          <NavLink to={MARKET_LANDING} className="no-underline text-black">
-            Market
-          </NavLink>
-          <Skeleton
-            variant="text"
-            animation="wave"
-            style={{ width: "250px" }}
-          />
-        </Breadcrumbs>
-
-        <div className="">
-          <div className="">
+        <div className="py-6">
+          <div className="mt-4 mb-6">
+            <Breadcrumbs aria-label="breadcrumb">
+              <NavLink to={MARKET_LANDING} className="no-underline text-black">
+                Market
+              </NavLink>
+              <Skeleton
+                variant="text"
+                animation="wave"
+                style={{ width: "250px" }}
+              />
+            </Breadcrumbs>
+          </div>
+          {/* Title */}
+          <div className="mb-3">
             <Skeleton
               variant="text"
               animation="wave"
               style={{ width: "250px" }}
             />
           </div>
-          <div className="">
+          {/* Carousel */}
+          <div className="mb-3">
             <Paper elevation={2} className="p-6 mb-3">
               <DisplaySkeleton />
             </Paper>
           </div>
-          <div className="">
+          {/* product description */}
+          <div className="mb-3">
             <Paper elevation={2} className="p-6 mb-3">
               <PanelSkeleton />
             </Paper>
@@ -106,13 +122,13 @@ const ProductDetailPage = ({ match }: IProductDetailPage) => {
     </div>
   );
 
+  if (isLoading) {
+    return LoadingSkeleton;
+  }
+
   return (
     <Fragment>
-      {isLoading
-        ? LoadingSkeleton
-        : Object.keys(data).length > 0
-        ? Content
-        : ProductNotFound}
+      {Object.keys(data).length > 0 ? Content : ProductNotFound}
     </Fragment>
   );
 };

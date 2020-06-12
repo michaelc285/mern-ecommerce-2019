@@ -1,12 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { userUpdateByAdmin } from "../../../../context/actions/AuthAction";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../context/store";
 import { IUserUpdateBody } from "../../../../types/interfaces";
-import {
-  getUserById,
-  cleanUpdateUserState,
-} from "../../../../context/actions/AuthAction";
+import { cleanUpdateUserState } from "../../../../context/actions/AuthAction";
 // Components
 import {
   Button,
@@ -39,6 +36,16 @@ const ProfileUpdate = ({ data, userId }: any) => {
     }
   };
 
+  const handleReset = useCallback(() => {
+    setContent({
+      name: data.name,
+      email: data.email,
+      password: "",
+      role: data.role ? true : false,
+    });
+    dispatch(cleanUpdateUserState());
+  }, [setContent, dispatch, data.email, data.name, data.role]);
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -47,7 +54,7 @@ const ProfileUpdate = ({ data, userId }: any) => {
       body["name"] = content.name;
     }
 
-    if (content.email !== data.email) {
+    if (content.email.length > 0 && content.email !== data.email) {
       body["email"] = content.email;
     }
 
@@ -65,11 +72,10 @@ const ProfileUpdate = ({ data, userId }: any) => {
 
   useEffect(() => {
     // If success refresh data and clean
-    if (success === true) {
-      dispatch(cleanUpdateUserState());
-      dispatch(getUserById(userId));
+    if (success) {
+      handleReset();
     }
-  }, [dispatch, userId, success]);
+  }, [dispatch, userId, success, handleReset]);
 
   return (
     <div className="relative">
@@ -185,7 +191,7 @@ const ProfileUpdate = ({ data, userId }: any) => {
         </div>
         {/* Role End */}
         {/* Submit Button */}
-        <div className="p-1 mb-3">
+        <div className="p-1 mb-3 flex">
           <Button
             aria-label="submit_button"
             type="submit"
@@ -201,6 +207,16 @@ const ProfileUpdate = ({ data, userId }: any) => {
             }
           >
             Update Profile
+          </Button>
+
+          <Button
+            aria-label="reset_button"
+            className="ml-3"
+            variant="contained"
+            color="primary"
+            onClick={handleReset}
+          >
+            Clear
           </Button>
         </div>
       </form>

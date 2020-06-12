@@ -5,6 +5,7 @@ import {
   usersListReducer,
   userDeleteReducer,
   userUpdateByAdminReducer,
+  userCreateByAdminReducer,
 } from "../reducers/AuthReducer";
 import errorReducer from "../reducers/ErrorReducer";
 import {
@@ -20,6 +21,7 @@ export default combineReducers({
   userDetails: userDetailsReducer,
   userDelete: userDeleteReducer,
   userUpdateByAdmin: userUpdateByAdminReducer,
+  userCreateByAdmin: userCreateByAdminReducer,
   cart: cartReducer,
   error: errorReducer,
   history: HistoryReducer,

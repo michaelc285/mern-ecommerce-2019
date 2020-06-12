@@ -16,6 +16,7 @@ import {
   HISTORY_CLEAR,
   GET_USERS_LIST_FAIL,
   GET_USERS_LIST_SUCCESS,
+  GET_USER_DETAILS_CLEAN,
   DELETE_USER_FAIL,
   DELETE_USER_SUCCESS,
   DELETE_USER_LOADING,
@@ -28,6 +29,10 @@ import {
   USER_LIST_LOADING,
   GET_USER_DETAILS_SUCCESS,
   GET_USER_DETAILS_FAIL,
+  CREATE_USER_CLEAN,
+  CREATE_USER_FAIL,
+  CREATE_USER_LOADING,
+  CREATE_USER_SUCCESS,
 } from "../types";
 
 // Load User and get access token
@@ -173,6 +178,9 @@ export const getUserById = (userId: string) => async (
     dispatch({ type: GET_USER_DETAILS_FAIL });
   }
 };
+// Clean User details reducer
+export const cleanUserDetailsState = () => (dispatch: Function) =>
+  dispatch({ type: GET_USER_DETAILS_CLEAN });
 
 // Delete User by Admin
 export const deleteUser = (userId: string) => async (
@@ -198,14 +206,14 @@ export const cleanDeleteUserState = () => (dispatch: Function) =>
   dispatch({ type: DELETE_USER_CLEAN });
 
 // Update user by admin
-export const userUpdateByAdmin = (userId: string, content: object) => async (
+export const userUpdateByAdmin = (userId: string, body: object) => async (
   dispatch: Function,
   getState: Function
 ) => {
   try {
     dispatch({ type: UPDATE_USER_LOADING });
 
-    await axios.put(`/api/users?id=${userId}`, content, {
+    await axios.put(`/api/users?id=${userId}`, body, {
       headers: { authorization: `Bearer ${getState().auth.token}` },
     });
 
@@ -219,3 +227,29 @@ export const userUpdateByAdmin = (userId: string, content: object) => async (
 // Clear update user reducer state
 export const cleanUpdateUserState = () => (dispatch: Function) =>
   dispatch({ type: UPDATE_USER_CLEAN });
+
+// Create user by admin
+export const createUserByAdmin = (body: object) => async (
+  dispatch: Function,
+  getState: Function
+) => {
+  try {
+    dispatch({ type: CREATE_USER_LOADING });
+
+    await axios.post("/api/users/create", body, {
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${getState().auth.token}`,
+      },
+    });
+
+    dispatch({ type: CREATE_USER_SUCCESS });
+  } catch (err) {
+    dispatch(returnErrors(err.response.data, err.response.status));
+    dispatch({ type: CREATE_USER_FAIL, payload: err.response });
+  }
+};
+
+// Clear create user reducer state
+export const cleanCreateUserState = () => (dispatch: Function) =>
+  dispatch({ type: CREATE_USER_CLEAN });

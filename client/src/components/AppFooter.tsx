@@ -13,19 +13,19 @@ const AppFooter = () => {
           <div className="w-32 mb-3">
             {/* LinkedIN */}
             <div className="flex justify-around ">
-              <div className="rounded-full h-8 w-8 flex items-center justify-center bg-white">
+              <div className="rounded-full h-8 w-8 flex items-center justify-center bg-white ">
                 <a
                   href={LINKEDIN_LINK}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <LinkedInIcon />
+                  <LinkedInIcon color="primary" />
                 </a>
               </div>
               {/* Github */}
               <div className="rounded-full h-8 w-8 flex items-center justify-center bg-white">
                 <a href={GITHUB_LINK} target="_blank" rel="noopener noreferrer">
-                  <GitHubIcon />
+                  <GitHubIcon color="primary" />
                 </a>
               </div>
               {/* Email */}
@@ -35,7 +35,7 @@ const AppFooter = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <MailOutlineIcon />
+                  <MailOutlineIcon color="primary" />
                 </a>
               </div>
             </div>

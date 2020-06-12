@@ -52,17 +52,17 @@ const ProductContainer = ({ product }: any) => {
   return (
     <div className="px-2 ">
       <div
-        className="d-flex align-items-center border-bottom"
+        className="flex items-center border-bottom"
         style={{ minHeight: "73px" }}
       >
         <div>
           <img
             src={`/${product.images[0]}`}
             alt={`${product.title}_1`}
-            className={`${classes.imgSize} d-none d-md-block`}
+            className={`${classes.imgSize} hidden md:block`}
           />
         </div>
-        <div className="flex-grow-1  ml-2">
+        <div className="flex-grow  ml-2">
           <NavLink
             to={`/product/${product._id}`}
             className="text-decoration-none"
@@ -71,7 +71,7 @@ const ProductContainer = ({ product }: any) => {
           </NavLink>
         </div>
         <div
-          className="py-2  mr-3"
+          className="py-2 mr-3"
           style={{
             borderLeft: "1px dotted 	rgb(224,224,224)",
             minWidth: "55px",
@@ -84,7 +84,7 @@ const ProductContainer = ({ product }: any) => {
         <div className="py-2 mr-2">{quantitySelection}</div>
         <div>
           <IconButton
-            style={{ padding: 1 }}
+            className="p-1"
             aria-label="remove"
             onClick={() => dispatch(removeProductFromCart(product._id))}
           >

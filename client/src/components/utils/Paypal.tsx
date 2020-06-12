@@ -46,11 +46,7 @@ const PaypalButton = (props: any) => {
         addPaypalSdk();
       }
     }
-  }, []);
-
-  useEffect(() => {
     return () => {
-      // Called when the component is going to unmount
       isCurrent.current = false;
     };
   }, []);

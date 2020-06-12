@@ -2,14 +2,14 @@ import React, { useEffect } from "react";
 import { RootState } from "../../context/store";
 import { useDispatch, useSelector } from "react-redux";
 import { loadCart } from "../../context/actions/CartAction";
-import { Grid, Button } from "@material-ui/core";
-import Bills from "./section/Bills";
-import ProductsList from "./section/ProductsList";
-import Payment from "./section/Payment";
-import LoadingProgress from "../utils/LoadingProgress";
-import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import { MARKET_LANDING } from "../../path";
 import { NavLink } from "react-router-dom";
+//Components
+import ProductsList from "./section/ProductsList";
+import Bills from "./section/Bills";
+import Payment from "./section/Payment";
+import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
+import { Grid, Button, LinearProgress } from "@material-ui/core";
 
 const CartPage = () => {
   const dispatch = useDispatch();
@@ -35,7 +35,7 @@ const CartPage = () => {
 
   // Components
 
-  const nothing = (
+  const Nothing = (
     <div className="mt-56 mx-auto">
       <div className="flex flex-col items-center">
         <h4 className="text-3xl mb-5 font-mono">Nothing In Cart</h4>
@@ -52,7 +52,7 @@ const CartPage = () => {
     </div>
   );
 
-  const shoopingcart = (
+  const Shopingcart = (
     <div className="container mx-auto">
       <div className="p-2 my-4">
         {/* Products List */}
@@ -80,15 +80,17 @@ const CartPage = () => {
     </div>
   );
 
+  if (cart.isLoading) {
+    return (
+      <div className="h-screen">
+        <LinearProgress color="secondary" />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen">
-      {cart.isLoading ? (
-        <LoadingProgress />
-      ) : cart.items && cart.items.length > 0 ? (
-        shoopingcart
-      ) : (
-        nothing
-      )}
+      {cart.items && cart.items.length > 0 ? Shopingcart : Nothing}
     </div>
   );
 };

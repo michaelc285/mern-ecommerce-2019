@@ -9,6 +9,7 @@ import {
   deleteUser,
   cleanDeleteUserState,
   cleanUpdateUserState,
+  cleanUserDetailsState,
 } from "../../../context/actions/AuthAction";
 
 // Components
@@ -39,6 +40,7 @@ const UserDetailsPage = ({ match }: IUserDetailsPage) => {
     return () => {
       if (deleteState.success) {
         dispatch(cleanDeleteUserState());
+        dispatch(cleanUserDetailsState());
       }
       dispatch(cleanUpdateUserState());
     };
@@ -60,13 +62,14 @@ const UserDetailsPage = ({ match }: IUserDetailsPage) => {
 
   return (
     <div className="min-h-screen">
-      <div className="container mx-auto" style={{ border: "1p solid red" }}>
-        <div className="py-16" style={{ border: "1p solid red" }}>
+      <div className="container mx-auto">
+        <div className="py-16">
           <div className="mb-6">
             <Breadcrumbs aria-label="breadcrumb">
               <NavLink
                 exact
                 to={USER_CONTROL_PANEL}
+                className="text-black"
                 style={{ textDecoration: "none" }}
               >
                 User Control Panel
@@ -78,7 +81,7 @@ const UserDetailsPage = ({ match }: IUserDetailsPage) => {
           </div>
           {/* Profile Update */}
           <div className="mb-16">
-            <h4 className="font-semibold">Profile</h4>
+            <h4 className="font-semibold text-2xl py-2">Profile</h4>
             <hr />
 
             <ProfileUpdate data={data} userId={userID} />
@@ -86,7 +89,7 @@ const UserDetailsPage = ({ match }: IUserDetailsPage) => {
           {/* Profile Update End */}
           {/* History */}
           <div className="mb-16">
-            <h4 className="font-semibold">History</h4>
+            <h4 className="font-semibold text-2xl py-2">History</h4>
             <hr />
 
             <History data={data.history} />
@@ -94,10 +97,12 @@ const UserDetailsPage = ({ match }: IUserDetailsPage) => {
           {/* History End */}
           {/* Delete Account */}
           <div className="mb-16">
-            <h4 className="font-semibold text-red-600">Delete Account</h4>
+            <h4 className="font-semibold  text-2xl py-2 text-red-600">
+              Delete Account
+            </h4>
             <hr />
             <div>
-              <p className="mb-3">
+              <p className="my-3">
                 Once you delete account, there is no going back. Please be
                 certain.
               </p>

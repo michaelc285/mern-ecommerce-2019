@@ -1,6 +1,12 @@
 const User = require("../models/Users");
 const bcrypt = require("bcryptjs");
 const { hashPassword } = require("../utils/hashPassword");
+const {
+  emailValidator,
+  nameFormatValidator,
+  passwordFormatValidator,
+  roleFormatValidator,
+} = require("../utils/formValidator");
 /**
  * @desc   Get user
  * @route  GET /api/users
@@ -51,7 +57,7 @@ exports.getUsers = async (req, res, next) => {
 /**
  * @desc   Update user Email / Password / Name / Role
  * @route  PUT /api/users?id
- * @access Private
+ * @access Private (Admin)
  */
 exports.updateUser = async (req, res) => {
   try {
@@ -65,54 +71,53 @@ exports.updateUser = async (req, res) => {
     let updateContents = {};
     let errors = [];
     // Check email
-    if (req.body.email) {
+    if (req.body.email !== undefined) {
       // Check Email exist or not
-      const emailExist = await User.findOne({
-        email: req.body.email,
-      }).catch((err) =>
-        console.log(`Users: email validation error ${err.message}`.red)
-      );
+      const emailValid = await emailValidator(req.body.email);
       // If exist push msg to errros[], if not allow it add in to updateContents
-      if (emailExist) {
-        errors.push("EMAIL_EXIST");
-      } else {
+      if (emailValid) {
         updateContents["email"] = req.body.email;
+      } else {
+        errors.push("EMAIL_EXIST");
       }
     }
 
     // Check Name
     if (req.body.name !== undefined) {
-      // Name length should be within 1 - 50
-      if (req.body.name.length < 1 || req.body.name.length > 50) {
-        errors.push("NAME_LENGTH");
-      } else {
+      // Name Format validation
+      const nameValid = nameFormatValidator(req.body.name);
+
+      if (nameValid) {
         updateContents["name"] = req.body.name;
+      } else {
+        errors.push("NAME_LENGTH");
       }
     }
 
     // Check password
     if (req.body.password !== undefined) {
-      // Password Format: length should be within 4-16
-      if (req.body.password.length < 4 || req.body.password.length > 16) {
-        errors.push("PASSWORD_FORMAT");
-      } else {
+      // Password Format validation
+      const passwordValid = passwordFormatValidator(req.body.password);
+
+      if (passwordValid) {
         updateContents["password"] = await hashPassword(req.body.password);
+      } else {
+        errors.push("PASSWORD_FORMAT");
       }
     }
 
     // Check role
     if (req.body.role !== undefined) {
-      if (typeof req.body.role === "boolean") {
-        req.body.role ? (req.body.role = 1) : (req.body.role = 0);
-      }
+      // Role format validation
+      const roleValid = roleFormatValidator(req.body.role);
 
-      if (req.body.role !== 1 && req.body.role !== 0) {
+      if (role) {
+        updateContents["role"] = req.body.role;
+      } else {
         throw Error("Role field only accept 1 / 0.  1 = Admin, 0 = User");
       }
-
-      updateContents["role"] = req.body.role;
     }
-
+    // Errors block
     if (errors.length > 0) {
       res.status(422).json({
         success: false,
@@ -124,7 +129,7 @@ exports.updateUser = async (req, res) => {
       );
       return;
     }
-
+    // Without any errors
     const user = await User.findOneAndUpdate({ _id: userId }, updateContents, {
       new: true,
     });
@@ -148,7 +153,7 @@ exports.updateUser = async (req, res) => {
 /**
  * @desc   Delete user
  * @route  DELETE /api/users:id
- * @access Private
+ * @access Private (Admin)
  */
 exports.deleteUser = async (req, res, next) => {
   try {
@@ -157,14 +162,116 @@ exports.deleteUser = async (req, res, next) => {
 
     await User.findOneAndRemove({ _id: userId });
 
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
     });
+    console.log("Users: Delete account success".green);
+    return;
   } catch (err) {
-    return res.status(404).json({
+    res.status(404).json({
       success: false,
-      error: "Server Error",
+      error: err.message,
     });
+    console.log(`Users: Delete account fail ${err.message}`.red);
+    return;
+  }
+};
+
+/**
+ * @desc   Crate account by admin
+ * @route  POST /api/users/create
+ * @access Private (Admin)
+ */
+exports.createAccountByAdmin = async (req, res) => {
+  try {
+    const { name, email, password, role } = req.body;
+
+    let accountContent = {};
+    let errors = [];
+
+    //Name check
+    if (name !== undefined) {
+      // Name Format validation
+      const nameValid = nameFormatValidator(name);
+
+      if (nameValid) {
+        accountContent["name"] = name;
+      } else {
+        errors.push("NAME_LENGTH");
+      }
+    } else {
+      errors.push("NAME_MISSING");
+    }
+
+    // Email Check
+    if (email !== undefined) {
+      // Check Email exist or not
+      const emailValid = await emailValidator(email);
+      // If exist push msg to errros[], if not allow it add in to updateContents
+      if (emailValid) {
+        accountContent["email"] = email;
+      } else {
+        errors.push("EMAIL_EXIST");
+      }
+    } else {
+      errors.push("EMAIL_MISSING");
+    }
+
+    // Password check
+    if (password !== undefined) {
+      // Password Format validation
+      const passwordValid = passwordFormatValidator(password);
+
+      if (passwordValid) {
+        accountContent["password"] = await hashPassword(password);
+      } else {
+        errors.push("PASSWORD_FORMAT");
+      }
+    } else {
+      errors.push("PASSWORD_MISSING");
+    }
+
+    // Role Check
+    if (role !== undefined) {
+      // Role format validation
+      const roleValid = roleFormatValidator(role);
+
+      if (roleValid) {
+        accountContent["role"] = role ? 1 : 0;
+      } else {
+        throw Error("Role field only accept 1 / 0.  1 = Admin, 0 = User");
+      }
+    }
+
+    // Errors block
+    if (errors.length > 0) {
+      res.status(422).json({
+        success: false,
+        errors,
+      });
+      console.log(errors);
+      console.log(
+        `Users: update create fail, ${errors.length} field(s) fail`.red
+      );
+      return;
+    }
+    // Without any errors
+    const user = await User.create(accountContent);
+
+    res.status(200).json({
+      success: true,
+      user,
+    });
+
+    console.log("Users: create account by admin success".green);
+    return;
+  } catch (err) {
+    res.status(404).json({
+      success: false,
+      error: err.message,
+    });
+    console.log(`Users: create account fail ${err.message}`.red);
+    return;
   }
 };
 

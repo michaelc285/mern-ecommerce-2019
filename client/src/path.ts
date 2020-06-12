@@ -21,6 +21,7 @@ export const PRODUCT_CONTROL_PANEL = "/admin/dashboard/product";
 export const USER_CONTROL_PANEL = "/admin/dashboard/user";
 export const USER_DETAILS_PAGE = "/admin/dashboard/user/:userID";
 export const CREATE_PRODUCT = "/admin/dashboard/product/create";
+export const CREATE_ACCOUNT = "/admin/dashbaord/user/create/";
 
 // External
 export const GITHUB_LINK = "https://github.com/michaelc285";

@@ -18,41 +18,43 @@ const HistoryContainer = ({ data }: IHistoryContainer) => {
     totalPrice += item.price * item.quantity;
     return (
       <ExpansionPanelDetails key={`${data.id}-${index}`}>
-        <div className="w-100 d-flex flex-column flex-lg-row flex-md-row">
-          <div className="w-75">
-            <Typography variant={"caption"}>
-              <strong>Product Name</strong>
-            </Typography>
+        <div className="w-full flex flex-col md:flex-row">
+          <div className="flex-grow">
+            <label className="text-sm font-medium text-gray-500">
+              Product Name
+            </label>
             <NavLink to={`/product/${item.id}`} exact className="no-underline">
-              <Typography>{item.name}</Typography>
+              <p className="text-lg font-semibold text-gray-900">{item.name}</p>
             </NavLink>
           </div>
 
           <div
-            className=" d-flex flex-column flex-lg-row flex-md-row justify-content-lg-around justify-content-md-around"
+            className=" flex flex-col md:flex-row md:justify-around"
             style={{ width: "400px" }}
           >
             <div style={{ minWidth: "100px" }}>
-              <Typography variant={"caption"}>
-                <strong>Quantity</strong>
-              </Typography>
-              <Typography>{item.quantity}</Typography>
+              <label className="text-sm font-medium text-gray-500">
+                Quantity
+              </label>
+              <p className="text-lg font-semibold text-gray-900">
+                {item.quantity}
+              </p>
             </div>
 
             <div style={{ minWidth: "100px" }}>
-              <Typography variant={"caption"}>
-                <strong>Price</strong>
-              </Typography>
-              <Typography>{CurrencyFormatter(item.price)}</Typography>
+              <label className="text-sm font-medium text-gray-500">Price</label>
+              <p className="text-lg font-semibold text-gray-900">
+                {CurrencyFormatter(item.price)}
+              </p>
             </div>
 
             <div style={{ minWidth: "100px" }}>
-              <Typography variant={"caption"}>
-                <strong>Sub Total </strong>
-              </Typography>
-              <Typography>
+              <label className="text-sm font-medium text-gray-500">
+                Sub Total
+              </label>
+              <p className="text-lg font-semibold text-gray-900">
                 {CurrencyFormatter(item.quantity * item.price)}
-              </Typography>
+              </p>
             </div>
           </div>
         </div>
@@ -65,19 +67,19 @@ const HistoryContainer = ({ data }: IHistoryContainer) => {
     <ExpansionPanel>
       <ExpansionPanelSummary
         expandIcon={<ExpandMoreIcon />}
-        aria-controls="panel1a-content"
-        id="panel1a-header"
-        className="border-bottom "
+        aria-controls="history-container"
+        id="history-container"
+        style={{ borderBottom: "1px solid rgb(144,144,144)" }}
       >
-        <div className="w-100 d-flex flex-column flex-md-row flex-lg-row flex-xl-row">
-          <div className="p2 flex-grow-1">
+        <div className="w-full flex flex-col md:flex-row">
+          <div className="py-2 flex-grow">
             <Typography>
               <strong>Order:</strong> {data.id}
             </Typography>
           </div>
 
           <div
-            className="p2 mr-3 d-flex justify-content-lg-between justify-content-md-between"
+            className="p-2 mr-3 flex md:justify-between"
             style={{ minWidth: "175px" }}
           >
             <Typography>
@@ -87,7 +89,7 @@ const HistoryContainer = ({ data }: IHistoryContainer) => {
           </div>
 
           <div
-            className="p2 d-flex justify-content-lg-between justify-content-md-between"
+            className="py-2 flex md:justify-between"
             style={{ minWidth: "130px" }}
           >
             <Typography>

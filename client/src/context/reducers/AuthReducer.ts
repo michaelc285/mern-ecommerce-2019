@@ -9,6 +9,7 @@ import {
   REGISTER_SUCCESS,
   GET_USERS_LIST_FAIL,
   GET_USERS_LIST_SUCCESS,
+  GET_USER_DETAILS_CLEAN,
   DELETE_USER_FAIL,
   DELETE_USER_SUCCESS,
   DELETE_USER_LOADING,
@@ -21,6 +22,10 @@ import {
   USER_LIST_LOADING,
   GET_USER_DETAILS_SUCCESS,
   GET_USER_DETAILS_FAIL,
+  CREATE_USER_CLEAN,
+  CREATE_USER_FAIL,
+  CREATE_USER_LOADING,
+  CREATE_USER_SUCCESS,
 } from "../types";
 
 export const authReducer = (
@@ -90,6 +95,12 @@ export const userDetailsReducer = (
     case GET_USER_DETAILS_SUCCESS:
       return { ...state, isLoading: false, data: action.payload.data.user };
     case GET_USER_DETAILS_FAIL:
+    case GET_USER_DETAILS_CLEAN:
+      return {
+        ...state,
+        isLoading: false,
+        data: {},
+      };
     default:
       return state;
   }
@@ -104,8 +115,9 @@ export const userDeleteReducer = (
       return { ...state, isLoading: true };
     case DELETE_USER_SUCCESS:
       return { ...state, isLoading: false, success: true };
-    case DELETE_USER_FAIL:
     case DELETE_USER_CLEAN:
+    case DELETE_USER_FAIL:
+      return { ...state, isLoading: false, success: false };
     default:
       return state;
   }
@@ -128,6 +140,34 @@ export const userUpdateByAdminReducer = (
         errors: [...action.payload.data.errors],
       };
     case UPDATE_USER_CLEAN:
+      return {
+        ...state,
+        isLoading: false,
+        success: false,
+        errors: [],
+      };
+    default:
+      return state;
+  }
+};
+
+export const userCreateByAdminReducer = (
+  state: any = { isLoading: false, success: false, errors: [] },
+  action: any
+) => {
+  switch (action.type) {
+    case CREATE_USER_LOADING:
+      return { ...state, isLoading: true };
+    case CREATE_USER_SUCCESS:
+      return { ...state, isLoading: false, success: true, errors: [] };
+    case CREATE_USER_FAIL:
+      return {
+        ...state,
+        isLoading: false,
+        success: false,
+        errors: [...action.payload.data.errors],
+      };
+    case CREATE_USER_CLEAN:
       return {
         ...state,
         isLoading: false,

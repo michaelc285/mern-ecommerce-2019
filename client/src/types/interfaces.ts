@@ -204,3 +204,10 @@ export interface IUserUpdateBody {
   role?: boolean | number;
   password?: string;
 }
+
+export interface IUserCreateBody {
+  name: string;
+  email: string;
+  password: string;
+  role: number;
+}

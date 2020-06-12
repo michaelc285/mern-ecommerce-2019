@@ -2,17 +2,17 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUsers } from "../../../context/actions/AuthAction";
 import { RootState } from "../../../context/store";
-import { Paper, LinearProgress } from "@material-ui/core";
-import Pagination from "../../market/products/Pagination";
 import { DateFormatter } from "../../../utils/Formatter";
 import { NavLink } from "react-router-dom";
-import { Button } from "@material-ui/core";
-import { USER_CONTROL_PANEL } from "../../../path";
+import { USER_CONTROL_PANEL, CREATE_ACCOUNT } from "../../../path";
+
+// Components
+import { Paper, LinearProgress, Button } from "@material-ui/core";
+import Pagination from "../../market/products/Pagination";
 
 const UserControlPanelLanding = () => {
   const dispatch = useDispatch();
   const { isLoading, data } = useSelector((state: RootState) => state.userList);
-
   const [currentPage, setCurrentPage] = useState(1);
   const [resultsPerPage] = useState(5);
 
@@ -34,6 +34,7 @@ const UserControlPanelLanding = () => {
       <td className="border px-3 py-2">
         <NavLink
           to={`${USER_CONTROL_PANEL}/${row._id}`}
+          className="text-blue-600 font-black font-mono"
           style={{ textDecoration: "none" }}
         >
           {row._id}
@@ -61,8 +62,8 @@ const UserControlPanelLanding = () => {
       <div className="container mx-auto">
         <div className="mt-8">
           <div className="flex flex-wrap mb-3">
-            <NavLink to="/#" style={{ textDecoration: "none" }}>
-              <Button variant="outlined" color="secondary" className="mr-3 ">
+            <NavLink to={CREATE_ACCOUNT} style={{ textDecoration: "none" }}>
+              <Button variant="outlined" color="secondary" className="mr-3">
                 Create User
               </Button>
             </NavLink>
