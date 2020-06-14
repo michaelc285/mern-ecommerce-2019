@@ -98,7 +98,7 @@ const ProfileUpdate = ({ data, userId }: any) => {
           <input
             id="name_input"
             className={` focus:outline-none focus:shadow-outline border-2 ${
-              errors.includes("NAME_LENGTH")
+              errors.includes("NAME_FORMAT")
                 ? "border-red-500 bg-red-100"
                 : "border-gray-300 bg-white"
             } rounded-lg py-2 px-4 block w-full sm:w-8/12 md:w-6/12 appearance-none leading-normal`}
@@ -107,7 +107,7 @@ const ProfileUpdate = ({ data, userId }: any) => {
             value={content.name}
             onChange={handleChangeTextContent}
           />
-          {errors.includes("NAME_LENGTH") && (
+          {errors.includes("NAME_FORMAT") && (
             <p className="text-sm text-red-500 py-1">
               Name's length should be within 1 - 50
             </p>

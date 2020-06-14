@@ -1,4 +1,13 @@
 const User = require("../models/Users");
+const {
+  EMAIL_EXIST,
+  EMAIL_MISSING,
+  EMAIL_FORMAT,
+  NAME_MISSING,
+  NAME_FORMAT,
+  PASSWORD_FORMAT,
+  PASSWORD_MISSING,
+} = require("../constant/types");
 const bcrypt = require("bcryptjs");
 const { hashPassword } = require("../utils/hashPassword");
 const {
@@ -78,7 +87,7 @@ exports.updateUser = async (req, res) => {
       if (emailValid) {
         updateContents["email"] = req.body.email;
       } else {
-        errors.push("EMAIL_EXIST");
+        errors.push(EMAIL_EXIST);
       }
     }
 
@@ -90,7 +99,7 @@ exports.updateUser = async (req, res) => {
       if (nameValid) {
         updateContents["name"] = req.body.name;
       } else {
-        errors.push("NAME_LENGTH");
+        errors.push(NAME_FORMAT);
       }
     }
 
@@ -102,7 +111,7 @@ exports.updateUser = async (req, res) => {
       if (passwordValid) {
         updateContents["password"] = await hashPassword(req.body.password);
       } else {
-        errors.push("PASSWORD_FORMAT");
+        errors.push(PASSWORD_FORMAT);
       }
     }
 
@@ -197,10 +206,10 @@ exports.createAccountByAdmin = async (req, res) => {
       if (nameValid) {
         accountContent["name"] = name;
       } else {
-        errors.push("NAME_LENGTH");
+        errors.push(NAME_FORMAT);
       }
     } else {
-      errors.push("NAME_MISSING");
+      errors.push(NAME_MISSING);
     }
 
     // Email Check
@@ -211,10 +220,10 @@ exports.createAccountByAdmin = async (req, res) => {
       if (emailValid) {
         accountContent["email"] = email;
       } else {
-        errors.push("EMAIL_EXIST");
+        errors.push(EMAIL_EXIST);
       }
     } else {
-      errors.push("EMAIL_MISSING");
+      errors.push(EMAIL_MISSING);
     }
 
     // Password check
@@ -225,10 +234,10 @@ exports.createAccountByAdmin = async (req, res) => {
       if (passwordValid) {
         accountContent["password"] = await hashPassword(password);
       } else {
-        errors.push("PASSWORD_FORMAT");
+        errors.push(PASSWORD_FORMAT);
       }
     } else {
-      errors.push("PASSWORD_MISSING");
+      errors.push(PASSWORD_MISSING);
     }
 
     // Role Check

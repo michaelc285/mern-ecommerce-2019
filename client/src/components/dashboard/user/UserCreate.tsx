@@ -23,6 +23,7 @@ const UserCreate = () => {
   const { isLoading, success, errors } = useSelector(
     (state: RootState) => state.userCreateByAdmin
   );
+  const [successPageIsOpen, setSuccessPageIsOpen] = useState(false);
   const [content, setContent] = useState({
     name: "",
     password: "",
@@ -44,6 +45,10 @@ const UserCreate = () => {
     dispatch(cleanCreateUserState());
   }, [dispatch, setContent]);
 
+  const handleSuccessPageClose = useCallback(() => {
+    setSuccessPageIsOpen(false);
+  }, [setSuccessPageIsOpen]);
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -59,12 +64,42 @@ const UserCreate = () => {
   useEffect(() => {
     if (success) {
       handleReset();
+      setSuccessPageIsOpen(true);
     }
 
     return () => {
       dispatch(cleanCreateUserState());
     };
   }, [dispatch, success, handleReset]);
+
+  // Components
+
+  const LoadingComponent = (
+    <div className="h-full w-full z-10 absolute flex justify-center items-center bg-white opacity-75">
+      <CircularProgress color="primary" />
+    </div>
+  );
+
+  const SuccessPage = (
+    <div className="h-full w-full z-10 absolute flex flex-col justify-center items-center bg-white">
+      <h6 className="text-4xl font-mono font-semibold text-green-600 uppercase mb-5">
+        Success
+      </h6>
+      <div className="flex flex-col md:flex-row">
+        <button
+          onClick={handleSuccessPageClose}
+          className="rounded text-white p-2 bg-blue-500 hover:bg-blue-600 mb-3 md:mr-3 uppercase"
+        >
+          Create Another User
+        </button>
+        <NavLink exact to={USER_CONTROL_PANEL}>
+          <button className="rounded no-underline text-white  hover:text-white p-2 bg-blue-500 hover:bg-blue-600 uppercase">
+            Back to user control
+          </button>
+        </NavLink>
+      </div>
+    </div>
+  );
 
   return (
     <div className="h-screen">
@@ -88,11 +123,10 @@ const UserCreate = () => {
           <hr />
           <div className="relative">
             {/* Loading Spinner*/}
-            {isLoading && (
-              <div className="h-full w-full z-10 absolute flex justify-center items-center bg-white opacity-75">
-                <CircularProgress color="primary" />
-              </div>
-            )}
+            {isLoading && LoadingComponent}
+            {/* When Success */}
+            {successPageIsOpen && SuccessPage}
+
             <form className="py-3" onSubmit={handleSubmit}>
               <div className="flex flex-wrap -mx-3 mb-6">
                 {/* Name Field */}
@@ -105,7 +139,7 @@ const UserCreate = () => {
                   </label>
                   <input
                     className={`appearance-none block w-full text-gray-700 border-2 ${
-                      errors.includes("NAME_LENGTH")
+                      errors.includes("NAME_FORMAT")
                         ? "border-red-500"
                         : "border-gray-200"
                     } rounded py-3 px-4 mb-3 leading-tight focus:outline-none`}
@@ -117,7 +151,7 @@ const UserCreate = () => {
                     required
                   />
                   {/* Error Message */}
-                  {errors.includes("NAME_LENGTH") && (
+                  {errors.includes("NAME_FORMAT") && (
                     <p className="text-red-500 text-xs italic">
                       Name's length should be within 1-50
                     </p>

@@ -31,7 +31,7 @@ import {
 export const authReducer = (
   state: any = {
     token: "",
-    isAuthenticated: null,
+    isAuthenticated: false,
     isLoading: false,
     user: null,
   },
@@ -46,7 +46,6 @@ export const authReducer = (
     case USER_LOADED:
     case REGISTER_SUCCESS:
     case LOGIN_SUCCESS:
-      // localStorage.setItem("token", action.payload.accesstoken);
       return {
         ...state,
         token: action.payload.accesstoken,
@@ -58,10 +57,9 @@ export const authReducer = (
     case LOGIN_FAIL:
     case LOGOUT_SUCCESS:
     case REGISTER_FAIL:
-      // localStorage.removeItem("token");
       return {
         ...state,
-        token: null,
+        token: "",
         isAuthenticated: false,
         isLoading: false,
         user: null,

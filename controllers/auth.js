@@ -8,9 +8,9 @@ const {
   sendRefreshToken,
 } = require("../utils/token");
 const {
-  MISSING_NAME,
-  MISSING_EMAIL,
-  MISSING_PASSWORD,
+  NAME_MISSING,
+  EMAIL_MISSING,
+  PASSWORD_MISSING,
   EMAIL_EXIST,
   INVALID_PASSWORD,
   USER_NOT_FOUND,
@@ -30,8 +30,8 @@ exports.loginUser = async (req, res, next) => {
   //Check fields
   if (!email || !password) {
     let labels = [];
-    if (!email) labels.push(MISSING_EMAIL);
-    if (!password) labels.push(MISSING_PASSWORD);
+    if (!email) labels.push(EMAIL_MISSING);
+    if (!password) labels.push(PASSWORD_MISSING);
 
     return res.status(401).json({
       success: false,
@@ -93,10 +93,9 @@ exports.registerUser = async (req, res, next) => {
   // Check user input
   if (!name || !email || !password) {
     let labels = [];
-    if (!name) labels.push(MISSING_NAME);
-    if (!email) labels.push(MISSING_EMAIL);
-    if (!password) labels.push(MISSING_PASSWORD);
-
+    if (!name) labels.push(NAME_MISSING);
+    if (!email) labels.push(EMAI_MISSING);
+    if (!password) labels.push(PASSWORD_MISSING);
     return res.status(400).json({
       success: false,
       status: 400,
