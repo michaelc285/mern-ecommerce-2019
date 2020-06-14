@@ -27,7 +27,6 @@ export interface IUser {
 export interface IError {
   id: E_ERROR;
   msg: IMsg;
-  labels: string[];
 }
 
 export interface IAuthForm {

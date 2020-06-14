@@ -1,137 +1,104 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../context/store";
 import { login } from "../../context/actions/AuthAction";
-
-import { clearErrors } from "../../context/actions/ErrorActions";
-import { useHistory } from "react-router-dom";
-import {
-  TextField,
-  Button,
-  FormControl,
-  Typography,
-  Paper,
-  Container,
-} from "@material-ui/core";
-
-import Alert from "@material-ui/lab/Alert";
-import { LOGIN_FAIL } from "../../context/types";
-import { v4 as uuidv4 } from "uuid";
+import { NavLink, Redirect } from "react-router-dom";
 import { MARKET_LANDING, SIGN_UP } from "../../path";
-import { NavLink } from "react-router-dom";
-
+import { LinearProgress } from "@material-ui/core";
 const Login = () => {
-  const history = useHistory();
   const dispatch = useDispatch();
-  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
-  const error = useSelector((state: RootState) => state.error);
+  const { isLoading, isAuthenticated, errors } = useSelector(
+    (state: RootState) => state.auth
+  );
+  const [content, setContent] = useState({ email: "", password: "" });
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [message, setMessage] = useState<string[] | null>(null);
-
-  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) =>
-    setEmail(event.target.value);
-
-  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) =>
-    setPassword(event.target.value);
+  const handleChangeContent = (event: React.FormEvent<HTMLInputElement>) => {
+    const { name, value } = event.currentTarget;
+    setContent({ ...content, [name]: value });
+  };
 
   const handleSubmit = (event: any) => {
     event.preventDefault();
 
-    if (!email || !password) {
-      alert("missing fields");
-    } else {
-      const loginUser = { email, password };
-
-      dispatch(login(loginUser));
-    }
+    dispatch(login(content));
   };
 
-  useEffect(() => {
-    if (error.id === LOGIN_FAIL && error.labels && error.labels.length > 0) {
-      setMessage([...error.labels]);
-    } else {
-      setMessage(null);
-    }
-
-    if (isAuthenticated) {
-      history.push(MARKET_LANDING);
-      dispatch(clearErrors());
-    }
-  }, [error, isAuthenticated, dispatch, history]);
-
-  const alertMessage =
-    message &&
-    message.length > 0 &&
-    message.map((msg) => (
-      <Alert severity="error" key={uuidv4()}>{`${msg.replace(
-        /_/g,
-        " "
-      )}`}</Alert>
-    ));
+  // if authenticated redirect to market landing page
+  if (isAuthenticated === true) {
+    return <Redirect to={{ pathname: MARKET_LANDING }} />;
+  }
 
   return (
-    <div className="min-h-screen">
-      <div className="p-5">
-        <Container maxWidth="sm">
-          <Paper elevation={3} className="p-3">
-            <Typography gutterBottom={true} variant={"h5"}>
-              Sign-In
-            </Typography>
-            {message ? alertMessage : null}
+    <div>
+      {isLoading && <LinearProgress />}
 
-            <form onSubmit={handleSubmit}>
-              <FormControl fullWidth>
-                <TextField
-                  type="email"
-                  id="loginEmail"
-                  label="Email"
-                  variant="outlined"
-                  name="loginEmail"
-                  className="mb-3"
-                  value={email}
-                  onChange={handleEmailChange}
-                />
-              </FormControl>
-              <FormControl fullWidth>
-                <TextField
-                  type="password"
-                  id="loginPassword"
-                  label="Password"
-                  variant="outlined"
-                  name="loginPassword"
-                  className="mb-3"
-                  value={password}
-                  onChange={handlePasswordChange}
-                />
-              </FormControl>
-              <FormControl fullWidth>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  size="small"
-                >
-                  Sign In
-                </Button>
-              </FormControl>
-              <div className="w-100 d-flex flex-column align-items-center">
-                <Typography variant={"subtitle1"}> or</Typography>
-                <NavLink exact to={SIGN_UP} style={{ textDecoration: "none" }}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    size="small"
-                    className="w-100"
-                  >
-                    Sign Up
-                  </Button>
-                </NavLink>
-              </div>
-            </form>
-          </Paper>
-        </Container>
+      <div className="py-12 w-full max-w-xs mx-auto relative">
+        <form
+          className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+          onSubmit={handleSubmit}
+        >
+          <div className="mb-4">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="email"
+            >
+              Email
+            </label>
+            <input
+              className={`appearance-none border-2 rounded w-full py-2 px-3 text-gray-700 mb-1 leading-tight focus:outline-none focus:shadow-outline ${
+                errors.includes("USER_NOT_FOUND") && "border-red-300 bg-red-100"
+              }`}
+              id="email"
+              type="text"
+              placeholder="Your email"
+              name="email"
+              onChange={handleChangeContent}
+              value={content.email}
+            />
+            {/* Errors */}
+            {errors.includes("USER_NOT_FOUND") && (
+              <p className="text-red-500 text-sm italic ">Email is not valid</p>
+            )}
+          </div>
+          <div className="mb-6">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="password"
+            >
+              Password
+            </label>
+            <input
+              className={`appearance-none border-2 rounded w-full py-2 px-3 text-gray-700 mb-1 leading-tight focus:outline-none focus:shadow-outline ${
+                errors.includes("PASSWORD_INVALID") &&
+                "border-red-300 bg-red-100"
+              }`}
+              id="password"
+              type="password"
+              placeholder="Password"
+              name="password"
+              onChange={handleChangeContent}
+              value={content.password}
+            />
+            {/* Errors */}
+            {errors.includes("PASSWORD_INVALID") && (
+              <p className="text-red-500 text-sm italic ">
+                Password is not valid
+              </p>
+            )}
+          </div>
+          <div className="flex items-center justify-between">
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              type="submit"
+            >
+              Sign In
+            </button>
+
+            <NavLink exact to={SIGN_UP} className="">
+              <button className="no-underline">No Account?</button>
+            </NavLink>
+          </div>
+        </form>
       </div>
     </div>
   );

@@ -1,142 +1,154 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../context/store";
 import { register } from "../../context/actions/AuthAction";
-import { clearErrors } from "../../context/actions/ErrorActions";
-import { useHistory } from "react-router-dom";
-import {
-  TextField,
-  Button,
-  FormControl,
-  Typography,
-  Paper,
-  Container,
-} from "@material-ui/core";
-import { REGISTER_FAIL } from "../../context/types";
-import Alert from "@material-ui/lab/Alert";
-import { v4 as uuidv4 } from "uuid";
+import { NavLink, Redirect } from "react-router-dom";
 import { SIGN_IN, MARKET_LANDING } from "../../path";
-import { NavLink } from "react-router-dom";
+import { LinearProgress } from "@material-ui/core";
 
 const Register = () => {
-  const history = useHistory();
   const dispatch = useDispatch();
-  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
-  const error = useSelector((state: RootState) => state.error);
+  const { isAuthenticated, isLoading, errors } = useSelector(
+    (state: RootState) => state.auth
+  );
+  const [content, setContent] = useState({ name: "", email: "", password: "" });
 
-  const [message, setMessage] = useState<string[] | null>();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleName = (event: React.ChangeEvent<HTMLInputElement>) =>
-    setName(event.target.value);
-  const handleEmail = (event: React.ChangeEvent<HTMLInputElement>) =>
-    setEmail(event.target.value);
-  const handlePassword = (event: React.ChangeEvent<HTMLInputElement>) =>
-    setPassword(event.target.value);
+  //  Handle form
+  const handleChangeContent = (event: React.FormEvent<HTMLInputElement>) => {
+    const { name, value } = event.currentTarget;
+    setContent({ ...content, [name]: value });
+  };
 
   const handleSubmit = (event: any) => {
     event.preventDefault();
 
-    if (!name || !email || !password) {
-      alert("missing fields");
-    } else {
-      const newUser = { name, email, password };
-
-      dispatch(register(newUser));
-    }
+    dispatch(register(content));
   };
 
-  useEffect(() => {
-    if (error.id === REGISTER_FAIL) {
-      setMessage([REGISTER_FAIL]);
-    } else {
-      setMessage(null);
-    }
-
-    // If Auth success go to Market Landing page
-    if (isAuthenticated) {
-      history.push(MARKET_LANDING);
-      clearErrors();
-    }
-  }, [error, isAuthenticated, history]);
-
-  const alertMessage =
-    message &&
-    message.length > 0 &&
-    message.map((msg) => (
-      <Alert severity="error" key={uuidv4()}>{`${msg.replace(
-        /_/g,
-        " "
-      )}`}</Alert>
-    ));
+  // if authenticated redirect to market landing page
+  if (isAuthenticated === true) {
+    return <Redirect to={{ pathname: MARKET_LANDING }} />;
+  }
 
   return (
-    <div className="min-h-screen">
-      <div className="p-5">
-        <Container maxWidth="sm">
-          <Paper elevation={3} className="p-3">
-            <Typography gutterBottom={true} variant={"h6"}>
-              Sign-Up
-            </Typography>
-            {message ? alertMessage : null}
-            <form onSubmit={handleSubmit}>
-              <FormControl fullWidth>
-                <TextField
-                  id="regName"
-                  label="Name"
-                  variant="outlined"
-                  name="regName"
-                  className="mb-3"
-                  value={name}
-                  onChange={handleName}
-                />
-              </FormControl>
-              <FormControl fullWidth>
-                <TextField
-                  id="regEmail"
-                  name="regEmail"
-                  label="Email Address"
-                  variant="outlined"
-                  className="mb-3"
-                  value={email}
-                  onChange={handleEmail}
-                />
-              </FormControl>
-              <FormControl fullWidth>
-                <TextField
-                  type="password"
-                  id="regPassword"
-                  label="Password"
-                  variant="outlined"
-                  name="regPassword"
-                  className="mb-3"
-                  value={password}
-                  onChange={handlePassword}
-                />
-              </FormControl>
-              <FormControl fullWidth>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  size="small"
-                >
-                  Sign Up
-                </Button>
-              </FormControl>
-            </form>
-            <div className="w-100 d-flex flex-column align-items-center">
-              <Typography variant={"subtitle1"}> or</Typography>
-              <NavLink exact to={SIGN_IN} style={{ textDecoration: "none" }}>
-                <Button variant="contained" color="primary" size="small">
-                  Sign In
-                </Button>
-              </NavLink>
-            </div>
-          </Paper>
-        </Container>
+    <div className="">
+      {isLoading && <LinearProgress />}
+      <div className="py-12 w-full max-w-xs mx-auto">
+        <form
+          className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+          onSubmit={handleSubmit}
+        >
+          {/* Email */}
+          <div className="mb-4">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="name"
+            >
+              Name
+            </label>
+            <input
+              className={`appearance-none border-2 rounded w-full py-2 px-3 text-gray-700 mb-1 leading-tight focus:outline-none focus:shadow-outline ${
+                errors.includes("NAME_FORMAT") ||
+                (errors.includes("NAME_MISSING")
+                  ? "border-red-300 bg-red-100"
+                  : null)
+              }`}
+              id="email"
+              type="text"
+              placeholder="Name"
+              name="name"
+              onChange={handleChangeContent}
+              value={content.name}
+            />
+            {/* Errors */}
+            {errors.includes("NAME_FORMAT") && (
+              <p className="text-red-500 text-sm italic">
+                Name's length should within 1-50
+              </p>
+            )}
+            {errors.includes("NAME_MISSING") && (
+              <p className="text-red-500 text-sm italic">Please enter name</p>
+            )}
+          </div>
+          {/* Email */}
+          <div className="mb-4">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="email"
+            >
+              Email
+            </label>
+            <input
+              className={`appearance-none border-2 rounded w-full py-2 px-3 text-gray-700 mb-1 leading-tight focus:outline-none focus:shadow-outline ${
+                errors.includes("EMAIL_EXIST") ||
+                errors.includes("EMAIL_MISSING")
+                  ? "border-red-300 bg-red-100"
+                  : null
+              }`}
+              id="email"
+              type="text"
+              placeholder="Email"
+              name="email"
+              onChange={handleChangeContent}
+              value={content.email}
+            />
+            {/* Errors */}
+            {errors.includes("EMAIL_EXIST") && (
+              <p className="text-red-500 text-sm italic">
+                Email exists. Please try another.
+              </p>
+            )}
+            {errors.includes("EMAIL_MISSING") && (
+              <p className="text-red-500 text-sm italic">Please enter email</p>
+            )}
+          </div>
+          {/* Passowrd */}
+          <div className="mb-6">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="password"
+            >
+              Password
+            </label>
+            <input
+              className={`appearance-none border-2 rounded w-full py-2 px-3 text-gray-700 mb-1 leading-tight focus:outline-none focus:shadow-outline ${
+                errors.includes("PASSWORD_FORMAT") ||
+                errors.includes("PASSWORD_MISSING")
+                  ? "border-red-300 bg-red-100"
+                  : null
+              }`}
+              id="password"
+              type="password"
+              placeholder="Password"
+              name="password"
+              onChange={handleChangeContent}
+              value={content.password}
+            />
+            {/* Errors */}
+            {errors.includes("PASSWORD_FORMAT") && (
+              <p className="text-red-500 text-sm italic">
+                Password length should be within 4-16
+              </p>
+            )}
+            {errors.includes("PASSWORD_MISSING") && (
+              <p className="text-red-500 text-sm italic">
+                Please enter password
+              </p>
+            )}
+          </div>
+          {/* Button */}
+          <div className="flex items-center justify-between">
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              type="submit"
+            >
+              Sign Up
+            </button>
+            <NavLink exact to={SIGN_IN}>
+              <button className="no-underline">Sign In</button>
+            </NavLink>
+          </div>
+        </form>
       </div>
     </div>
   );

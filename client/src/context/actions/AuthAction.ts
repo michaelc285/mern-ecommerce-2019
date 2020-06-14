@@ -57,8 +57,8 @@ export const loadUser = () => async (dispatch: Function) => {
       dispatch(loadCart());
     } else {
       // fail token to null auth turn to false
-      dispatch(returnErrors(result.error, 500));
-      dispatch({ type: AUTH_ERROR });
+      dispatch(returnErrors(result.error, response.status));
+      dispatch({ type: AUTH_ERROR, payload: result });
     }
   } catch (err) {
     console.log(err);
@@ -80,24 +80,19 @@ export const register = ({ name, email, password }: IAuthFunction) => async (
 
     const result = await axios.post("/api/auth/register", newUser, config);
 
-    dispatch({ type: REGISTER_SUCCESS, payload: result.data });
-
-    return true;
+    dispatch({ type: REGISTER_SUCCESS, payload: result });
   } catch (err) {
-    dispatch(
-      returnErrors(err.response.data, err.response.status, REGISTER_FAIL, [
-        REGISTER_FAIL,
-      ])
-    );
-    dispatch({ type: REGISTER_FAIL });
-    return false;
+    dispatch(returnErrors(err.response.data, err.response.status));
+    dispatch({ type: REGISTER_FAIL, payload: err.response.data });
   }
 };
 
-// Login User , return boolean
+// Login User
 export const login = ({ email, password }: IAuthFunction) => async (
   dispatch: Function
 ) => {
+  dispatch({ type: USER_LOADING });
+
   const body = JSON.stringify({ email, password });
 
   const response = await fetch("/api/auth/login", {
@@ -114,14 +109,12 @@ export const login = ({ email, password }: IAuthFunction) => async (
     dispatch({ type: LOGIN_SUCCESS, payload: result });
     dispatch(loadCart());
   } else {
-    dispatch(
-      returnErrors(result.error, result.status, LOGIN_FAIL, result.labels)
-    );
-    dispatch({ type: LOGIN_FAIL });
+    dispatch(returnErrors(result.errors, response.status));
+    dispatch({ type: LOGIN_FAIL, payload: result });
   }
 };
 
-// Logout User, return boolean
+// Logout User
 export const logout = () => async (dispatch: Function) => {
   const response = await fetch("/api/auth/logout", {
     method: "POST",
@@ -137,7 +130,7 @@ export const logout = () => async (dispatch: Function) => {
     dispatch({ type: HISTORY_CLEAR });
     dispatch({ type: CART_CLEAR });
   } else {
-    dispatch(returnErrors(result.error, 500));
+    dispatch(returnErrors(result.errors, response.status));
   }
 };
 

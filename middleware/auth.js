@@ -7,10 +7,12 @@ const auth = (req, res, next) => {
 
   //Check for token
   if (!token) {
-    return res.status(401).json({
+    res.status(401).json({
       success: false,
       msg: "No token exists",
     });
+    console.log("Mid Auth: No token exists".red);
+    return;
   }
 
   try {
@@ -23,6 +25,7 @@ const auth = (req, res, next) => {
   } catch (err) {
     console.log("Mid Auth: Token Invalid".red);
     res.status(401).json({ msg: "Token is not valid" });
+    return;
   }
 };
 

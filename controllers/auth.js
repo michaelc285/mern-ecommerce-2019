@@ -2,6 +2,11 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { hashPassword } = require("../utils/hashPassword");
 const {
+  emailValidator,
+  nameFormatValidator,
+  passwordFormatValidator,
+} = require("../utils/formValidator");
+const {
   createAccessToken,
   createRefreshToken,
   sendAccessToken,
@@ -12,10 +17,13 @@ const {
   EMAIL_MISSING,
   PASSWORD_MISSING,
   EMAIL_EXIST,
-  INVALID_PASSWORD,
+  PASSWORD_INVALID,
   USER_NOT_FOUND,
   TOKEN_NOT_MATCH,
   TOKEN_NOT_FOUND,
+  LOGOUT_SUCCESS,
+  PASSWORD_FORMAT,
+  NAME_FORMAT,
 } = require("../constant/types.js");
 // Model
 const User = require("../models/Users");
@@ -28,17 +36,17 @@ const REFRESH_TOKEN_COOKIE_PATH = require("../constant/path");
 exports.loginUser = async (req, res, next) => {
   const { email, password } = req.body;
   //Check fields
+  let errors = [];
   if (!email || !password) {
-    let labels = [];
-    if (!email) labels.push(EMAIL_MISSING);
-    if (!password) labels.push(PASSWORD_MISSING);
-
-    return res.status(401).json({
+    if (!email) errors.push(EMAIL_MISSING);
+    if (!password) errors.push(PASSWORD_MISSING);
+    // Blcok
+    res.status(401).json({
       success: false,
-      labels: labels,
-      error: "Empty field(s)",
-      status: 401,
+      errors,
     });
+    console.log(`Auth: User login fail`.red);
+    return;
   }
 
   try {
@@ -48,7 +56,8 @@ exports.loginUser = async (req, res, next) => {
 
     // Check password
     const passwordIsMatch = await bcrypt.compare(password, user.password);
-    if (!passwordIsMatch) throw Error(INVALID_PASSWORD);
+    console.log(`Password is Match : ${passwordIsMatch}`);
+    if (!passwordIsMatch) throw Error(PASSWORD_INVALID);
 
     // Create Access & Refresh Token
     const accessToken = createAccessToken(user._id);
@@ -64,21 +73,20 @@ exports.loginUser = async (req, res, next) => {
     console.log("Auth: Login Success".green);
     return;
   } catch (err) {
-    console.log(`Auth: Login Process error: ${err.message}`.red);
-    if (err.message === USER_NOT_FOUND || err.message === INVALID_PASSWORD) {
-      return res.status(401).json({
+    if (err.message === USER_NOT_FOUND || err.message === PASSWORD_INVALID) {
+      res.status(401).json({
         success: false,
-        labels: [err.message],
-        error: err.message,
-        status: 401,
+        errors: [err.message],
       });
+      console.log(`Auth: Login Process error: ${err.message}`.red);
+      return;
     } else {
-      return res.status(500).json({
+      res.status(500).json({
         success: false,
-        labels: [err.message],
-        error: err.message,
-        status: 500,
+        errors: [err.message],
       });
+      console.log(`Auth: Internal Server Error: ${err.message}`.red);
+      return;
     }
   }
 };
@@ -89,22 +97,49 @@ exports.loginUser = async (req, res, next) => {
  * @access Public
  */
 exports.registerUser = async (req, res, next) => {
-  const { name, email, password } = req.body;
-  // Check user input
-  if (!name || !email || !password) {
-    let labels = [];
-    if (!name) labels.push(NAME_MISSING);
-    if (!email) labels.push(EMAI_MISSING);
-    if (!password) labels.push(PASSWORD_MISSING);
-    return res.status(400).json({
-      success: false,
-      status: 400,
-      labels: labels,
-      error: "Empty field(s)",
-    });
-  }
-
   try {
+    const { name, email, password } = req.body;
+    // Check user input
+    let errors = [];
+    // Name Check
+    if (name) {
+      const nameValid = nameFormatValidator(name);
+      if (nameValid === false) {
+        errors.push(NAME_FORMAT);
+      }
+    } else {
+      errors.push(NAME_MISSING);
+    }
+    // Email Check
+    if (email) {
+      const emailValid = await emailValidator(email);
+      if (emailValid === false) {
+        errors.push(EMAIL_EXIST);
+      }
+    } else {
+      errors.push(EMAIL_MISSING);
+    }
+
+    // Password Check
+    if (password) {
+      const passwordValid = passwordFormatValidator(password);
+      if (passwordValid === false) {
+        errors.push(PASSWORD_FORMAT);
+      }
+    } else {
+      errors.push(PASSWORD_MISSING);
+    }
+
+    // Error block
+    if (errors.length > 0) {
+      res.status(400).json({
+        success: false,
+        errors,
+      });
+      console.log(`Auth: Register fail, ${errors.length} error(s)`.red);
+      return;
+    }
+
     // Hash the password
     const hashedPassword = await hashPassword(password);
 
@@ -116,29 +151,28 @@ exports.registerUser = async (req, res, next) => {
     const refreshToken = createRefreshToken(user._id);
 
     // Insert refresh token with user in db
-    await User.findByIdAndUpdate(user._id, {
-      token: refreshToken,
-    });
+    const result = await User.findOneAndUpdate(
+      { _id: user._id },
+      {
+        token: refreshToken,
+      },
+      { new: true }
+    );
+    if (!result) throw Error(EMAIL_EXIST);
+
     // Send token. Refresh token as cookie and access token as regular response
     sendRefreshToken(res, refreshToken);
     sendAccessToken(req, res, accessToken, user);
+
     console.log("Auth: Register success".green);
     return;
   } catch (err) {
-    console.log(`Auth: Login Process error: ${err.message}`.red);
-    if (err.name === "MongoError") {
-      return res.status(400).json({
-        success: false,
-        status: 400,
-        labels: EMAIL_EXIST,
-        error: EMAIL_EXIST,
-      });
-    } else {
-      return res.status(500).json({
-        success: false,
-        error: err.message,
-      });
-    }
+    res.status(500).json({
+      success: false,
+      errors: [err.message],
+    });
+    console.log("Auth: Internal server error".red);
+    return;
   }
 };
 
@@ -154,8 +188,7 @@ exports.logoutUser = async (req, res, next) => {
     if (!token) throw Error(TOKEN_NOT_FOUND);
 
     // Verify token
-    let payload = null;
-    payload = jwt.verify(token, process.env.REFRESH_JWT_TOKEN_SECRET);
+    const payload = jwt.verify(token, process.env.REFRESH_JWT_TOKEN_SECRET);
 
     // Clear cookie
     res.clearCookie("refreshtoken", { path: REFRESH_TOKEN_COOKIE_PATH });
@@ -167,16 +200,17 @@ exports.logoutUser = async (req, res, next) => {
 
     res.status(200).json({
       success: true,
-      message: "LOGOUT_SUCCESS",
+      message: LOGOUT_SUCCESS,
     });
     console.log("Auth: Logout Success".green);
     return;
   } catch (err) {
-    console.log(`Auth: Logout Process error: ${err.message}`.red);
-    res.status(400).json({
+    res.status(401).json({
       success: false,
-      error: err.message,
+      error: [err.message],
     });
+    console.log(`Auth: Logout Process error: ${err.message}`.red);
+    return;
   }
 };
 
@@ -217,12 +251,13 @@ exports.refresh_token = async (req, res, next) => {
     console.log("Auth: Token Refresh Success".green);
     return;
   } catch (err) {
-    console.log(`Auth: Token Refresh Process error: ${err.message}`.red);
-    return res.status(400).json({
+    res.status(401).json({
       success: false,
-      error: err.message,
+      errors: [err.message],
       accesstoken: "",
     });
+    console.log(`Auth: Token Refresh Process error: ${err.message}`.red);
+    return;
   }
 };
 
@@ -246,7 +281,7 @@ exports.getUser = async (req, res, next) => {
     console.log(`Auth: Get User Process error: ${err.message}`.red);
     return res.status(400).json({
       success: false,
-      error: err.message,
+      errors: [err.message],
     });
   }
 };
