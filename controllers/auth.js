@@ -56,7 +56,6 @@ exports.loginUser = async (req, res, next) => {
 
     // Check password
     const passwordIsMatch = await bcrypt.compare(password, user.password);
-    console.log(`Password is Match : ${passwordIsMatch}`);
     if (!passwordIsMatch) throw Error(PASSWORD_INVALID);
 
     // Create Access & Refresh Token

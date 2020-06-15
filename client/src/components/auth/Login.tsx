@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../context/store";
-import { login } from "../../context/actions/AuthAction";
+import { login, cleanAuthErrorsState } from "../../context/actions/AuthAction";
 import { NavLink, Redirect } from "react-router-dom";
 import { MARKET_LANDING, SIGN_UP } from "../../path";
+
+// Components
 import { LinearProgress } from "@material-ui/core";
 const Login = () => {
   const dispatch = useDispatch();
@@ -22,6 +24,12 @@ const Login = () => {
 
     dispatch(login(content));
   };
+
+  useEffect(() => {
+    return () => {
+      dispatch(cleanAuthErrorsState());
+    };
+  }, [dispatch]);
 
   // if authenticated redirect to market landing page
   if (isAuthenticated === true) {

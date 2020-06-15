@@ -26,6 +26,7 @@ import {
   CREATE_USER_FAIL,
   CREATE_USER_LOADING,
   CREATE_USER_SUCCESS,
+  AUTH_ERRORS_CLEAN,
 } from "../types";
 
 export const authReducer = (
@@ -73,6 +74,11 @@ export const authReducer = (
         isLoading: false,
         user: null,
         errors: [...action.payload.errors],
+      };
+    case AUTH_ERRORS_CLEAN:
+      return {
+        ...state,
+        errors: [],
       };
     case LOGOUT_SUCCESS:
       return {

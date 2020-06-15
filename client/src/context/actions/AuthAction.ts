@@ -33,6 +33,7 @@ import {
   CREATE_USER_FAIL,
   CREATE_USER_LOADING,
   CREATE_USER_SUCCESS,
+  AUTH_ERRORS_CLEAN,
 } from "../types";
 
 // Load User and get access token
@@ -134,6 +135,11 @@ export const logout = () => async (dispatch: Function) => {
   }
 };
 
+export const cleanAuthErrorsState = () => (dispatch: Function) =>
+  dispatch({ type: AUTH_ERRORS_CLEAN });
+
+// ------------------------------------------
+
 // Get Users
 export const getUsers = () => async (
   dispatch: Function,
@@ -174,7 +180,7 @@ export const getUserById = (userId: string) => async (
 // Clean User details reducer
 export const cleanUserDetailsState = () => (dispatch: Function) =>
   dispatch({ type: GET_USER_DETAILS_CLEAN });
-
+// --------------------------------------------------------------
 // Delete User by Admin
 export const deleteUser = (userId: string) => async (
   dispatch: Function,
@@ -197,6 +203,7 @@ export const deleteUser = (userId: string) => async (
 // Clear delete user reducer state
 export const cleanDeleteUserState = () => (dispatch: Function) =>
   dispatch({ type: DELETE_USER_CLEAN });
+// --------------------------------------------------------------
 
 // Update user by admin
 export const userUpdateByAdmin = (userId: string, body: object) => async (
@@ -220,6 +227,7 @@ export const userUpdateByAdmin = (userId: string, body: object) => async (
 // Clear update user reducer state
 export const cleanUpdateUserState = () => (dispatch: Function) =>
   dispatch({ type: UPDATE_USER_CLEAN });
+// --------------------------------------------------------------
 
 // Create user by admin
 export const createUserByAdmin = (body: object) => async (
@@ -246,3 +254,4 @@ export const createUserByAdmin = (body: object) => async (
 // Clear create user reducer state
 export const cleanCreateUserState = () => (dispatch: Function) =>
   dispatch({ type: CREATE_USER_CLEAN });
+// --------------------------------------------------------------

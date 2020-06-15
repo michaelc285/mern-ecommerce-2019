@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../context/store";
-import { register } from "../../context/actions/AuthAction";
+import {
+  register,
+  cleanAuthErrorsState,
+} from "../../context/actions/AuthAction";
 import { NavLink, Redirect } from "react-router-dom";
 import { SIGN_IN, MARKET_LANDING } from "../../path";
 import { LinearProgress } from "@material-ui/core";
@@ -24,6 +27,12 @@ const Register = () => {
 
     dispatch(register(content));
   };
+
+  useEffect(() => {
+    return () => {
+      dispatch(cleanAuthErrorsState());
+    };
+  }, [dispatch]);
 
   // if authenticated redirect to market landing page
   if (isAuthenticated === true) {

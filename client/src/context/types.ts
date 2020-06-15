@@ -9,6 +9,7 @@ export const LOGIN_FAIL = "LOGIN_FAIL";
 export const LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
 export const REGISTER_SUCCESS = "REGISTER_SUCCESS";
 export const REGISTER_FAIL = "REGISTER_FAIL";
+export const AUTH_ERRORS_CLEAN = "AUTH_ERRORS_CLEAN";
 // !Admin Control Panel :
 export const USER_LIST_LOADING = "USER_LIST_LOADING";
 export const GET_USERS_LIST_SUCCESS = "GET_USERS_LIST_SUCCESS";
