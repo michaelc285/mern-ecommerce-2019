@@ -45,6 +45,7 @@ Role
 		|- MyAccount
 			|- Cart
 			|- History
+			|- Profile
 			|- Logout
 		|- Dashboard
 			|- ProductsControlPanel
@@ -53,6 +54,7 @@ Role
 		|- MyAccount
 			|- Cart
 			|- History
+			|- Profile
 			|- Logout
 	|- Guest
 		|- SIGN UP
@@ -64,4 +66,4 @@ Role
 	- This project is a pratice for me to learn modern framework and webapp.
 
 - What have you learned in this project ?
-	-	OAuth 2.0, JWT token, RESTful API, NoSQL database (MongoDB), MVC Pattern, ReactJS, Redux, ExpressJS, NodeJS, TypeScript, Bootstrap, Material-UI etc...
+	-	OAuth 2.0, JWT token, RESTful API, NoSQL database (MongoDB Atlas), MVC Pattern, ReactJS, React Hooks, Redux, ExpressJS, NodeJS, TypeScript, Tailwindcss ,Bootstrap, Material-UI etc...
