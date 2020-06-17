@@ -37,6 +37,7 @@ import {
   USER_PROFILE_LOAD_FAIL,
   USER_PROFILE_LOAD_SUCCESS,
   USER_PROFILE_UPDATE,
+  USER_DELETE_ACCOUNT_SUCCESS,
 } from "../types";
 
 // Load User and get access token
@@ -217,6 +218,27 @@ export const deleteUser = (userId: string) => async (
     });
 
     dispatch({ type: DELETE_USER_SUCCESS });
+  } catch (err) {
+    dispatch(returnErrors(err.response.data, err.response.status));
+    dispatch({ type: DELETE_USER_FAIL });
+  }
+};
+
+// Delete User by User
+export const deleteAccountByUser = () => async (
+  dispatch: Function,
+  getState: Function
+) => {
+  try {
+    dispatch({ type: DELETE_USER_LOADING });
+
+    await axios.delete("/api/users/profile", {
+      headers: { authorization: `Bearer ${getState().auth.token}` },
+    });
+
+    dispatch({ type: DELETE_USER_SUCCESS });
+    // Reset Auth state to inital
+    dispatch({ type: USER_DELETE_ACCOUNT_SUCCESS });
   } catch (err) {
     dispatch(returnErrors(err.response.data, err.response.status));
     dispatch({ type: DELETE_USER_FAIL });

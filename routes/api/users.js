@@ -10,6 +10,7 @@ const {
   createAccountByAdmin,
   editProfileByUser,
   getUserProfileByToken,
+  deleteAccountByUser,
 } = require("../../controllers/users");
 const {
   AddProductToCart,
@@ -32,7 +33,8 @@ router
 router
   .route("/profile")
   .put(auth, editProfileByUser)
-  .get(auth, getUserProfileByToken);
+  .get(auth, getUserProfileByToken)
+  .delete(auth, deleteAccountByUser);
 
 router.route("/create").post(auth, admin, createAccountByAdmin);
 

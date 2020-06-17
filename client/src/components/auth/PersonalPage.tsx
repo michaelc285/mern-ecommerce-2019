@@ -2,8 +2,12 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { RootState } from "../../context/store";
-
-import { getUserByAccessToken } from "../../context/actions/AuthAction";
+import { MARKET_LANDING } from "../../path";
+import {
+  getUserByAccessToken,
+  deleteAccountByUser,
+  cleanDeleteUserState,
+} from "../../context/actions/AuthAction";
 import ProfileUpdate from "./section/ProfileUpdate";
 // Components
 import { Button, LinearProgress, Typography } from "@material-ui/core";
@@ -14,16 +18,24 @@ const PersonalPage = () => {
     (state: RootState) => state.auth
   );
 
-  // const deleteState = useSelector((state: RootState) => state.userDelete);
+  const deleteState = useSelector((state: RootState) => state.userDelete);
 
   useEffect(() => {
     dispatch(getUserByAccessToken());
   }, [dispatch]);
 
-  // // Delete Account Success
-  // if (deleteState.success === true) {
-  //   return <Redirect to={{ pathname: USER_CONTROL_PANEL }} />;
-  // }
+  useEffect(() => {
+    return () => {
+      if (deleteState.success) {
+        dispatch(cleanDeleteUserState());
+      }
+    };
+  }, [dispatch, deleteState.success]);
+
+  // Delete Account Success
+  if (deleteState.success === true) {
+    return <Redirect to={{ pathname: MARKET_LANDING }} />;
+  }
 
   // User details loading
   if (isLoading) {
@@ -38,12 +50,11 @@ const PersonalPage = () => {
     <div className="min-h-screen">
       <div className="container mx-auto">
         <div className="py-16">
-          <div className="mb-6">
-            <Typography color="textPrimary">{`${data.name}`}</Typography>
-          </div>
           {/* Profile Update */}
           <div className="mb-16">
-            <h4 className="font-semibold text-2xl py-2">Profile</h4>
+            <h4 className="font-semibold text-2xl py-2">
+              {data.name}'s Profile
+            </h4>
             <hr />
 
             <ProfileUpdate data={data} />
@@ -66,7 +77,7 @@ const PersonalPage = () => {
                 variant="contained"
                 color="secondary"
                 size="small"
-                onClick={() => console.log("delete myself")}
+                onClick={() => dispatch(deleteAccountByUser())}
               >
                 Delete Account
               </Button>

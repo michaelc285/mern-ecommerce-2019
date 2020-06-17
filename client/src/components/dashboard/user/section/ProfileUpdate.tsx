@@ -36,7 +36,7 @@ const ProfileUpdate = ({ data, userId }: any) => {
     }
   };
 
-  const handleReset = useCallback(() => {
+  const handleReset = () => {
     setContent({
       name: data.name,
       email: data.email,
@@ -44,7 +44,7 @@ const ProfileUpdate = ({ data, userId }: any) => {
       role: data.role ? true : false,
     });
     dispatch(cleanUpdateUserState());
-  }, [setContent, dispatch, data.email, data.name, data.role]);
+  };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -70,12 +70,12 @@ const ProfileUpdate = ({ data, userId }: any) => {
     dispatch(userUpdateByAdmin(userId, body));
   };
 
-  useEffect(() => {
-    // If success refresh data and clean
-    if (success) {
-      handleReset();
-    }
-  }, [dispatch, userId, success, handleReset]);
+  // useEffect(() => {
+  //   // If success refresh data and clean
+  //   if (success) {
+  //     handleReset();
+  //   }
+  // }, [dispatch, userId, success, handleReset]);
 
   return (
     <div className="relative">

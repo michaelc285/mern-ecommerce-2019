@@ -29,11 +29,12 @@ const UserDetailsPage = ({ match }: IUserDetailsPage) => {
     (state: RootState) => state.userDetails
   );
   const deleteState = useSelector((state: RootState) => state.userDelete);
-
+  const updateUser = useSelector((state: RootState) => state.userUpdate);
   useEffect(() => {
-    // DeleteState success default false, if delete is false fetch user data.
+    console.log("UseEffect fire");
     if (deleteState.success === false) {
       dispatch(getUserById(userID));
+      console.log("Reload");
     }
 
     // When Unmount
@@ -44,7 +45,7 @@ const UserDetailsPage = ({ match }: IUserDetailsPage) => {
       }
       dispatch(cleanUpdateUserState());
     };
-  }, [dispatch, userID, deleteState.success]);
+  }, [dispatch, userID, deleteState.success, updateUser.success]);
 
   // Delete Account Success
   if (deleteState.success === true) {

@@ -30,6 +30,7 @@ import {
   USER_PROFILE_LOAD_FAIL,
   USER_PROFILE_LOAD_SUCCESS,
   USER_PROFILE_UPDATE,
+  USER_DELETE_ACCOUNT_SUCCESS,
 } from "../types";
 
 export const authReducer = (
@@ -97,6 +98,7 @@ export const authReducer = (
         ...state,
         errors: [],
       };
+    case USER_DELETE_ACCOUNT_SUCCESS:
     case LOGOUT_SUCCESS:
       return {
         ...state,

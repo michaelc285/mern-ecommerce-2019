@@ -2,12 +2,12 @@ const User = require("../models/Users");
 const {
   EMAIL_EXIST,
   EMAIL_MISSING,
-  EMAIL_FORMAT,
   NAME_MISSING,
   NAME_FORMAT,
   PASSWORD_FORMAT,
   PASSWORD_MISSING,
 } = require("../constant/types");
+const REFRESH_TOKEN_COOKIE_PATH = require("../constant/path");
 const bcrypt = require("bcryptjs");
 const { hashPassword } = require("../utils/hashPassword");
 const {
@@ -398,4 +398,32 @@ exports.getUserProfileByToken = async (req, res) => {
   }
 };
 
-// Remove User by User
+/**
+ * @desc   Delete account by user
+ * @route  DELETE /api/user/profile
+ * @access Private
+ */
+exports.deleteAccountByUser = async (req, res, next) => {
+  try {
+    await User.findOneAndRemove({ _id: req.user.userId });
+
+    // Clear cookie
+    res.clearCookie("refreshtoken", {
+      path: REFRESH_TOKEN_COOKIE_PATH,
+    });
+
+    res.status(200).json({
+      success: true,
+    });
+
+    console.log(`Users: ${req.user.userId} delete account success`.green);
+    return;
+  } catch (err) {
+    res.status(402).json({
+      success: false,
+      errors: [err.message],
+    });
+    console.log(`Users: User delete account fail ${err.message}`.red);
+    return;
+  }
+};
