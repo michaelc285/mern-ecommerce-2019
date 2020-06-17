@@ -57,7 +57,7 @@ exports.getUsers = async (req, res, next) => {
     console.log(`Users: Get user fail : ${err.message}`.red);
     res.status(404).json({
       success: false,
-      error: err.message,
+      errors: [err.message],
     });
     return;
   }
@@ -149,9 +149,9 @@ exports.updateUser = async (req, res) => {
     console.log("Users: Update user success".green);
     return;
   } catch (err) {
-    res.status(404).json({
+    res.status(402).json({
       success: false,
-      error: err.message,
+      errors: [err.message],
     });
 
     console.log(`Users: Update user fail Msg: ${err.message}`.red);
@@ -177,9 +177,9 @@ exports.deleteUser = async (req, res, next) => {
     console.log("Users: Delete account success".green);
     return;
   } catch (err) {
-    res.status(404).json({
+    res.status(402).json({
       success: false,
-      error: err.message,
+      errors: [err.message],
     });
     console.log(`Users: Delete account fail ${err.message}`.red);
     return;
@@ -277,12 +277,125 @@ exports.createAccountByAdmin = async (req, res) => {
   } catch (err) {
     res.status(404).json({
       success: false,
-      error: err.message,
+      errors: [err.message],
     });
     console.log(`Users: create account fail ${err.message}`.red);
     return;
   }
 };
 
-// Update User by User
+/**
+ * @desc   Edit Profile by user itself Email / Password / Name
+ * @route  PUT /api/users/profile
+ * @access Private
+ */
+exports.editProfileByUser = async (req, res) => {
+  try {
+    if (!req.body) {
+      return res.status(204).json({ success: false, msg: "Nothing in body" });
+    }
+
+    let updateContents = {};
+    let errors = [];
+    // Check email
+    if (req.body.email !== undefined) {
+      // Check Email exist or not
+      const emailValid = await emailValidator(req.body.email);
+      // If exist push msg to errros[], if not allow it add in to updateContents
+      if (emailValid) {
+        updateContents["email"] = req.body.email;
+      } else {
+        errors.push(EMAIL_EXIST);
+      }
+    }
+
+    // Check Name
+    if (req.body.name !== undefined) {
+      // Name Format validation
+      const nameValid = nameFormatValidator(req.body.name);
+
+      if (nameValid) {
+        updateContents["name"] = req.body.name;
+      } else {
+        errors.push(NAME_FORMAT);
+      }
+    }
+
+    // Check password
+    if (req.body.password !== undefined) {
+      // Password Format validation
+      const passwordValid = passwordFormatValidator(req.body.password);
+
+      if (passwordValid) {
+        updateContents["password"] = await hashPassword(req.body.password);
+      } else {
+        errors.push(PASSWORD_FORMAT);
+      }
+    }
+
+    // Errors block
+    if (errors.length > 0) {
+      res.status(422).json({
+        success: false,
+        errors,
+      });
+      console.log(errors);
+      console.log(
+        `Users: update user fail, ${errors.length} field(s) fail`.red
+      );
+      return;
+    }
+    // Without any errors
+    const user = await User.findOneAndUpdate(
+      { _id: req.user.userId },
+      updateContents,
+      {
+        new: true,
+      }
+    );
+
+    res.status(200).json({
+      success: true,
+      data: user,
+    });
+    console.log(`Users: User ${req.user.userId} profile update success`.green);
+    return;
+  } catch (err) {
+    res.status(404).json({
+      success: false,
+      errors: [err.message],
+    });
+
+    console.log(`Users: Profile update fail Msg: ${err.message}`.red);
+    return;
+  }
+};
+
+/**
+ * @desc   Get user profile info by access token
+ * @route  GET /api/users/profile
+ * @access Private
+ */
+exports.getUserProfileByToken = async (req, res) => {
+  try {
+    // Without any errors
+    const user = await User.findOne({ _id: req.user.userId });
+
+    res.status(200).json({
+      success: true,
+      data: user,
+    });
+    console.log(`Users: ${req.user.userId} get profile success`.green);
+    return;
+  } catch (err) {
+    res.status(402).json({
+      success: false,
+      errors: [err.message],
+    });
+
+    console.log(`Users: get profile fail Msg: ${err.message}`.red);
+    return;
+  }
+};
+
 // Remove User by User

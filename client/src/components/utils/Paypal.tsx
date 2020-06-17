@@ -16,10 +16,11 @@ const PaypalButton = (props: any) => {
       clientID +
       "&disable-funding=credit,card";
     script.async = true;
+
+    script.onload = () => setSdkReady(true);
     if (isCurrent.current) {
-      script.onload = () => setSdkReady(true);
+      document.body.appendChild(script);
     }
-    document.body.appendChild(script);
   };
 
   const createOrder = (data: any, actions: any) =>
@@ -51,15 +52,17 @@ const PaypalButton = (props: any) => {
     };
   }, []);
 
-  if (!sdkReady && !(window as any).paypal) {
-    return (
-      <button
-        disabled
-        className="border border-gray-400 rounded px-16 py-1 uppercase mb-1"
-      >
-        Loading
-      </button>
-    );
+  if (!sdkReady) {
+    if (!(window as any).paypal) {
+      return (
+        <button
+          disabled
+          className="border border-gray-400 rounded px-16 py-1 uppercase mb-1"
+        >
+          Loading
+        </button>
+      );
+    }
   }
 
   const Button = (window as any).paypal.Buttons.driver("react", {

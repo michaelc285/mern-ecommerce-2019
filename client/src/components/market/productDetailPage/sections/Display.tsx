@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { IProduct } from "../../../../types/interfaces";
-
+import "bootstrap/dist/css/bootstrap.min.css";
 //Components
 import {
   Carousel,

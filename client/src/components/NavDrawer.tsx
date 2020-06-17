@@ -12,8 +12,10 @@ import {
   PRODUCT_CONTROL_PANEL,
   USER_CONTROL_PANEL,
   ROOT,
+  USER_PROFILE,
 } from "../path";
-import { makeStyles } from "@material-ui/core/styles";
+
+//Components
 import {
   List,
   ListItem,
@@ -21,20 +23,23 @@ import {
   ListItemText,
   ListItemIcon,
   Divider,
+  Collapse,
+  makeStyles,
 } from "@material-ui/core/";
+// Icon
 import VpnKeyIcon from "@material-ui/icons/VpnKey";
 import HowToRegIcon from "@material-ui/icons/HowToReg";
 import HomeIcon from "@material-ui/icons/Home";
-import ShoppingBasketIcon from "@material-ui/icons/ShoppingBasket";
 import ReceiptIcon from "@material-ui/icons/Receipt";
-import Collapse from "@material-ui/core/Collapse";
-import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
+import ShoppingBasketIcon from "@material-ui/icons/ShoppingBasket";
+import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import FolderSharedIcon from "@material-ui/icons/FolderShared";
 import FolderIcon from "@material-ui/icons/Folder";
+import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
 
 const NavDrawer = ({ toggleDrawer, toggle }: any) => {
   const dispatch = useDispatch();
@@ -77,6 +82,15 @@ const NavDrawer = ({ toggleDrawer, toggle }: any) => {
                 <ReceiptIcon />
               </ListItemIcon>
               <ListItemText primary={"History"} className="text-black" />
+            </ListItem>
+          </NavLink>
+          {/* Profile page */}
+          <NavLink exact to={USER_PROFILE} style={{ textDecoration: "none" }}>
+            <ListItem button onClick={toggleDrawer(!toggle)}>
+              <ListItemIcon className="ml-4">
+                <AssignmentIndIcon />
+              </ListItemIcon>
+              <ListItemText primary={"Profile"} className="text-black" />
             </ListItem>
           </NavLink>
 

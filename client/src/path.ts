@@ -13,7 +13,7 @@ export const MARKET_LANDING = "/market";
  */
 export const USER_CART = "/user/cart";
 export const USER_HISTORY = "/user/history";
-
+export const USER_PROFILE = "/user/profile";
 /**
  *      ADMIN
  */

@@ -1,7 +1,6 @@
 import React, { useEffect, Suspense } from "react";
 import { Route, Switch } from "react-router-dom";
 import LinearProgress from "@material-ui/core/LinearProgress";
-import "bootstrap/dist/css/bootstrap.min.css";
 import "./assets/main.css";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "./context/store";
@@ -19,6 +18,7 @@ import {
   ROOT,
   USER_DETAILS_PAGE,
   CREATE_ACCOUNT,
+  USER_PROFILE,
 } from "./path";
 import { loadUser } from "./context/actions/AuthAction";
 import { ROLE_ADMIN, ROLE_GUEST, ROLE_USER } from "./context/types";
@@ -38,6 +38,7 @@ import ProductControlPanelLanding from "./components/dashboard/product/ProductCo
 import UserControlPanelLanding from "./components/dashboard/user/UserControlPanelLanding";
 import UserDetailsPage from "./components/dashboard/user/UserDetailsPage";
 import UserCreate from "./components/dashboard/user/UserCreate";
+import PersonalPage from "./components/auth/PersonalPage";
 
 const App = () => {
   const auth = useSelector((state: RootState) => state.auth);
@@ -80,7 +81,7 @@ const App = () => {
           <Route path={SIGN_UP} exact component={Register} />
 
           {/* User Route */}
-
+          {/* Cart */}
           <ProtectedRoute
             exact
             isAuthenticated={isAuthenticated}
@@ -89,6 +90,7 @@ const App = () => {
             path={USER_CART}
             component={CartPage}
           />
+          {/* History */}
           <ProtectedRoute
             exact
             isAuthenticated={isAuthenticated}
@@ -96,6 +98,15 @@ const App = () => {
             authenticationPath={SIGN_IN}
             path={USER_HISTORY}
             component={PurchaseHistoryUser}
+          />
+          {/* Personal info page */}
+          <ProtectedRoute
+            exact
+            isAuthenticated={isAuthenticated}
+            role={role}
+            authenticationPath={SIGN_IN}
+            path={USER_PROFILE}
+            component={PersonalPage}
           />
           {/* Admin Route */}
           {/* User Control Panel */}

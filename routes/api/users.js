@@ -8,6 +8,8 @@ const {
   updateUser,
   deleteUser,
   createAccountByAdmin,
+  editProfileByUser,
+  getUserProfileByToken,
 } = require("../../controllers/users");
 const {
   AddProductToCart,
@@ -26,6 +28,11 @@ router
   .get(auth, admin, getUsers)
   .put(auth, admin, updateUser)
   .delete(auth, admin, deleteUser);
+
+router
+  .route("/profile")
+  .put(auth, editProfileByUser)
+  .get(auth, getUserProfileByToken);
 
 router.route("/create").post(auth, admin, createAccountByAdmin);
 

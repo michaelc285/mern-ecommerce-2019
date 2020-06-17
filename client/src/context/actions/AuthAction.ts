@@ -34,6 +34,9 @@ import {
   CREATE_USER_LOADING,
   CREATE_USER_SUCCESS,
   AUTH_ERRORS_CLEAN,
+  USER_PROFILE_LOAD_FAIL,
+  USER_PROFILE_LOAD_SUCCESS,
+  USER_PROFILE_UPDATE,
 } from "../types";
 
 // Load User and get access token
@@ -177,6 +180,26 @@ export const getUserById = (userId: string) => async (
     dispatch({ type: GET_USER_DETAILS_FAIL });
   }
 };
+
+// Get Users by access token in state
+export const getUserByAccessToken = () => async (
+  dispatch: Function,
+  getState: Function
+) => {
+  try {
+    dispatch({ type: USER_LOADING });
+
+    const result = await axios.get("/api/users/profile", {
+      headers: { authorization: `Bearer ${getState().auth.token}` },
+    });
+
+    dispatch({ type: USER_PROFILE_LOAD_SUCCESS, payload: result });
+  } catch (err) {
+    dispatch(returnErrors(err.response.data, err.response.status));
+    dispatch({ type: USER_PROFILE_LOAD_FAIL, payload: err.response.data });
+  }
+};
+
 // Clean User details reducer
 export const cleanUserDetailsState = () => (dispatch: Function) =>
   dispatch({ type: GET_USER_DETAILS_CLEAN });
@@ -214,10 +237,36 @@ export const userUpdateByAdmin = (userId: string, body: object) => async (
     dispatch({ type: UPDATE_USER_LOADING });
 
     await axios.put(`/api/users?id=${userId}`, body, {
-      headers: { authorization: `Bearer ${getState().auth.token}` },
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${getState().auth.token}`,
+      },
     });
 
     dispatch({ type: UPDATE_USER_SUCCESS });
+  } catch (err) {
+    dispatch(returnErrors(err.response.data, err.response.status));
+    dispatch({ type: UPDATE_USER_FAIL, payload: err.response });
+  }
+};
+
+// Update user by user
+export const userUpdateByUser = (body: object) => async (
+  dispatch: Function,
+  getState: Function
+) => {
+  try {
+    dispatch({ type: UPDATE_USER_LOADING });
+
+    const result = await axios.put("/api/users/profile", body, {
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${getState().auth.token}`,
+      },
+    });
+
+    dispatch({ type: UPDATE_USER_SUCCESS });
+    dispatch({ type: USER_PROFILE_UPDATE, payload: result });
   } catch (err) {
     dispatch(returnErrors(err.response.data, err.response.status));
     dispatch({ type: UPDATE_USER_FAIL, payload: err.response });

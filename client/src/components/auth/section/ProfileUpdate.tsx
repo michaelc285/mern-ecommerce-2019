@@ -1,20 +1,18 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { userUpdateByAdmin } from "../../../../context/actions/AuthAction";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../../../context/store";
-import { IUserUpdateBody } from "../../../../types/interfaces";
-import { cleanUpdateUserState } from "../../../../context/actions/AuthAction";
-// Components
+import React, { useState, useCallback } from "react";
 import {
-  Button,
-  Switch,
-  FormControlLabel,
-  CircularProgress,
-} from "@material-ui/core";
+  userUpdateByUser,
+  cleanUpdateUserState,
+} from "../../../context/actions/AuthAction";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../context/store";
+import { IUserUpdateBody } from "../../../types/interfaces";
 
-const ProfileUpdate = ({ data, userId }: any) => {
+// Components
+import { Button, CircularProgress } from "@material-ui/core";
+
+const ProfileUpdate = ({ data }: any) => {
   const dispatch = useDispatch();
-  const { isLoading, success, errors } = useSelector(
+  const { isLoading, errors } = useSelector(
     (state: RootState) => state.userUpdate
   );
 
@@ -22,7 +20,6 @@ const ProfileUpdate = ({ data, userId }: any) => {
     name: data.name,
     email: data.email,
     password: "",
-    role: data.role ? true : false,
   });
 
   // HandleChange
@@ -31,9 +28,6 @@ const ProfileUpdate = ({ data, userId }: any) => {
   ) => {
     const { name, value } = event.currentTarget;
     setContent({ ...content, [name]: value });
-    if (name === "role") {
-      setContent({ ...content, [name]: !content.role });
-    }
   };
 
   const handleReset = useCallback(() => {
@@ -41,10 +35,9 @@ const ProfileUpdate = ({ data, userId }: any) => {
       name: data.name,
       email: data.email,
       password: "",
-      role: data.role ? true : false,
     });
     dispatch(cleanUpdateUserState());
-  }, [setContent, dispatch, data.email, data.name, data.role]);
+  }, [setContent, dispatch, data.email, data.name]);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -58,24 +51,12 @@ const ProfileUpdate = ({ data, userId }: any) => {
       body["email"] = content.email;
     }
 
-    const role = content.role === true ? 1 : 0;
-    if (role !== data.role) {
-      body["role"] = role;
-    }
-
     if (content.password) {
       body["password"] = content.password;
     }
 
-    dispatch(userUpdateByAdmin(userId, body));
+    dispatch(userUpdateByUser(body));
   };
-
-  useEffect(() => {
-    // If success refresh data and clean
-    if (success) {
-      handleReset();
-    }
-  }, [dispatch, userId, success, handleReset]);
 
   return (
     <div className="relative">
@@ -168,28 +149,7 @@ const ProfileUpdate = ({ data, userId }: any) => {
           )}
         </div>
         {/* Password End */}
-        {/* Role */}
-        <div className="p-1 mb-3">
-          <label
-            htmlFor="switch_group"
-            className="block uppercase tracking-wide text-gray-700 text-sm font-bold mb-2"
-          >
-            Role
-          </label>
-          <FormControlLabel
-            id="switch_group"
-            control={
-              <Switch
-                checked={content.role}
-                onChange={handleChangeTextContent}
-                name="role"
-                aria-label="role_switch"
-              />
-            }
-            label={content.role ? "Admin" : "User"}
-          />
-        </div>
-        {/* Role End */}
+
         {/* Submit Button */}
         <div className="p-1 mb-3 flex">
           <Button
@@ -200,7 +160,6 @@ const ProfileUpdate = ({ data, userId }: any) => {
             disabled={
               content.name === data.name &&
               content.email === data.email &&
-              content.role === (data.role === 1 ? true : false) &&
               content.password.length === 0
                 ? true
                 : false

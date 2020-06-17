@@ -27,6 +27,9 @@ import {
   CREATE_USER_LOADING,
   CREATE_USER_SUCCESS,
   AUTH_ERRORS_CLEAN,
+  USER_PROFILE_LOAD_FAIL,
+  USER_PROFILE_LOAD_SUCCESS,
+  USER_PROFILE_UPDATE,
 } from "../types";
 
 export const authReducer = (
@@ -63,6 +66,20 @@ export const authReducer = (
         isAuthenticated: true,
         isLoading: false,
         errors: [],
+      };
+    case USER_PROFILE_UPDATE:
+    case USER_PROFILE_LOAD_SUCCESS:
+      return {
+        ...state,
+        user: action.payload.data.data,
+        isLoading: false,
+        errors: [],
+      };
+    case USER_PROFILE_LOAD_FAIL:
+      return {
+        ...state,
+        isLoading: false,
+        errors: [...action.payload.errors],
       };
     case AUTH_ERROR:
     case LOGIN_FAIL:
@@ -146,7 +163,7 @@ export const userDeleteReducer = (
   }
 };
 
-export const userUpdateByAdminReducer = (
+export const userUpdate = (
   state: any = { isLoading: false, success: false, errors: [] },
   action: any
 ) => {
