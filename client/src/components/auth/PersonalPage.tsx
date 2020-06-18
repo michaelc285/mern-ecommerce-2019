@@ -8,9 +8,10 @@ import {
   deleteAccountByUser,
   cleanDeleteUserState,
 } from "../../context/actions/AuthAction";
-import ProfileUpdate from "./section/ProfileUpdate";
 // Components
 import { Button, LinearProgress, Typography } from "@material-ui/core";
+import ProfileUpdate from "./section/ProfileUpdate";
+import AddressUpdate from "./section/AddressUpdate";
 
 const PersonalPage = () => {
   const dispatch = useDispatch();
@@ -60,6 +61,30 @@ const PersonalPage = () => {
             <ProfileUpdate data={data} />
           </div>
           {/* Profile Update End */}
+          {/* Address Update */}
+          <div className="mb-16">
+            <h4 className="font-semibold text-2xl py-2">Address</h4>
+            <hr />
+
+            <AddressUpdate
+              data={
+                data && data.address
+                  ? {
+                      addressLine1: data.address.addressLine1,
+                      addressLine2: data.address.addressLine2,
+                      townOrCity: data.address.townOrCity,
+                      postalCode: data.address.postalCode,
+                    }
+                  : {
+                      addressLine1: "",
+                      addressLine2: "",
+                      townOrCity: "",
+                      postalCode: "",
+                    }
+              }
+            />
+          </div>
+          {/* Address update End */}
 
           {/* Delete Account */}
           <div className="mb-16">

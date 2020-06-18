@@ -210,3 +210,10 @@ export interface IUserCreateBody {
   password: string;
   role: number;
 }
+
+export interface IUserAddressBody {
+  addressLine1: string;
+  addressLine2: string;
+  townOrCity: string;
+  postalCode: string;
+}

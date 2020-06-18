@@ -187,6 +187,40 @@ exports.deleteUser = async (req, res, next) => {
 };
 
 /**
+ * @desc   Update address by Admin
+ * @route  PUT /api/users/:id/address
+ * @access Private (Admin)
+ */
+exports.updateAddressByAdmin = async (req, res, next) => {
+  try {
+    const userId = req.query.id;
+    if (!userId) throw Error("Please Provide User id");
+
+    let newAddress = {};
+    const { addressLine1, addressLine2, townOrCity, postalCode } = req.body;
+    // check req.body
+    newAddress["addressLine1"] = addressLine1;
+    newAddress["addressLine2"] = addressLine2;
+    newAddress["townOrCity"] = townOrCity;
+    newAddress["postalCode"] = postalCode;
+
+    await User.findOneAndUpdate({ _id: userId }, { address: newAddress });
+
+    res.status(200).json({ success: true });
+
+    console.log(`Users: User ${req.user.userId} update address success`.green);
+    return;
+  } catch (err) {
+    res.status(422).json({
+      success: false,
+      errors: [err.message],
+    });
+    console.log(`Users: user update address fail`.red);
+    return;
+  }
+};
+
+/**
  * @desc   Crate account by admin
  * @route  POST /api/users/create
  * @access Private (Admin)
@@ -400,7 +434,7 @@ exports.getUserProfileByToken = async (req, res) => {
 
 /**
  * @desc   Delete account by user
- * @route  DELETE /api/user/profile
+ * @route  DELETE /api/users/profile
  * @access Private
  */
 exports.deleteAccountByUser = async (req, res, next) => {
@@ -424,6 +458,41 @@ exports.deleteAccountByUser = async (req, res, next) => {
       errors: [err.message],
     });
     console.log(`Users: User delete account fail ${err.message}`.red);
+    return;
+  }
+};
+
+/**
+ * @desc   Update address by user
+ * @route  PUT /api/users/profile/address
+ * @access Private
+ */
+exports.updateAddressByUser = async (req, res, next) => {
+  try {
+    let newAddress = {};
+    const { addressLine1, addressLine2, townOrCity, postalCode } = req.body;
+    // check req.body
+    newAddress["addressLine1"] = addressLine1;
+    newAddress["addressLine2"] = addressLine2;
+    newAddress["townOrCity"] = townOrCity;
+    newAddress["postalCode"] = postalCode;
+
+    const user = await User.findOneAndUpdate(
+      { _id: req.user.userId },
+      { address: newAddress },
+      { new: true }
+    );
+
+    res.status(200).json({ success: true, data: user });
+
+    console.log(`Users: User ${req.user.userId} update address success`.green);
+    return;
+  } catch (err) {
+    res.status(422).json({
+      success: false,
+      errors: [err.message],
+    });
+    console.log(`Users: user update address fail`.red);
     return;
   }
 };

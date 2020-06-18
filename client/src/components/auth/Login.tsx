@@ -26,6 +26,7 @@ const Login = () => {
   };
 
   useEffect(() => {
+    dispatch(cleanAuthErrorsState());
     return () => {
       dispatch(cleanAuthErrorsState());
     };

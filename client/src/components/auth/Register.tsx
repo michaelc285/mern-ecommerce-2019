@@ -29,6 +29,7 @@ const Register = () => {
   };
 
   useEffect(() => {
+    dispatch(cleanAuthErrorsState());
     return () => {
       dispatch(cleanAuthErrorsState());
     };

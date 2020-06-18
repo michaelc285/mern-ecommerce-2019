@@ -9,8 +9,10 @@ const {
   deleteUser,
   createAccountByAdmin,
   editProfileByUser,
+  updateAddressByAdmin,
   getUserProfileByToken,
   deleteAccountByUser,
+  updateAddressByUser,
 } = require("../../controllers/users");
 const {
   AddProductToCart,
@@ -30,11 +32,15 @@ router
   .put(auth, admin, updateUser)
   .delete(auth, admin, deleteUser);
 
+router.route("/:id/address").put(auth, admin, updateAddressByAdmin);
+
 router
   .route("/profile")
   .put(auth, editProfileByUser)
   .get(auth, getUserProfileByToken)
   .delete(auth, deleteAccountByUser);
+
+router.route("/profile/address").put(auth, updateAddressByUser);
 
 router.route("/create").post(auth, admin, createAccountByAdmin);
 
