@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { RootState } from "../../context/store";
 import { useDispatch, useSelector } from "react-redux";
 import { loadCart } from "../../context/actions/CartAction";
@@ -8,30 +8,46 @@ import { NavLink } from "react-router-dom";
 import ProductsList from "./section/ProductsList";
 import Bills from "./section/Bills";
 import Payment from "./section/Payment";
+import ShippingInfo from "./section/ShippingInfo";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import { Grid, Button, LinearProgress } from "@material-ui/core";
+
+const billsCalculate = (items: any) => {
+  let orderTotal: number = 0;
+  let deliveryFee: number = 80;
+  let totalPayment: number = 0;
+  if (items.length > 0) {
+    items.forEach((item: any) => {
+      orderTotal += item.quantity * item.price;
+    });
+    if (orderTotal >= 200) deliveryFee = 0;
+    totalPayment = orderTotal + deliveryFee;
+
+    return {
+      orderTotal,
+      deliveryFee,
+      totalPayment,
+    };
+  } else {
+    return {
+      orderTotal,
+      deliveryFee,
+      totalPayment,
+    };
+  }
+};
 
 const CartPage = () => {
   const dispatch = useDispatch();
 
   const cart = useSelector((state: RootState) => state.cart);
+  const { user } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
     dispatch(loadCart());
   }, [dispatch]);
 
-  // Bills calulate
-  let orderTotal: number = 0;
-  let deliveryFee: number = 0;
-  let totalPayment: number = 0;
-
-  if (cart.items && cart.items.length > 0) {
-    cart.items.forEach((item: any) => {
-      orderTotal += item.quantity * item.price;
-    });
-    if (orderTotal < 200) deliveryFee = 80;
-    totalPayment = orderTotal + deliveryFee;
-  }
+  const bills = useMemo(() => billsCalculate(cart.items), [cart.items]);
 
   // Components
 
@@ -57,21 +73,24 @@ const CartPage = () => {
       <div className="p-2 my-4">
         {/* Products List */}
         <Grid container spacing={3}>
-          <Grid item xl={8} md={8} xs={12}>
+          <Grid item xs={12} lg={8}>
             <ProductsList />
           </Grid>
           {/* Bill */}
-          <Grid item xl={4} md={4} xs={12}>
+          <Grid item xs={12} lg={4}>
             <Grid container direction={"column"} spacing={3}>
               <Grid item>
                 <Bills
-                  orderTotal={orderTotal}
-                  deliveryFee={deliveryFee}
-                  totalPayment={totalPayment}
+                  orderTotal={bills.orderTotal}
+                  deliveryFee={bills.deliveryFee}
+                  totalPayment={bills.totalPayment}
                 />
               </Grid>
               <Grid item>
-                <Payment totalPayment={totalPayment} />
+                <ShippingInfo contactDetails={user.contactDetails} />
+              </Grid>
+              <Grid item>
+                <Payment totalPayment={bills.totalPayment} />
               </Grid>
             </Grid>
           </Grid>

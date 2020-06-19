@@ -6,7 +6,7 @@ import {
   userDeleteReducer,
   userUpdate,
   userCreateByAdminReducer,
-  addressUpdate,
+  contactDetailsUpdate,
 } from "../reducers/AuthReducer";
 import errorReducer from "../reducers/ErrorReducer";
 import {
@@ -22,7 +22,7 @@ export default combineReducers({
   userDetails: userDetailsReducer,
   userDelete: userDeleteReducer,
   userUpdate: userUpdate,
-  addressUpdate: addressUpdate,
+  contactDetailsUpdate: contactDetailsUpdate,
   userCreateByAdmin: userCreateByAdminReducer,
   cart: cartReducer,
   error: errorReducer,

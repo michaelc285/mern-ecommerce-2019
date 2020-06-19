@@ -12,7 +12,7 @@ const {
   updateAddressByAdmin,
   getUserProfileByToken,
   deleteAccountByUser,
-  updateAddressByUser,
+  updateContactDetailsByUser,
 } = require("../../controllers/users");
 const {
   AddProductToCart,
@@ -32,7 +32,7 @@ router
   .put(auth, admin, updateUser)
   .delete(auth, admin, deleteUser);
 
-router.route("/:id/address").put(auth, admin, updateAddressByAdmin);
+router.route("/address").put(auth, admin, updateAddressByAdmin);
 
 router
   .route("/profile")
@@ -40,7 +40,7 @@ router
   .get(auth, getUserProfileByToken)
   .delete(auth, deleteAccountByUser);
 
-router.route("/profile/address").put(auth, updateAddressByUser);
+router.route("/profile/contact").put(auth, updateContactDetailsByUser);
 
 router.route("/create").post(auth, admin, createAccountByAdmin);
 

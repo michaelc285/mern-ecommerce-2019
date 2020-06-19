@@ -31,11 +31,11 @@ import {
   USER_PROFILE_LOAD_SUCCESS,
   USER_PROFILE_UPDATE,
   USER_DELETE_ACCOUNT_SUCCESS,
-  UPDATE_ADDRESS_LOADING,
-  UPDATE_ADDRESS_SUCCESS,
-  UPDATE_ADDRESS_FAIL,
-  UPDATE_ADDRESS_CLEAN,
-  USER_ADDRESS_UPDATE,
+  UPDATE_CONTACT_LOADING,
+  UPDATE_CONTACT_SUCCESS,
+  UPDATE_CONTACT_FAIL,
+  UPDATE_CONTACT_CLEAN,
+  USER_CONTACT_UPDATE,
 } from "../types";
 
 export const authReducer = (
@@ -73,7 +73,7 @@ export const authReducer = (
         isLoading: false,
         errors: [],
       };
-    case USER_ADDRESS_UPDATE:
+    case USER_CONTACT_UPDATE:
     case USER_PROFILE_UPDATE:
     case USER_PROFILE_LOAD_SUCCESS:
       return {
@@ -227,31 +227,31 @@ export const userCreateByAdminReducer = (
   }
 };
 
-export const addressUpdate = (
+export const contactDetailsUpdate = (
   state: any = { isLoading: false, success: false, errors: [] },
   action: any
 ) => {
   switch (action.type) {
-    case UPDATE_ADDRESS_LOADING:
+    case UPDATE_CONTACT_LOADING:
       return {
         ...state,
         isLoading: true,
       };
-    case UPDATE_ADDRESS_SUCCESS:
+    case UPDATE_CONTACT_SUCCESS:
       return {
         ...state,
         success: true,
         isLoading: false,
         errors: [],
       };
-    case UPDATE_ADDRESS_FAIL:
+    case UPDATE_CONTACT_FAIL:
       return {
         ...state,
         success: false,
         isLoading: false,
         errors: [...action.payload.data.errors],
       };
-    case UPDATE_ADDRESS_CLEAN:
+    case UPDATE_CONTACT_CLEAN:
       return {
         isLoading: false,
         success: false,

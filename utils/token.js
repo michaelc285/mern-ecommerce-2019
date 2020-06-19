@@ -28,6 +28,7 @@ const sendAccessToken = (req, res, accesstoken, userInfo) => {
       role: userInfo.role,
       cart: userInfo.cart,
       history: userInfo.history,
+      contactDetails: userInfo.contactDetails,
     },
   });
   console.log("Token: Send Access Token Success".green);

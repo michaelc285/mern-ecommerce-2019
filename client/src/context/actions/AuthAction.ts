@@ -38,10 +38,10 @@ import {
   USER_PROFILE_LOAD_SUCCESS,
   USER_PROFILE_UPDATE,
   USER_DELETE_ACCOUNT_SUCCESS,
-  UPDATE_ADDRESS_CLEAN,
-  USER_ADDRESS_UPDATE,
-  UPDATE_ADDRESS_LOADING,
-  UPDATE_ADDRESS_SUCCESS,
+  UPDATE_CONTACT_CLEAN,
+  USER_CONTACT_UPDATE,
+  UPDATE_CONTACT_LOADING,
+  UPDATE_CONTACT_SUCCESS,
 } from "../types";
 
 // Load User and get access token
@@ -332,21 +332,22 @@ export const cleanCreateUserState = () => (dispatch: Function) =>
 // --------------------------------------------------------------
 
 // Update address by user
-export const updateAddressByUser = (body: object) => async (
+export const updateContactDetailsByUser = (body: object) => async (
   dispatch: Function,
   getState: Function
 ) => {
   try {
-    dispatch({ type: UPDATE_ADDRESS_LOADING });
-    const result = await axios.put("/api/users/profile/address", body, {
+    dispatch({ type: UPDATE_CONTACT_LOADING });
+    console.log(body);
+    const result = await axios.put("/api/users/profile/contact", body, {
       headers: {
         "Content-Type": "application/json",
         authorization: `Bearer ${getState().auth.token}`,
       },
     });
 
-    dispatch({ type: UPDATE_ADDRESS_SUCCESS });
-    dispatch({ type: USER_ADDRESS_UPDATE, payload: result });
+    dispatch({ type: UPDATE_CONTACT_SUCCESS });
+    dispatch({ type: USER_CONTACT_UPDATE, payload: result });
   } catch (err) {
     dispatch(returnErrors(err.response.data, err.response.status));
     dispatch({ type: UPDATE_USER_FAIL, payload: err.response });
@@ -354,7 +355,7 @@ export const updateAddressByUser = (body: object) => async (
 };
 
 // Clear create user reducer state
-export const cleanUpdateAddressState = () => (dispatch: Function) =>
-  dispatch({ type: UPDATE_ADDRESS_CLEAN });
+export const cleanUpdateContactDetailsState = () => (dispatch: Function) =>
+  dispatch({ type: UPDATE_CONTACT_CLEAN });
 
 // --------------------------------------------------------------

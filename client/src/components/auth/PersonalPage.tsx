@@ -7,11 +7,13 @@ import {
   getUserByAccessToken,
   deleteAccountByUser,
   cleanDeleteUserState,
+  cleanUpdateUserState,
+  cleanUpdateContactDetailsState,
 } from "../../context/actions/AuthAction";
 // Components
-import { Button, LinearProgress, Typography } from "@material-ui/core";
+import { Button, LinearProgress } from "@material-ui/core";
 import ProfileUpdate from "./section/ProfileUpdate";
-import AddressUpdate from "./section/AddressUpdate";
+import ShippingDetailsUpdate from "./section/ShippingDetailsUpdate";
 
 const PersonalPage = () => {
   const dispatch = useDispatch();
@@ -30,6 +32,8 @@ const PersonalPage = () => {
       if (deleteState.success) {
         dispatch(cleanDeleteUserState());
       }
+      dispatch(cleanUpdateUserState());
+      dispatch(cleanUpdateContactDetailsState());
     };
   }, [dispatch, deleteState.success]);
 
@@ -63,26 +67,10 @@ const PersonalPage = () => {
           {/* Profile Update End */}
           {/* Address Update */}
           <div className="mb-16">
-            <h4 className="font-semibold text-2xl py-2">Address</h4>
+            <h4 className="font-semibold text-2xl py-2">Contact Details</h4>
             <hr />
 
-            <AddressUpdate
-              data={
-                data && data.address
-                  ? {
-                      addressLine1: data.address.addressLine1,
-                      addressLine2: data.address.addressLine2,
-                      townOrCity: data.address.townOrCity,
-                      postalCode: data.address.postalCode,
-                    }
-                  : {
-                      addressLine1: "",
-                      addressLine2: "",
-                      townOrCity: "",
-                      postalCode: "",
-                    }
-              }
-            />
+            <ShippingDetailsUpdate contactDetails={data.contactDetails} />
           </div>
           {/* Address update End */}
 

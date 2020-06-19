@@ -1,74 +1,40 @@
-import React, { Fragment } from "react";
-import { makeStyles, Theme } from "@material-ui/core/styles";
+import React from "react";
 import PaypalButton from "../../utils/Paypal";
-import {
-  Paper,
-  Grid,
-  Typography,
-  FormControl,
-  Radio,
-  FormControlLabel,
-} from "@material-ui/core";
+import { Paper, FormControl, Radio, FormControlLabel } from "@material-ui/core";
 import { useDispatch } from "react-redux";
 import { buyProcess } from "../../../context/actions/CartAction";
 import { IPayment } from "../../../types/interfaces";
 
 const Payment = ({ totalPayment }: IPayment) => {
-  const classes = useStyles();
   const dispatch = useDispatch();
 
   const onSuccess = (details: any, data: any) =>
     dispatch(buyProcess(details, data));
 
   return (
-    <Fragment>
-      <Paper elevation={1}>
-        <Grid container direction={"column"}>
-          <Grid item className={classes.boxTitle}>
-            <Typography className={classes.textContent} variant={"h6"}>
-              Payment
-            </Typography>
-          </Grid>
-          <Grid item>
-            <FormControl component="fieldset">
-              <FormControlLabel
-                className={classes.subTitle}
-                value="end"
-                control={<Radio color="secondary" />}
-                label="Paypal"
-                checked
-              />
-            </FormControl>
-          </Grid>
-          <Grid item className={classes.button}>
-            <PaypalButton amount={totalPayment} onSuccess={onSuccess} />
-          </Grid>
-        </Grid>
-      </Paper>
-    </Fragment>
+    <Paper elevation={1}>
+      {/* Title */}
+      <div className="bg-gray-400">
+        <h6 className="font-semibold py-2 ml-2 uppercase">Payment</h6>
+      </div>
+      {/* Title end */}
+      {/* Option button */}
+      <FormControl component="fieldset" className="ml-4">
+        <FormControlLabel
+          value="end"
+          control={<Radio color="secondary" />}
+          label="PayPal"
+          checked
+        />
+      </FormControl>
+      {/* Option button end */}
+      {/* Paypal Button */}
+      <div className="mx-auto w-2/3">
+        <PaypalButton amount={totalPayment} onSuccess={onSuccess} />
+      </div>
+      {/* Paypal butto end */}
+    </Paper>
   );
 };
-
-const useStyles = makeStyles((theme: Theme) => ({
-  root: {
-    minHeight: "5vh",
-  },
-
-  textContent: {
-    marginLeft: "10px",
-    marginRight: "10px",
-  },
-  boxTitle: {
-    padding: "3px",
-    backgroundColor: "rgb(180, 180, 180)",
-  },
-  subTitle: {
-    marginLeft: "2px",
-  },
-  button: {
-    display: "flex",
-    justifyContent: "center",
-  },
-}));
 
 export default Payment;

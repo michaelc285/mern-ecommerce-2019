@@ -211,9 +211,10 @@ export interface IUserCreateBody {
   role: number;
 }
 
-export interface IUserAddressBody {
+export interface IUserShippingDetailsBody {
   addressLine1: string;
   addressLine2: string;
   townOrCity: string;
   postalCode: string;
+  phone: string;
 }

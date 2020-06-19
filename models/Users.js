@@ -30,9 +30,15 @@ const UserSchema = new mongoose.Schema({
     type: Array,
     default: [],
   },
-  address: {
+  contactDetails: {
     type: Object,
-    default: [],
+    default: {
+      addressLine1: "",
+      addressLine2: "",
+      townOrCity: "",
+      postalCode: "",
+      phone: "",
+    },
   },
   token: {
     type: String,

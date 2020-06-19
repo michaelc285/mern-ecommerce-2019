@@ -1,6 +1,7 @@
 import React, { useEffect, Suspense } from "react";
 import { Route, Switch } from "react-router-dom";
 import LinearProgress from "@material-ui/core/LinearProgress";
+import "bootstrap/dist/css/bootstrap.min.css";
 import "./assets/main.css";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "./context/store";

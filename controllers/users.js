@@ -464,35 +464,45 @@ exports.deleteAccountByUser = async (req, res, next) => {
 
 /**
  * @desc   Update address by user
- * @route  PUT /api/users/profile/address
+ * @route  PUT /api/users/profile/contact
  * @access Private
  */
-exports.updateAddressByUser = async (req, res, next) => {
+exports.updateContactDetailsByUser = async (req, res, next) => {
   try {
-    let newAddress = {};
-    const { addressLine1, addressLine2, townOrCity, postalCode } = req.body;
+    let newContactDetails = {};
+
+    const {
+      addressLine1,
+      addressLine2,
+      townOrCity,
+      postalCode,
+      phone,
+    } = req.body;
     // check req.body
-    newAddress["addressLine1"] = addressLine1;
-    newAddress["addressLine2"] = addressLine2;
-    newAddress["townOrCity"] = townOrCity;
-    newAddress["postalCode"] = postalCode;
+    newContactDetails["addressLine1"] = addressLine1;
+    newContactDetails["addressLine2"] = addressLine2;
+    newContactDetails["townOrCity"] = townOrCity;
+    newContactDetails["postalCode"] = postalCode;
+    newContactDetails["phone"] = phone;
 
     const user = await User.findOneAndUpdate(
       { _id: req.user.userId },
-      { address: newAddress },
+      { contactDetails: newContactDetails },
       { new: true }
     );
 
     res.status(200).json({ success: true, data: user });
 
-    console.log(`Users: User ${req.user.userId} update address success`.green);
+    console.log(
+      `Users: User ${req.user.userId} update contact details success`.green
+    );
     return;
   } catch (err) {
     res.status(422).json({
       success: false,
       errors: [err.message],
     });
-    console.log(`Users: user update address fail`.red);
+    console.log(`Users: user update details fail, ${err.message}`.red);
     return;
   }
 };

@@ -1,14 +1,11 @@
 import React, { Fragment } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../context/store";
-import { makeStyles, Theme } from "@material-ui/core/styles";
-import { Grid, Paper, Typography } from "@material-ui/core";
+import { Grid, Paper } from "@material-ui/core";
 import ProductContainer from "./ProductContainer";
 import { ICartItemDetail } from "../../../types/interfaces";
 
 const ProductsList = () => {
-  const classes = useStyles();
-
   const cart = useSelector((state: RootState) => state.cart);
 
   const contentArr = cart.items.map((product: ICartItemDetail) => (
@@ -19,10 +16,8 @@ const ProductsList = () => {
 
   const content = (
     <Paper elevation={1}>
-      <div className={classes.boxTitle}>
-        <Typography className={classes.textMargin} variant={"h6"}>
-          Product List
-        </Typography>
+      <div className="bg-gray-400">
+        <h6 className="font-semibold py-2 ml-2 uppercase">Product List</h6>
       </div>
       <Grid container spacing={1} direction={"column"}>
         {contentArr}
@@ -32,19 +27,5 @@ const ProductsList = () => {
 
   return <Fragment>{content}</Fragment>;
 };
-
-const useStyles = makeStyles((theme: Theme) => ({
-  root: {
-    minHeight: "5vh",
-  },
-  boxTitle: {
-    padding: "3px",
-    marginBottom: "6px",
-    backgroundColor: "rgb(180, 180, 180)",
-  },
-  textMargin: {
-    marginLeft: "10px",
-  },
-}));
 
 export default ProductsList;

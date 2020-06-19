@@ -1,78 +1,50 @@
-import React, { Fragment } from "react";
+import React from "react";
 import { CurrencyFormatter } from "../../../utils/Formatter";
-import { makeStyles, Theme } from "@material-ui/core/styles";
-import { Paper, Grid, Typography } from "@material-ui/core";
+
+import { Paper } from "@material-ui/core";
 import { IBills } from "../../../types/interfaces";
 
 const Bills = ({ orderTotal, deliveryFee, totalPayment }: IBills) => {
-  const classes = useStyles();
   return (
-    <Fragment>
-      <Paper elevation={1} className={classes.root}>
-        <Grid container direction={"column"}>
-          <Grid item xl={12} className={classes.boxTitle}>
-            <Typography className={classes.textContent} variant={"h6"}>
-              Summary
-            </Typography>
-          </Grid>
-          <Grid
-            item
-            xl={12}
-            className={classes.subTitle}
-            style={{ borderBottom: " 1px solid rgb(180, 180, 180)" }}
-          >
-            <Typography className={classes.textContent}>Order total</Typography>
-            <Typography className={classes.textContent}>
-              {CurrencyFormatter(orderTotal)}
-            </Typography>
-          </Grid>
-          <Grid item xl={12} className={classes.subTitle}>
-            <Typography className={classes.textContent}>
-              Total billed amount
-            </Typography>
-            <Typography className={classes.textContent}>
-              {CurrencyFormatter(orderTotal)}
-            </Typography>
-          </Grid>
-          <Grid item xl={12} className={classes.subTitle}>
-            <Typography className={classes.textContent}>
-              Delivery Fee
-            </Typography>
-            <Typography className={classes.textContent}>
-              {CurrencyFormatter(deliveryFee)}
-            </Typography>
-          </Grid>
-          <Grid item xl={12} className={classes.subTitle}>
-            <Typography color={"secondary"} className={classes.textContent}>
-              Total Payment
-            </Typography>
-            <Typography className={classes.textContent}>
-              {CurrencyFormatter(totalPayment)}
-            </Typography>
-          </Grid>
-        </Grid>
-      </Paper>
-    </Fragment>
+    <Paper elevation={1}>
+      {/* Title  */}
+      <div className="bg-gray-400">
+        <h6 className="font-semibold py-2 ml-2 uppercase">Summary</h6>
+      </div>
+      {/* Title End */}
+      {/* Contents */}
+      <div className="font-medium">
+        {/* Order Total */}
+        <div className="border-bottom border-solid flex justify-between py-1">
+          <p className="ml-2">Order Total :</p>
+          <p className="mr-2">{CurrencyFormatter(orderTotal)}</p>
+        </div>
+        {/* Order Total End*/}
+
+        {/* Total billed amount */}
+        <div className="flex justify-between mb-1">
+          <p className="ml-2">Total billed amount :</p>
+          <p className="mr-2">{CurrencyFormatter(orderTotal)}</p>
+        </div>
+        {/* Total billed amount End */}
+
+        {/* Delivery Fee */}
+        <div className="flex justify-between mb-1">
+          <p className="ml-2">Delivery Fee :</p>
+          <p className="mr-2">{CurrencyFormatter(deliveryFee)}</p>
+        </div>
+        {/* Delivery Fee End */}
+
+        {/* Total Payment */}
+        <div className="flex justify-between py-1 border-top border-solid">
+          <p className="ml-2 text-red-600">Total Payment :</p>
+          <p className="mr-2">{CurrencyFormatter(totalPayment)}</p>
+        </div>
+        {/* Total payment end*/}
+      </div>
+      {/* Contents end */}
+    </Paper>
   );
 };
-
-const useStyles = makeStyles((theme: Theme) => ({
-  root: {
-    minHeight: "5vh",
-  },
-  textContent: {
-    marginLeft: "10px",
-    marginRight: "10px",
-  },
-  boxTitle: {
-    padding: "3px",
-    backgroundColor: "rgb(180, 180, 180)",
-  },
-  subTitle: {
-    marginBottom: "2px",
-    display: "flex",
-    justifyContent: " space-between",
-  },
-}));
 
 export default Bills;

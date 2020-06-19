@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState } from "react";
 import { userUpdateByAdmin } from "../../../../context/actions/AuthAction";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../context/store";
@@ -14,7 +14,7 @@ import {
 
 const ProfileUpdate = ({ data, userId }: any) => {
   const dispatch = useDispatch();
-  const { isLoading, success, errors } = useSelector(
+  const { isLoading, errors } = useSelector(
     (state: RootState) => state.userUpdate
   );
 

@@ -185,10 +185,10 @@ exports.updateProductInCart = async (req, res) => {
       success: true,
       cart: result,
     });
-    conosle.log("Cart: Update product quantity in cart success".green);
+    console.log("Cart: Update product quantity in cart success".green);
     return;
   } catch (err) {
-    conosle.log(
+    console.log(
       `Cart: Update product quantity in cart fail ${err.message}`.green
     );
     return res.status(401).json({

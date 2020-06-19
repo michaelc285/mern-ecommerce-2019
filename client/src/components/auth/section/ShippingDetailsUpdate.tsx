@@ -1,30 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../context/store";
 import {
-  updateAddressByUser,
-  cleanUpdateAddressState,
+  updateContactDetailsByUser,
+  cleanUpdateContactDetailsState,
 } from "../../../context/actions/AuthAction";
 //Components
 import { CircularProgress, Button } from "@material-ui/core";
-import { IUserAddressBody } from "../../../types/interfaces";
+import { IUserShippingDetailsBody } from "../../../types/interfaces";
 
 interface IAddressUpdate {
-  data: IUserAddressBody;
+  contactDetails: IUserShippingDetailsBody;
 }
 
-const AddressUpdate = ({ data }: IAddressUpdate) => {
+// const createContentDetailsObject = (contactDetails:IUserShippingDetailsBody) =>{
+//   if(Object.keys(contactDetails).length>0){
+
+//   }else{
+//     return {
+//       addressLine1:"",
+//       addressLine2:"",
+//       townOrCity:"",
+//       postalCode:"",
+//       phone:""
+//     }
+//   }
+// }
+
+const ShippingDetailsUpdate = ({ contactDetails }: IAddressUpdate) => {
   const dispatch = useDispatch();
   const { isLoading, errors } = useSelector(
-    (state: RootState) => state.addressUpdate
+    (state: RootState) => state.contactDetailsUpdate
   );
-
-  const [content, setContent] = useState({
-    addressLine1: data.addressLine1,
-    addressLine2: data.addressLine2,
-    townOrCity: data.townOrCity,
-    postalCode: data.postalCode,
-  });
+  const [content, setContent] = useState(contactDetails);
 
   // HandleChange
   const handleChangeTextContent = (
@@ -34,22 +42,34 @@ const AddressUpdate = ({ data }: IAddressUpdate) => {
     setContent({ ...content, [name]: value });
   };
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
+    setContent({
+      addressLine1: contactDetails.addressLine1,
+      addressLine2: contactDetails.addressLine2,
+      townOrCity: contactDetails.townOrCity,
+      postalCode: contactDetails.postalCode,
+      phone: contactDetails.phone,
+    });
+    dispatch(cleanUpdateContactDetailsState());
+  }, [setContent, dispatch, contactDetails]);
+
+  const handleClean = () => {
     setContent({
       addressLine1: "",
       addressLine2: "",
       townOrCity: "",
       postalCode: "",
+      phone: "",
     });
-    dispatch(cleanUpdateAddressState());
+    dispatch(cleanUpdateContactDetailsState());
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const body: IUserAddressBody = content;
+    const body: IUserShippingDetailsBody = content;
 
-    dispatch(updateAddressByUser(body));
+    dispatch(updateContactDetailsByUser(body));
   };
 
   return (
@@ -123,9 +143,10 @@ const AddressUpdate = ({ data }: IAddressUpdate) => {
           </div>
         </div>
         {/* Address Line 2 End */}
-        <div className="flex flex-wrap mb-2">
+
+        <div className="flex flex-wrap w-full mb-2">
           {/* Town or city */}
-          <div className="p-1 mb-3 w-full md:w-2/3">
+          <div className="p-1 mb-3 w-full md:w-1/3">
             <label
               htmlFor="townOrCity_input"
               className="block uppercase tracking-wide text-gray-700 text-sm font-bold mb-2"
@@ -138,7 +159,7 @@ const AddressUpdate = ({ data }: IAddressUpdate) => {
                 errors.includes("PASSWORD_FORMAT")
                   ? "border-red-500 bg-red-100"
                   : "border-gray-300 bg-white"
-              } rounded-lg py-2 px-4 block w-full sm:w-8/12 md:w-6/12 appearance-none leading-normal`}
+              } rounded-lg py-2 px-4 block w-full appearance-none leading-normal`}
               type="text"
               placeholder="eg: Manchester"
               name="townOrCity"
@@ -166,7 +187,7 @@ const AddressUpdate = ({ data }: IAddressUpdate) => {
                 errors.includes("PASSWORD_FORMAT")
                   ? "border-red-500 bg-red-100"
                   : "border-gray-300 bg-white"
-              } rounded-lg py-2 px-4 block w-full sm:w-8/12 md:w-6/12 appearance-none leading-normal`}
+              } rounded-lg py-2 px-4 block w-full  appearance-none leading-normal`}
               placeholder="eg: M16 0RA"
               type="text"
               name="postalCode"
@@ -180,6 +201,34 @@ const AddressUpdate = ({ data }: IAddressUpdate) => {
             )}
           </div>
           {/* Postcode End */}
+          {/* Contact Phone Number */}
+          <div className="p-1 mb-3 w-full md:w-1/3">
+            <label
+              htmlFor="phone_input"
+              className="block uppercase tracking-wide text-gray-700 text-sm font-bold mb-2"
+            >
+              Contact Number
+            </label>
+            <input
+              id="phone_input"
+              className={` focus:outline-none focus:shadow-outline border-2 ${
+                errors.includes("PASSWORD_FORMAT")
+                  ? "border-red-500 bg-red-100"
+                  : "border-gray-300 bg-white"
+              } rounded-lg py-2 px-4 block w-full appearance-none leading-normal`}
+              type="text"
+              placeholder="eg: +44 7911 123456"
+              name="phone"
+              value={content.phone}
+              onChange={handleChangeTextContent}
+            />
+            {errors.includes("PASSWORD_FORMAT") && (
+              <p className="text-sm text-red-500 py-1">
+                Password's length should be within 4 - 16
+              </p>
+            )}
+          </div>
+          {/* Contact Phone number End */}
         </div>
 
         {/* Submit Button */}
@@ -200,7 +249,16 @@ const AddressUpdate = ({ data }: IAddressUpdate) => {
             color="primary"
             onClick={handleReset}
           >
-            Clear
+            Reset
+          </Button>
+          <Button
+            aria-label="clean_button"
+            className="ml-3"
+            variant="contained"
+            color="primary"
+            onClick={handleClean}
+          >
+            Clean
           </Button>
         </div>
       </form>
@@ -208,4 +266,4 @@ const AddressUpdate = ({ data }: IAddressUpdate) => {
   );
 };
 
-export default AddressUpdate;
+export default ShippingDetailsUpdate;
