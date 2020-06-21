@@ -76,11 +76,17 @@ export const CART_ADD_SUCCESS = "CART_ADD_SUCCESS";
 export const CART_ADD_FAIL = "CART_ADD_FAIL";
 export const CART_REMOVE_FAIL = "CART_REMOVE_FAIL";
 export const CART_REMOVE_SUCCESS = "CART_REMOVE_SUCCESS";
-export const CART_BUY_SUCCESS = "CART_BUY_SUCCESS";
-export const CART_BUY_FAIL = "CART_BUY_FAIL";
 export const CART_UPDATE_SUCCESS = "CART_UPDATE_SUCCESS";
 export const CART_UPDATE_FAIL = "CART_UPDATE_FAIL";
 export const CART_CLEAR = "CART_CLEAR";
+/**
+ * Buy Process
+ */
+export const BUY_PROCESS_LOADING = "BUY_PROCESS_LOADING";
+export const BUY_PROCESS_SUCCESS = "BUY_PROCESS_SUCCESS";
+export const BUY_PROCESS_FAIL = "BUY_PROCESS_FAIL";
+export const BUY_PROCESS_CLEAN = "BUY_PROCESS_CLEAN";
+
 /**
  *      History
  */

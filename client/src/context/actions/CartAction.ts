@@ -7,10 +7,12 @@ import {
   CART_ADD_SUCCESS,
   CART_REMOVE_SUCCESS,
   CART_REMOVE_FAIL,
-  CART_BUY_FAIL,
-  CART_BUY_SUCCESS,
+  BUY_PROCESS_FAIL,
+  BUY_PROCESS_SUCCESS,
   CART_UPDATE_FAIL,
   CART_UPDATE_SUCCESS,
+  BUY_PROCESS_LOADING,
+  BUY_PROCESS_CLEAN,
 } from "../types";
 import axios from "axios";
 
@@ -115,13 +117,14 @@ export const buyProcess = (details: any, data: any) => async (
 ) => {
   try {
     // Page Loading signal
-    dispatch({ type: CART_LOADING });
+    dispatch({ type: BUY_PROCESS_LOADING });
 
     // Axios Body
     const body = {
       details,
       data,
       cart: getState().cart.items,
+      contactDetails: getState().auth.user.contactDetails,
     };
     // Axios Config
     const config = {
@@ -134,9 +137,12 @@ export const buyProcess = (details: any, data: any) => async (
     await axios.post("/api/users/cart/buyProcessDone", body, config);
 
     // Success
-    dispatch({ type: CART_BUY_SUCCESS });
+    dispatch({ type: BUY_PROCESS_SUCCESS });
   } catch (err) {
     dispatch(returnErrors(err.response.data, err.response.status));
-    dispatch({ type: CART_BUY_FAIL });
+    dispatch({ type: BUY_PROCESS_FAIL });
   }
 };
+
+export const cleanBuyProcessState = () => (dispatch: Function) =>
+  dispatch({ type: BUY_PROCESS_CLEAN });

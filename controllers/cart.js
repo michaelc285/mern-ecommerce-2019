@@ -224,6 +224,7 @@ exports.buyProcessDone = async (req, res) => {
     // Bills object
     const bills = {
       id: req.body.data.orderID,
+      contactDetails: req.body.contactDetails,
       purchaseAt: Date.now(),
       history,
     };
@@ -235,6 +236,7 @@ exports.buyProcessDone = async (req, res) => {
       name: req.body.details.payer.name.given_name,
       surname: req.body.details.payer.name.surname,
       email: req.body.details.payer.email_address,
+      contactDetails: req.body.contactDetails,
     };
 
     const paymentData = {
@@ -271,7 +273,7 @@ exports.buyProcessDone = async (req, res) => {
 
     // Update sold value
     await async.eachSeries(productInPayment, async (item) => {
-      await Product.update(
+      await Product.updateOne(
         { _id: item.id },
         {
           $inc: {

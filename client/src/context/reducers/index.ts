@@ -14,7 +14,7 @@ import {
   productDetailsReducer,
   productEditReducer,
 } from "../reducers/ProductReducer";
-import cartReducer from "../reducers/CartReducer";
+import { buyProcessReducer, cartReducer } from "../reducers/CartReducer";
 import HistoryReducer from "../reducers/HistoryReducer";
 export default combineReducers({
   auth: authReducer,
@@ -25,6 +25,7 @@ export default combineReducers({
   contactDetailsUpdate: contactDetailsUpdate,
   userCreateByAdmin: userCreateByAdminReducer,
   cart: cartReducer,
+  buyProcess: buyProcessReducer,
   error: errorReducer,
   history: HistoryReducer,
   productList: productListReducer,
