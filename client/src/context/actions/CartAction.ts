@@ -13,8 +13,10 @@ import {
   CART_UPDATE_SUCCESS,
   BUY_PROCESS_LOADING,
   BUY_PROCESS_CLEAN,
+  CART_CLEAN,
 } from "../types";
 import axios from "axios";
+import { IBills } from "../../types/interfaces";
 
 // Load cart
 export const loadCart = () => async (
@@ -111,7 +113,7 @@ export const updateProductInCart = (
 };
 
 //Buy Product Success
-export const buyProcess = (details: any, data: any) => async (
+export const buyProcess = (details: any, data: any, bills: IBills) => async (
   dispatch: Function,
   getState: Function
 ) => {
@@ -125,6 +127,7 @@ export const buyProcess = (details: any, data: any) => async (
       data,
       cart: getState().cart.items,
       contactDetails: getState().auth.user.contactDetails,
+      bills,
     };
     // Axios Config
     const config = {
@@ -138,6 +141,7 @@ export const buyProcess = (details: any, data: any) => async (
 
     // Success
     dispatch({ type: BUY_PROCESS_SUCCESS });
+    dispatch({ type: CART_CLEAN });
   } catch (err) {
     dispatch(returnErrors(err.response.data, err.response.status));
     dispatch({ type: BUY_PROCESS_FAIL });

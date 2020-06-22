@@ -11,7 +11,7 @@ import {
   BUY_PROCESS_SUCCESS,
   CART_UPDATE_FAIL,
   CART_UPDATE_SUCCESS,
-  CART_CLEAR,
+  CART_CLEAN,
   BUY_PROCESS_LOADING,
   BUY_PROCESS_CLEAN,
 } from "../types";
@@ -39,16 +39,16 @@ export const cartReducer = (
         isLoading: false,
         items: action.payload.data.cart,
       };
-    case CART_CLEAR:
+    case CART_CLEAN:
+    case CART_UPDATE_FAIL:
+    case CART_GET_FAIL:
+    case CART_ADD_FAIL:
+    case CART_REMOVE_FAIL:
       return {
         ...state,
         isLoading: false,
         items: [],
       };
-    case CART_UPDATE_FAIL:
-    case CART_GET_FAIL:
-    case CART_ADD_FAIL:
-    case CART_REMOVE_FAIL:
     default:
       return state;
   }

@@ -204,7 +204,6 @@ exports.updateProductInCart = async (req, res) => {
  * @access Private
  */
 exports.buyProcessDone = async (req, res) => {
-  let payerInfo = {};
   try {
     // Get user ID
     const userId = req.user.userId;
@@ -227,6 +226,7 @@ exports.buyProcessDone = async (req, res) => {
       contactDetails: req.body.contactDetails,
       purchaseAt: Date.now(),
       history,
+      bills: req.body.bills,
     };
 
     // Create Transaction Data

@@ -21,7 +21,7 @@ const checkContact = (contactDetails: IUserShippingDetailsBody) => {
   }
 };
 
-const Payment = ({ totalPayment }: IPayment) => {
+const Payment = ({ bills }: IPayment) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.auth);
 
@@ -31,7 +31,7 @@ const Payment = ({ totalPayment }: IPayment) => {
   ]);
 
   const onSuccess = (details: any, data: any) =>
-    dispatch(buyProcess(details, data));
+    dispatch(buyProcess(details, data, bills));
   return (
     <Paper elevation={1}>
       {/* Title */}
@@ -53,8 +53,8 @@ const Payment = ({ totalPayment }: IPayment) => {
             />
           </FormControl>
           {/* Option button end */}
-          <div className="mx-auto w-2/3">
-            <PaypalButton amount={totalPayment} onSuccess={onSuccess} />
+          <div className="mx-auto w-2/3 relative z-0">
+            <PaypalButton amount={bills.totalPayment} onSuccess={onSuccess} />
           </div>
         </div>
       ) : (

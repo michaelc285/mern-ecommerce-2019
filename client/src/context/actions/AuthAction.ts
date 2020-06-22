@@ -12,8 +12,8 @@ import {
   LOGOUT_SUCCESS,
   REGISTER_FAIL,
   REGISTER_SUCCESS,
-  CART_CLEAR,
-  HISTORY_CLEAR,
+  CART_CLEAN,
+  HISTORY_CLEAR as HISTORY_CLEAN,
   GET_USERS_LIST_FAIL,
   GET_USERS_LIST_SUCCESS,
   GET_USER_DETAILS_CLEAN,
@@ -136,8 +136,8 @@ export const logout = () => async (dispatch: Function) => {
 
   if (result.success) {
     dispatch({ type: LOGOUT_SUCCESS });
-    dispatch({ type: HISTORY_CLEAR });
-    dispatch({ type: CART_CLEAR });
+    dispatch({ type: HISTORY_CLEAN });
+    dispatch({ type: CART_CLEAN });
   } else {
     dispatch(returnErrors(result.errors, response.status));
   }

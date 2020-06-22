@@ -127,7 +127,7 @@ const CartPage = () => {
                     <ShippingInfo contactDetails={user.contactDetails} />
                   </Grid>
                   <Grid item>
-                    <Payment totalPayment={bills.totalPayment} />
+                    <Payment bills={bills} />
                   </Grid>
                 </Grid>
               </Grid>

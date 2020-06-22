@@ -34,6 +34,7 @@ import ProductCreate from "./components/dashboard/product/ProductCreate";
 import ProductDetailPage from "./components/market/productDetailPage/ProductDetailPage";
 import CartPage from "./components/cart/CartPage";
 import PurchaseHistoryUser from "./components/history/PurchaseHistoryUser";
+import PurchaseHistoryUser2 from "./components/history/PurchaseHistoryUser2";
 import ErrorPage from "./components/ErrorPage";
 import ProductControlPanelLanding from "./components/dashboard/product/ProductControlPanelLanding";
 import UserControlPanelLanding from "./components/dashboard/user/UserControlPanelLanding";
@@ -98,7 +99,7 @@ const App = () => {
             role={role}
             authenticationPath={SIGN_IN}
             path={USER_HISTORY}
-            component={PurchaseHistoryUser}
+            component={PurchaseHistoryUser2}
           />
           {/* Personal info page */}
           <ProtectedRoute

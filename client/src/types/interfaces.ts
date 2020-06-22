@@ -137,7 +137,7 @@ export interface IProductsList {
 }
 
 export interface IPayment {
-  totalPayment: number;
+  bills: IBills;
 }
 
 export interface IBills {

@@ -14,6 +14,7 @@ import {
 } from "@material-ui/core";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import HistoryContainer from "./section/HistoryContainer";
+import HistoryContainer2 from "./section/HistoryContainer2";
 // import HistoryTable from "./section/HistoryTable";
 
 const PurchaseHistoryUser = () => {
@@ -68,9 +69,9 @@ const PurchaseHistoryUser = () => {
           {data.length > 0
             ? data
                 .sort((a: any, b: any) => b.purchaseAt - a.purchaseAt)
-                .map((item: any) => (
-                  <div key={item.id}>
-                    <HistoryContainer data={item} />
+                .map((row: any) => (
+                  <div key={row.id}>
+                    <HistoryContainer2 data={row} />
                   </div>
                 ))
             : NoHistory}
