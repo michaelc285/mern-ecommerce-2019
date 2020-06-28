@@ -9,12 +9,14 @@ import { USER_CONTROL_PANEL, CREATE_ACCOUNT } from "../../../path";
 // Components
 import { Paper, LinearProgress, Button } from "@material-ui/core";
 import Pagination from "../../market/products/Pagination";
+// Icons
+import EditIcon from "@material-ui/icons/Edit";
 
 const UserControlPanelLanding = () => {
   const dispatch = useDispatch();
   const { isLoading, data } = useSelector((state: RootState) => state.userList);
   const [currentPage, setCurrentPage] = useState(1);
-  const [resultsPerPage] = useState(5);
+  const [resultsPerPage] = useState(10);
 
   useEffect(() => {
     dispatch(getUsers());
@@ -29,23 +31,36 @@ const UserControlPanelLanding = () => {
   const paginate = (e: any, pageNumber: number) => setCurrentPage(pageNumber);
 
   const Rows = currentResults.map((row: any, index: number) => (
-    <tr className={(index + 1) % 2 === 0 ? "bg-gray-200" : ""} key={row._id}>
-      <td className="border px-3 py-2">{indexOfFirstResult + index + 1}</td>
-      <td className="border px-3 py-2">
-        <NavLink
-          to={`${USER_CONTROL_PANEL}/${row._id}`}
-          className="text-blue-600 font-black font-mono"
-          style={{ textDecoration: "none" }}
-        >
-          {row._id}
-        </NavLink>
+    <tr
+      key={row._id}
+      className="bg-gray-200 hover:bg-gray-200 hover:opacity-50 "
+    >
+      {/* Details */}
+      <td
+        className={`rounded-l-lg border-l-8 ${
+          row.role ? "border-red-600" : "border-green-500"
+        }`}
+        style={{ padding: 15 }}
+      >
+        <div className="flex flex-col">
+          <p className="font-light text-xs">
+            <strong>ID:</strong> {row._id}{" "}
+          </p>
+          <p className="font-semibold text-xl">{row.name}</p>
+        </div>
       </td>
-      <td className="border px-3 py-2">{row.name}</td>
-      <td className="border px-3 py-2">{row.role === 1 ? "Admin" : "User"}</td>
-      <td className="border px-3 py-2">{row.email}</td>
-      <td className="border px-3 py-2">{row.history.length}</td>
-      <td className="border px-3 py-2">{row.cart.length}</td>
-      <td className="border px-3 py-2">{DateFormatter(row.register_date)}</td>
+      {/* Details End */}
+      {/* Edit Button */}
+      <td className="rounded-r-lg">
+        <div className="px-1">
+          <NavLink to={`${USER_CONTROL_PANEL}/${row._id}`} exact>
+            <button>
+              <EditIcon />
+            </button>
+          </NavLink>
+        </div>
+      </td>
+      {/* Edit Button End */}
     </tr>
   ));
 
@@ -69,7 +84,7 @@ const UserControlPanelLanding = () => {
             </NavLink>
           </div>
 
-          {/* Table */}
+          {/* Content */}
           <div className="mb-3">
             <Paper elevation={2} className="p-3">
               <div className="overflow-x-auto">
@@ -80,23 +95,24 @@ const UserControlPanelLanding = () => {
                       : `${resultCount} Result`}
                   </h4>
                 </div>
-
-                <table className="table-auto">
+                {/* Table */}
+                <table
+                  className="w-full"
+                  style={{
+                    borderSpacing: "0px 7px",
+                    borderCollapse: "separate",
+                  }}
+                >
                   <thead>
                     <tr>
-                      <th className="px-3 py-2">Index</th>
                       <th className="px-3 py-2">ID</th>
-                      <th className="px-3 py-2">Name</th>
-                      <th className="px-3 py-2">Role</th>
-                      <th className="px-3 py-2">Email</th>
-                      <th className="px-3 py-2">History</th>
-                      <th className="px-3 py-2">Cart</th>
-                      <th className="px-3 py-2">Reg. Date</th>
                     </tr>
                   </thead>
                   <tbody>{Rows}</tbody>
                 </table>
+                {/* Table End */}
               </div>
+              {/* Pagination */}
               <div className="flex justify-center my-10 p-3">
                 <Pagination
                   productsPerPage={resultsPerPage}
@@ -104,8 +120,10 @@ const UserControlPanelLanding = () => {
                   paginate={paginate}
                 />
               </div>
+              {/* Pagination End */}
             </Paper>
           </div>
+          {/* Content End */}
         </div>
       </div>
     </div>

@@ -141,7 +141,7 @@ export const buyProcess = (details: any, data: any, bills: IBills) => async (
 
     // Success
     dispatch({ type: BUY_PROCESS_SUCCESS });
-    dispatch({ type: CART_CLEAN });
+    dispatch(loadCart());
   } catch (err) {
     dispatch(returnErrors(err.response.data, err.response.status));
     dispatch({ type: BUY_PROCESS_FAIL });
