@@ -16,7 +16,7 @@ const UserControlPanelLanding = () => {
   const dispatch = useDispatch();
   const { isLoading, data } = useSelector((state: RootState) => state.userList);
   const [currentPage, setCurrentPage] = useState(1);
-  const [resultsPerPage] = useState(10);
+  const [resultsPerPage] = useState(5);
 
   useEffect(() => {
     dispatch(getUsers());
@@ -33,32 +33,75 @@ const UserControlPanelLanding = () => {
   const Rows = currentResults.map((row: any, index: number) => (
     <tr
       key={row._id}
-      className="bg-gray-200 hover:bg-gray-200 hover:opacity-50 "
+      className="hover:opacity-75"
+      style={{ backgroundColor: "#1c223b" }}
     >
       {/* Details */}
       <td
-        className={`rounded-l-lg border-l-8 ${
-          row.role ? "border-red-600" : "border-green-500"
+        className={`rounded-l border-l-8 ${
+          row.active ? "border-green-600" : "border-red-600"
         }`}
         style={{ padding: 15 }}
       >
-        <div className="flex flex-col">
-          <p className="font-light text-xs">
-            <strong>ID:</strong> {row._id}{" "}
+        <section className="flex flex-col text-gray-400">
+          <div className="font-light text-xs font-mono">
+            <p className="pr-2 inline-block">
+              <strong className="font-semibold">Id:</strong>{" "}
+              <span className="text-orange-400">{row._id}</span>{" "}
+            </p>
+            <div className="hidden md:inline-block">
+              <p className="pr-2 inline-block">
+                <strong className="font-semibold">Reg:</strong>{" "}
+                <span className="text-pink-600">
+                  {DateFormatter(row.register_date)}
+                </span>
+              </p>
+              <p className="pr-2 inline-block">
+                <strong className="font-semibold">History:</strong>{" "}
+                <span className=" text-red-400">{row.history.length}</span>
+              </p>
+              <p className="pr-2 inline-block">
+                <strong className="font-semibold">Cart:</strong>{" "}
+                <span className=" text-red-400">{row.cart.length}</span>
+              </p>
+              <p className="pr-2 inline-block">
+                <strong className="font-semibold">Role:</strong>{" "}
+                <span
+                  className={`${
+                    row.role === 0 ? "text-green-500" : "text-red-500"
+                  }`}
+                >
+                  {row.role ? "Admin" : "User"}
+                </span>
+              </p>
+              <p className="pr-2 inline-block">
+                <strong className="font-semibold">Active:</strong>{" "}
+                <span
+                  className={`${
+                    row.active ? "text-green-500" : "text-red-500"
+                  }`}
+                >
+                  {row.active ? "True" : "False"}
+                </span>
+              </p>
+            </div>
+          </div>
+          <p className="font-semibold text-xl pt-1">
+            <span>{row.email}</span>
           </p>
-          <p className="font-semibold text-xl">{row.name}</p>
-        </div>
+          <p className="font-semibold text-xl pt-1">
+            <span>{row.name}</span>
+          </p>
+        </section>
       </td>
       {/* Details End */}
       {/* Edit Button */}
-      <td className="rounded-r-lg">
-        <div className="px-1">
-          <NavLink to={`${USER_CONTROL_PANEL}/${row._id}`} exact>
-            <button>
-              <EditIcon />
-            </button>
-          </NavLink>
-        </div>
+      <td className="rounded-r text-center">
+        <NavLink to={`${USER_CONTROL_PANEL}/${row._id}`} exact>
+          <button>
+            <EditIcon color="primary" />
+          </button>
+        </NavLink>
       </td>
       {/* Edit Button End */}
     </tr>
@@ -73,23 +116,30 @@ const UserControlPanelLanding = () => {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen" style={{ backgroundColor: "#1c223b" }}>
       <div className="container mx-auto">
-        <div className="mt-8">
+        <div className="py-8">
           <div className="flex flex-wrap mb-3">
             <NavLink to={CREATE_ACCOUNT} style={{ textDecoration: "none" }}>
               <Button variant="outlined" color="secondary" className="mr-3">
                 Create User
               </Button>
             </NavLink>
+            <Button variant="outlined" color="secondary" className="mr-3">
+              Filter
+            </Button>
           </div>
 
           {/* Content */}
           <div className="mb-3">
-            <Paper elevation={2} className="p-3">
+            <Paper
+              elevation={2}
+              className="p-3"
+              style={{ backgroundColor: "#273349" }}
+            >
               <div className="overflow-x-auto">
                 <div className="mb-3">
-                  <h4 className="text-2xl text-indigo-900">
+                  <h4 className="text-2xl text-white">
                     {resultCount > 1
                       ? `${resultCount} Results`
                       : `${resultCount} Result`}
@@ -105,7 +155,7 @@ const UserControlPanelLanding = () => {
                 >
                   <thead>
                     <tr>
-                      <th className="px-3 py-2">ID</th>
+                      <th className="px-3 py-2 text-gray-200">User</th>
                     </tr>
                   </thead>
                   <tbody>{Rows}</tbody>
@@ -113,7 +163,7 @@ const UserControlPanelLanding = () => {
                 {/* Table End */}
               </div>
               {/* Pagination */}
-              <div className="flex justify-center my-10 p-3">
+              <div className="flex justify-center p-3">
                 <Pagination
                   productsPerPage={resultsPerPage}
                   totalProducts={resultCount}
