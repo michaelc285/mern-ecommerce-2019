@@ -2,9 +2,14 @@
 
 # My first e-commerce webapp
 
-<img src="https://github.com/michaelc285/mern-ecommerce/blob/master/readmeImage/sample1.png?raw=true" width="400">
 
-<img src="https://github.com/michaelc285/mern-ecommerce/blob/master/readmeImage/cartLanding.jpg?raw=true" width="400">
+| | | |
+|:-------------------------:|:-------------------------:|:-------------------------:|
+|<img src="https://github.com/michaelc285/mern-ecommerce/blob/master/readmeImage/sample1.png?raw=true" width="400" alt="screen shot market landing"> Market Landing|  <img src="https://github.com/michaelc285/mern-ecommerce/blob/master/readmeImage/cartLanding.jpg?raw=true" width="400" alt="screen shot shopping cart"> Shopping Cart |<img src="https://raw.githubusercontent.com/michaelc285/mern-ecommerce/master/readmeImage/userControlPanel.jpg?raw=true" width="400" alt="screen shot shopping cart"> Users Control Panel||
+
+
+
+
 
 ## Getting Started
 
@@ -66,4 +71,4 @@ Role
 	- This project is a pratice for me to learn modern framework and webapp.
 
 - What have you learned in this project ?
-	-	OAuth 2.0, JWT token, RESTful API, NoSQL database (MongoDB Atlas), MVC Pattern, ReactJS, React Hooks, Redux, ExpressJS, NodeJS, TypeScript, Tailwindcss ,Bootstrap, Material-UI etc...
+	-	OAuth 2.0, JWT token, RESTful API, NoSQL database (MongoDB Atlas), MVC Pattern, ReactJS, React Hooks, Redux, ExpressJS, NodeJS, TypeScript, Tailwindcss ,Bootstrap, Material-UI, Responsive etc...
