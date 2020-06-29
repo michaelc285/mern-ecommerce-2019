@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUsers } from "../../../context/actions/AuthAction";
 import { RootState } from "../../../context/store";
 import { DateFormatter } from "../../../utils/Formatter";
 import { NavLink } from "react-router-dom";
 import { USER_CONTROL_PANEL, CREATE_ACCOUNT } from "../../../path";
+import { IUser } from "../../../types/interfaces";
 
 // Components
 import { Paper, LinearProgress, Button } from "@material-ui/core";
@@ -12,25 +13,9 @@ import Pagination from "../../market/products/Pagination";
 // Icons
 import EditIcon from "@material-ui/icons/Edit";
 
-const UserControlPanelLanding = () => {
-  const dispatch = useDispatch();
-  const { isLoading, data } = useSelector((state: RootState) => state.userList);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [resultsPerPage] = useState(5);
-
-  useEffect(() => {
-    dispatch(getUsers());
-  }, [dispatch]);
-
-  // Get current product
-  const indexOfLastResult = currentPage * resultsPerPage;
-  const indexOfFirstResult = indexOfLastResult - resultsPerPage;
-  let currentResults = data.slice(indexOfFirstResult, indexOfLastResult);
-  const resultCount = data.length;
-  // Change page
-  const paginate = (e: any, pageNumber: number) => setCurrentPage(pageNumber);
-
-  const Rows = currentResults.map((row: any, index: number) => (
+// Table Rows
+const tableRows = (users: any) => {
+  return users.map((row: any, index: number) => (
     <tr
       key={row._id}
       className="hover:opacity-75"
@@ -106,6 +91,27 @@ const UserControlPanelLanding = () => {
       {/* Edit Button End */}
     </tr>
   ));
+};
+
+const UserControlPanelLanding = () => {
+  const dispatch = useDispatch();
+  const { isLoading, data } = useSelector((state: RootState) => state.userList);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [resultsPerPage] = useState(5);
+
+  useEffect(() => {
+    dispatch(getUsers());
+  }, [dispatch]);
+
+  // Get current product
+  const indexOfLastResult = currentPage * resultsPerPage;
+  const indexOfFirstResult = indexOfLastResult - resultsPerPage;
+  let currentResults = data.slice(indexOfFirstResult, indexOfLastResult);
+  const resultCount = data.length;
+  // Change page
+  const paginate = (e: any, pageNumber: number) => setCurrentPage(pageNumber);
+
+  const Rows = useMemo(() => tableRows(currentResults), [currentResults]);
 
   if (isLoading) {
     return (

@@ -1,18 +1,107 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { NavLink } from "react-router-dom";
 import { CREATE_PRODUCT } from "../../../path";
 import { useSelector, useDispatch } from "react-redux";
 import { Button, LinearProgress } from "@material-ui/core";
 import { RootState } from "../../../context/store";
 import { getProducts } from "../../../context/actions/ProductAction";
-import { DateFormatter } from "../../../utils/Formatter";
+import { DateFormatter, CurrencyFormatter } from "../../../utils/Formatter";
 import ProductFilter from "../../market/filter/ProductFilter";
 import { deleteProductById } from "../../../context/actions/ProductAction";
 import { Paper } from "@material-ui/core";
 import Pagination from "../../market/products/Pagination";
-// Testing
 
-// id, type, title, updatedAt
+// Icons
+import EditIcon from "@material-ui/icons/Edit";
+import { IProduct } from "../../../types/interfaces";
+
+// Table Rows
+const tableRows = (products: IProduct[]) => {
+  return products.map((row: IProduct, index: number) => (
+    <tr
+      key={row._id}
+      className="hover:opacity-75"
+      style={{ backgroundColor: "#1c223b" }}
+    >
+      {/* Details */}
+      <td
+        className={`rounded-l border-l-8 ${
+          row.active ? "border-green-600" : "border-red-600"
+        }`}
+        style={{ padding: 15 }}
+      >
+        <section className="flex flex-col text-gray-400">
+          <div className="font-light text-xs font-mono">
+            <p className="pr-2 inline-block">
+              <strong className="font-semibold">Id:</strong>{" "}
+              <span className="text-orange-400">{row._id}</span>{" "}
+            </p>
+            <div className="hidden md:inline-block">
+              {/* Last Update At */}
+              <p className="pr-2 inline-block">
+                <strong className="font-semibold">Last Update:</strong>{" "}
+                <span className="text-pink-600">
+                  {DateFormatter(row.updatedAt)}
+                </span>
+              </p>
+              {/* Create At */}
+              <p className="pr-2 inline-block">
+                <strong className="font-semibold">Create At:</strong>{" "}
+                <span className="text-pink-600">
+                  {DateFormatter(row.createdAt)}
+                </span>
+              </p>
+              {/* Type */}
+              <p className="pr-2 inline-block">
+                <strong className="font-semibold">Type:</strong>{" "}
+                <span className=" text-red-400">{row.type}</span>
+              </p>
+              {/* Sold */}
+              <p className="pr-2 inline-block">
+                <strong className="font-semibold">Sold:</strong>{" "}
+                <span className=" text-red-400">{row.sold}</span>
+              </p>
+              {/* Views */}
+              <p className="pr-2 inline-block">
+                <strong className="font-semibold">Views:</strong>{" "}
+                <span className=" text-red-400">{row.views}</span>
+              </p>
+              {/* Price */}
+              <p className="pr-2 inline-block">
+                <strong className="font-semibold">Price:</strong>{" "}
+                <span className=" text-red-400">
+                  {CurrencyFormatter(row.price)}
+                </span>
+              </p>
+              {/* Active */}
+              <p className="pr-2 inline-block">
+                <strong className="font-semibold">Active:</strong>{" "}
+                <span
+                  className={`${
+                    row.active ? "text-green-500" : "text-red-500"
+                  }`}
+                >
+                  {row.active ? "True" : "False"}
+                </span>
+              </p>
+            </div>
+          </div>
+          <p className="font-semibold text-xl pt-1">
+            <span>{row.title}</span>
+          </p>
+        </section>
+      </td>
+      {/* Details End */}
+      {/* Edit Button */}
+      <td className="rounded-r text-center">
+        <button>
+          <EditIcon color="primary" />
+        </button>
+      </td>
+      {/* Edit Button End */}
+    </tr>
+  ));
+};
 
 const ProductControlPanelLanding = () => {
   const dispatch = useDispatch();
@@ -34,28 +123,7 @@ const ProductControlPanelLanding = () => {
   // Change page
   const paginate = (e: any, pageNumber: number) => setCurrentPage(pageNumber);
 
-  const Rows = currentProducts.map((row: any, index: number) => (
-    <tr className={(index + 1) % 2 === 0 ? "bg-gray-200" : ""} key={row._id}>
-      <td className="border px-3 py-2">{indexOfFirstProduct + index + 1}</td>
-      <td className="border px-3 py-2">{row._id}</td>
-      <td className="border px-3 py-2">{row.title}</td>
-      <td className="border px-3 py-2">{row.type}</td>
-      <td className="border px-3 py-2">{DateFormatter(row.updatedAt)}</td>
-      <td className="border px-3 py-2">{DateFormatter(row.createdAt)}</td>
-      <td className="border px-3 py-2">
-        <button className="text-blue-600" onClick={() => console.log(row._id)}>
-          Edit
-        </button>
-        <span>{" | "}</span>
-        <button
-          className="text-blue-600"
-          onClick={() => dispatch(deleteProductById(row._id))}
-        >
-          Delete
-        </button>
-      </td>
-    </tr>
-  ));
+  const Rows = useMemo(() => tableRows(currentProducts), [currentProducts]);
 
   if (isLoading) {
     return (
@@ -66,9 +134,9 @@ const ProductControlPanelLanding = () => {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen" style={{ backgroundColor: "#1c223b" }}>
       <div className="container mx-auto">
-        <div className="mt-8">
+        <div className="py-8">
           <div className="flex flex-wrap mb-3">
             <NavLink
               exact
@@ -84,43 +152,50 @@ const ProductControlPanelLanding = () => {
             <ProductFilter />
           </div>
 
-          {/* Table */}
+          {/* Content */}
           <div className="mb-3">
-            <Paper elevation={2} className="p-3">
+            <Paper
+              elevation={2}
+              className="p-3"
+              style={{ backgroundColor: "#273349" }}
+            >
               <div className="overflow-x-auto">
                 <div className="mb-3">
-                  <h4 className="text-2xl">
+                  <h4 className="text-2xl text-white">
                     {resultCount > 1
                       ? `${resultCount} Results`
                       : `${resultCount} Result`}
                   </h4>
                 </div>
-
-                <table className="table-auto">
+                {/* Table */}
+                <table
+                  className="w-full"
+                  style={{
+                    borderSpacing: "0px 7px",
+                    borderCollapse: "separate",
+                  }}
+                >
                   <thead>
                     <tr>
-                      <th className="px-3 py-2">Index</th>
-                      <th className="px-3 py-2">Product ID</th>
-                      <th className="px-3 py-2">Title</th>
-                      <th className="px-3 py-2">Type</th>
-                      <th className="px-3 py-2">Updated At</th>
-                      <th className="px-3 py-2">Created At</th>
-                      <th className="px-3 py-2">Options</th>
+                      <th className="px-3 py-2 text-gray-200">Product</th>
                     </tr>
                   </thead>
-
                   <tbody>{Rows}</tbody>
                 </table>
+                {/* Table End */}
               </div>
-              <div className="flex justify-center my-10 p-3">
+              {/* Pagination */}
+              <div className="flex justify-center p-3">
                 <Pagination
                   productsPerPage={productsPerPage}
                   totalProducts={resultCount}
                   paginate={paginate}
                 />
               </div>
+              {/* Pagination End */}
             </Paper>
           </div>
+          {/* Content End */}
         </div>
       </div>
     </div>

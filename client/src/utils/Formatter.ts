@@ -10,7 +10,7 @@ export const CurrencyFormatter = (money: number) => {
   return formatter.format(money);
 };
 
-export const DateFormatter = (date: number) => {
+export const DateFormatter = (date: string | number) => {
   // ms to  YYYY-MM-DD  HH:MM
   return new Date(date).toISOString().slice(0, 16).replace(/T/g, " ");
 };

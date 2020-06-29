@@ -17,11 +17,16 @@ export interface IMsg {
 //  Auth
 // ***************
 export interface IUser {
-  name?: string;
+  name: string;
   email: string;
-  password: string;
-  cart?: string[];
-  history?: string[];
+  password?: string;
+  cart?: IProductInCart[];
+  history?: IHistory[];
+  role?: number;
+  active?: boolean;
+  register_date?: string | number;
+  contactDetails?: IUserShippingDetailsBody;
+  _id?: string;
 }
 
 export interface IError {
@@ -91,9 +96,17 @@ export interface IProduct {
   images: string[];
   quantity: number;
   sold: number;
-  createAt: string;
-  updateAt: string;
+  createdAt: string;
+  updatedAt: string;
   creator?: string | object;
+  views: number;
+  active: boolean;
+}
+
+export interface IProductInCart {
+  id: string;
+  quantity: number;
+  date: number;
 }
 
 export interface IProductDetailPage {
@@ -174,7 +187,9 @@ export interface IOrderProduct {
 export interface IHistory {
   id: string;
   purchaseAt: number;
+  contactDetails: IUserShippingDetailsBody;
   history: IOrderProduct[];
+  bills: IBills;
 }
 
 export interface IHistoryContainer {
@@ -218,3 +233,7 @@ export interface IUserShippingDetailsBody {
   postalCode: string;
   phone: string;
 }
+
+// ***************
+//  Product Control Panel Landing
+// ***************
