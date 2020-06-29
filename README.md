@@ -1,6 +1,6 @@
 
 
-# My first e-commerce webapp
+# E-Commerce webapp (MERN stack)
 
 
 | | | |
@@ -66,9 +66,11 @@ Role
 		|- SIGN IN
 
 ```
-## FAQ
-- Objective ? 
-	- This project is a pratice for me to learn modern framework and webapp.
+## What I Learned
+- OAuth 2.0, JWT token, RESTful API, MVC Pattern, NodeJS, TypeScript
+- Frontend: React.js, React Hooks, Redux, Responsive 
+- Backend: MongoDB Atlas, Express.js
+- CSS Framework / UI: Tailwind CSS, Material-UI
+## Objective 
+- This project is a pratice for me to learn modern framework and webapp.
 
-- What have you learned in this project ?
-	-	OAuth 2.0, JWT token, RESTful API, NoSQL database (MongoDB Atlas), MVC Pattern, ReactJS, React Hooks, Redux, ExpressJS, NodeJS, TypeScript, Tailwindcss ,Bootstrap, Material-UI, Responsive etc...
