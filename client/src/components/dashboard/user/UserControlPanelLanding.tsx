@@ -5,11 +5,11 @@ import { RootState } from "../../../context/store";
 import { DateFormatter } from "../../../utils/Formatter";
 import { NavLink } from "react-router-dom";
 import { USER_CONTROL_PANEL, CREATE_ACCOUNT } from "../../../path";
-import { IUser } from "../../../types/interfaces";
 
 // Components
 import { Paper, LinearProgress, Button } from "@material-ui/core";
 import Pagination from "../../market/products/Pagination";
+import UserControlPanelLandingLoading from "./section/UserControlPanelLandingLoading";
 // Icons
 import EditIcon from "@material-ui/icons/Edit";
 
@@ -117,6 +117,7 @@ const UserControlPanelLanding = () => {
     return (
       <div className="h-screen">
         <LinearProgress color="secondary" />
+        <UserControlPanelLandingLoading />
       </div>
     );
   }

@@ -2,14 +2,16 @@ import React, { useEffect, useState, useMemo } from "react";
 import { NavLink } from "react-router-dom";
 import { CREATE_PRODUCT } from "../../../path";
 import { useSelector, useDispatch } from "react-redux";
-import { Button, LinearProgress } from "@material-ui/core";
 import { RootState } from "../../../context/store";
 import { getProducts } from "../../../context/actions/ProductAction";
 import { DateFormatter, CurrencyFormatter } from "../../../utils/Formatter";
-import ProductFilter from "../../market/filter/ProductFilter";
 import { deleteProductById } from "../../../context/actions/ProductAction";
-import { Paper } from "@material-ui/core";
+
+// Componetns
+import ProductFilter from "../../market/filter/ProductFilter";
+import { Button, LinearProgress, Paper } from "@material-ui/core";
 import Pagination from "../../market/products/Pagination";
+import ProductControlPanelLandingLoading from "./section/ProductControlPanelLandingLoading";
 
 // Icons
 import EditIcon from "@material-ui/icons/Edit";
@@ -129,6 +131,7 @@ const ProductControlPanelLanding = () => {
     return (
       <div className="h-screen">
         <LinearProgress color="secondary" />
+        <ProductControlPanelLandingLoading />
       </div>
     );
   }
