@@ -1,6 +1,9 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getUsers } from "../../../context/actions/AuthAction";
+import {
+  getUsers,
+  getUsersByFilter,
+} from "../../../context/actions/AuthAction";
 import { RootState } from "../../../context/store";
 import { DateFormatter } from "../../../utils/Formatter";
 import { NavLink } from "react-router-dom";
@@ -10,6 +13,8 @@ import { USER_CONTROL_PANEL, CREATE_ACCOUNT } from "../../../path";
 import { Paper, LinearProgress, Button } from "@material-ui/core";
 import Pagination from "../../market/products/Pagination";
 import UserControlPanelLandingLoading from "./section/UserControlPanelLandingLoading";
+import CustomDialog from "../../utils/CustomDialog";
+import UserFilter from "./section/UserFilter";
 // Icons
 import EditIcon from "@material-ui/icons/Edit";
 
@@ -96,8 +101,20 @@ const tableRows = (users: any) => {
 const UserControlPanelLanding = () => {
   const dispatch = useDispatch();
   const { isLoading, data } = useSelector((state: RootState) => state.userList);
+  const [dialogIsOpen, setDialogIsOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [resultsPerPage] = useState(5);
+
+  const handleDialogIsOpen = () => {
+    setDialogIsOpen(true);
+  };
+  const handleDialogIsClose = () => {
+    setDialogIsOpen(false);
+  };
+
+  const search = () => {
+    dispatch(getUsersByFilter());
+  };
 
   useEffect(() => {
     dispatch(getUsers());
@@ -124,6 +141,12 @@ const UserControlPanelLanding = () => {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#1c223b" }}>
+      <CustomDialog
+        isOpen={dialogIsOpen}
+        handleClose={handleDialogIsClose}
+        title={"User Filter"}
+        children={<UserFilter />}
+      />
       <div className="container mx-auto">
         <div className="py-8">
           <div className="flex flex-wrap mb-3">
@@ -132,7 +155,12 @@ const UserControlPanelLanding = () => {
                 Create User
               </Button>
             </NavLink>
-            <Button variant="outlined" color="secondary" className="mr-3">
+            <Button
+              variant="outlined"
+              color="secondary"
+              className="mr-3"
+              onClick={handleDialogIsOpen}
+            >
               Filter
             </Button>
           </div>

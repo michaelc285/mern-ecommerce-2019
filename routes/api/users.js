@@ -5,6 +5,7 @@ const admin = require("../../middleware/admin");
 const { getHistory } = require("../../controllers/history");
 const {
   getUsers,
+  getUsersByFilter,
   updateUser,
   deleteUser,
   createAccountByAdmin,
@@ -29,6 +30,7 @@ const {
 router
   .route("/")
   .get(auth, admin, getUsers)
+  .post(auth, admin, getUsersByFilter)
   .put(auth, admin, updateUser)
   .delete(auth, admin, deleteUser);
 

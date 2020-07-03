@@ -12,7 +12,7 @@ import ProductFilter from "../../market/filter/ProductFilter";
 import { Button, LinearProgress, Paper } from "@material-ui/core";
 import Pagination from "../../market/products/Pagination";
 import ProductControlPanelLandingLoading from "./section/ProductControlPanelLandingLoading";
-
+import CustomDialog from "../../utils/CustomDialog";
 // Icons
 import EditIcon from "@material-ui/icons/Edit";
 import { IProduct } from "../../../types/interfaces";
@@ -112,6 +112,10 @@ const ProductControlPanelLanding = () => {
   );
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(5);
+  const [dialogIsOpen, setDialogIsOpen] = useState(false);
+
+  const handleDialogIsOpen = () => setDialogIsOpen(true);
+  const handleDialogIsClose = () => setDialogIsOpen(false);
 
   useEffect(() => {
     dispatch(getProducts());
@@ -138,6 +142,12 @@ const ProductControlPanelLanding = () => {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#1c223b" }}>
+      <CustomDialog
+        isOpen={dialogIsOpen}
+        handleClose={handleDialogIsClose}
+        title={"Product Filter"}
+        children={<ProductFilter />}
+      />
       <div className="container mx-auto">
         <div className="py-8">
           <div className="flex flex-wrap mb-3">
@@ -150,9 +160,14 @@ const ProductControlPanelLanding = () => {
                 Create Product
               </Button>
             </NavLink>
-          </div>
-          <div className="mb-3">
-            <ProductFilter />
+            <Button
+              variant="outlined"
+              color="secondary"
+              className="mr-3 "
+              onClick={handleDialogIsOpen}
+            >
+              Filter
+            </Button>
           </div>
 
           {/* Content */}

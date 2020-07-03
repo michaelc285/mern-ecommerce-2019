@@ -18,7 +18,7 @@ const {
 } = require("../utils/formValidator");
 /**
  * @desc   Get user
- * @route  GET /api/users
+ * @route  GET /api/users/:type <single/all>
  * @access Private (Admin)
  */
 exports.getUsers = async (req, res, next) => {
@@ -55,6 +55,54 @@ exports.getUsers = async (req, res, next) => {
     return;
   } catch (err) {
     console.log(`Users: Get user fail : ${err.message}`.red);
+    res.status(404).json({
+      success: false,
+      errors: [err.message],
+    });
+    return;
+  }
+};
+
+/**
+ * @desc   Get user by filtering
+ * @route  POST /api/users
+ * @access Private (Admin)
+ */
+exports.getUsersByFilter = async (req, res, next) => {
+  try {
+    let filterArguments = {};
+    let searchTerm = req.body.searchTerm;
+    // Classify the filter object
+    for (let key in req.body.filters) {
+      if (key === "history" || key === "cart") {
+        filterArguments[key] = {
+          $gte: { $size: 1 },
+        };
+      } else if (key === "active" || key === "role") {
+        filterArguments[key] = req.body.filters[key];
+      }
+    }
+
+    let users = null;
+
+    if (searchTerm) {
+      let regex = new RegExp(searchTerm, "i");
+      users = await User.find(filterArguments).find({
+        $text: { $search: regex },
+      });
+    } else {
+      users = await User.find(filterArguments);
+    }
+
+    res.status(200).json({
+      success: true,
+      count: users.length,
+      users,
+    });
+    console.log(`Users: Get user by filtering success`.green);
+    return;
+  } catch (err) {
+    console.log(`Users: Get users by filter fail : ${err.message}`.red);
     res.status(404).json({
       success: false,
       errors: [err.message],

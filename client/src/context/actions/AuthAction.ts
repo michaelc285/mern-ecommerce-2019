@@ -167,6 +167,28 @@ export const getUsers = () => async (
   }
 };
 
+// Get Users by Filters
+export const getUsersByFilter = (filter: object = {}) => async (
+  dispatch: Function,
+  getState: Function
+) => {
+  try {
+    dispatch({ type: USER_LIST_LOADING });
+
+    const result = await axios.post(`/api/users`, filter, {
+      headers: {
+        authorization: `Bearer ${getState().auth.token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    dispatch({ type: GET_USERS_LIST_SUCCESS, payload: result });
+  } catch (err) {
+    dispatch(returnErrors(err.response.data, err.response.status));
+    dispatch({ type: GET_USERS_LIST_FAIL });
+  }
+};
+
 // Get Users By ID
 export const getUserById = (userId: string) => async (
   dispatch: Function,
