@@ -71,22 +71,46 @@ exports.getUsers = async (req, res, next) => {
 exports.getUsersByFilter = async (req, res, next) => {
   try {
     let filterArguments = {};
-    let searchTerm = req.body.searchTerm;
+    const searchTerm = req.body.searchTerm;
+    console.log(req.body);
     // Classify the filter object
     for (let key in req.body.filters) {
       if (key === "history" || key === "cart") {
         filterArguments[key] = {
           $gte: { $size: 1 },
         };
-      } else if (key === "active" || key === "role") {
-        filterArguments[key] = req.body.filters[key];
+      } else if (key === "role" || key == "active") {
+        const arr = req.body.filters[key];
+        if (arr.length > 0) {
+          const convertedStatusArr = arr.map((value) => {
+            if (key === "role") {
+              switch (value.toLowerCase()) {
+                case "admin":
+                  return 1;
+                case "user":
+                default:
+                  return 0;
+              }
+            } else if (key === "active") {
+              switch (value.toLowerCase()) {
+                case "active":
+                  return true;
+                case "inactive":
+                default:
+                  return false;
+              }
+            }
+          });
+          console.log(convertedStatusArr);
+          filterArguments[key] = { $in: convertedStatusArr };
+        }
       }
     }
-
+    console.log(filterArguments);
     let users = null;
 
     if (searchTerm) {
-      let regex = new RegExp(searchTerm, "i");
+      const regex = new RegExp(searchTerm, "i");
       users = await User.find(filterArguments).find({
         $text: { $search: regex },
       });
