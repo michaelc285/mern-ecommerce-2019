@@ -14,6 +14,7 @@ const {
   getUserProfileByToken,
   deleteAccountByUser,
   updateContactDetailsByUser,
+  updateAccountStatus,
 } = require("../../controllers/users");
 const {
   AddProductToCart,
@@ -35,6 +36,8 @@ router
   .delete(auth, admin, deleteUser);
 
 router.route("/address").put(auth, admin, updateAddressByAdmin);
+
+router.route("/status").put(auth, admin, updateAccountStatus);
 
 router
   .route("/profile")

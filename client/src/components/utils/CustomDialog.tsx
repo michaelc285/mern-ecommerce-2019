@@ -1,6 +1,5 @@
-import React from "react";
-import classes from "*.module.css";
-import { makeStyles, Theme, createStyles } from "@material-ui/core";
+import React, { useEffect } from "react";
+
 import {
   Button,
   Dialog,
@@ -23,6 +22,12 @@ const CustomDialog = ({
   title,
   children,
 }: ICustomerDialogProps) => {
+  useEffect(() => {
+    return () => {
+      handleClose();
+    };
+  }, []);
+
   return (
     <React.Fragment>
       <Dialog

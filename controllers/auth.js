@@ -63,9 +63,15 @@ exports.loginUser = async (req, res, next) => {
     const refreshToken = createRefreshToken(user._id);
 
     // Insert refresh token with user in db
-    await User.findByIdAndUpdate(user._id, {
-      token: refreshToken,
-    });
+    await User.findByIdAndUpdate(
+      user._id,
+      {
+        accessToken: accessToken,
+        token: refreshToken,
+      },
+      { new: true }
+    );
+
     // Send token. Refresh token as cookie and access token as regular response
     sendRefreshToken(res, refreshToken);
     sendAccessToken(req, res, accessToken, user);
@@ -194,7 +200,7 @@ exports.logoutUser = async (req, res, next) => {
     // Remove token in mongoDB
     const user = await User.findOneAndUpdate(
       { _id: payload.userId },
-      { token: undefined }
+      { token: null, accessToken: null }
     );
 
     res.status(200).json({
@@ -240,12 +246,9 @@ exports.refresh_token = async (req, res, next) => {
     // Pass the validation
     // Generate token
     const accessToken = createAccessToken(user._id);
+    await User.findOneAndUpdate({ _id: user._id }, { accessToken });
     //const refreshToken = createRefreshToken(user._id);
 
-    // res.status(200).json({
-    //   success: true,
-    //   accesstoken: accessToken,
-    // });
     sendAccessToken(req, res, accessToken, user);
     console.log("Auth: Token Refresh Success".green);
     return;

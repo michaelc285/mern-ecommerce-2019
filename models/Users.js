@@ -40,8 +40,13 @@ const UserSchema = new mongoose.Schema({
       phone: "",
     },
   },
+  accessToken: {
+    type: String,
+    default: null,
+  },
   token: {
     type: String,
+    default: null,
   },
   register_date: {
     type: Date,

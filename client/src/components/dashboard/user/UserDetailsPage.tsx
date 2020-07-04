@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, Redirect } from "react-router-dom";
 import { IUserDetailsPage } from "../../../types/interfaces";
@@ -7,9 +7,11 @@ import { USER_CONTROL_PANEL } from "../../../path";
 import {
   getUserById,
   deleteUser,
+  updateAccountStatus,
   cleanDeleteUserState,
   cleanUpdateUserState,
   cleanUserDetailsState,
+  cleanUpdateAccountStatusState,
 } from "../../../context/actions/AuthAction";
 
 // Components
@@ -18,6 +20,8 @@ import {
   LinearProgress,
   Breadcrumbs,
   Typography,
+  Switch,
+  Grid,
 } from "@material-ui/core";
 import History from "./section/History";
 import ProfileUpdate from "./section/ProfileUpdate";
@@ -28,14 +32,25 @@ const UserDetailsPage = ({ match }: IUserDetailsPage) => {
   const { isLoading, data } = useSelector(
     (state: RootState) => state.userDetails
   );
+
   const deleteState = useSelector((state: RootState) => state.userDelete);
   const updateUser = useSelector((state: RootState) => state.userUpdate);
+  const [accountStatus, setAccountStatus] = useState<boolean>();
+
+  const handleAccountStatusChnage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const status = event.target.checked;
+    setAccountStatus(status);
+    dispatch(updateAccountStatus(userID, status));
+    // console.log(event.target.checked);
+  };
+
   useEffect(() => {
-    console.log("UseEffect fire");
     if (deleteState.success === false) {
       dispatch(getUserById(userID));
-      console.log("Reload");
     }
+    setAccountStatus(data.active);
 
     // When Unmount
     return () => {
@@ -45,7 +60,7 @@ const UserDetailsPage = ({ match }: IUserDetailsPage) => {
       }
       dispatch(cleanUpdateUserState());
     };
-  }, [dispatch, userID, deleteState.success, updateUser.success]);
+  }, [dispatch, userID, deleteState.success, updateUser.success, data.active]);
 
   // Delete Account Success
   if (deleteState.success === true) {
@@ -96,8 +111,40 @@ const UserDetailsPage = ({ match }: IUserDetailsPage) => {
             <History data={data.history} />
           </div>
           {/* History End */}
+          {/* Update Account status*/}
+          <section className="mb-16">
+            <h4 className="font-semibold  text-2xl py-2 text-red-600">
+              Account Status
+            </h4>
+            <hr />
+            <div>
+              <p className="my-3">
+                Once you deactivate account, the user will also be logedout.
+              </p>
+
+              <Typography component="div">
+                <Grid
+                  component="label"
+                  container
+                  alignItems="center"
+                  spacing={1}
+                >
+                  <Grid item>Revoke</Grid>
+                  <Grid item>
+                    <Switch
+                      checked={accountStatus}
+                      onChange={handleAccountStatusChnage}
+                      name="account-status-switch"
+                    />
+                  </Grid>
+                  <Grid item>Activate</Grid>
+                </Grid>
+              </Typography>
+            </div>
+          </section>
+          {/* Switch Account Status End */}
           {/* Delete Account */}
-          <div className="mb-16">
+          <section className="mb-16">
             <h4 className="font-semibold  text-2xl py-2 text-red-600">
               Delete Account
             </h4>
@@ -117,7 +164,7 @@ const UserDetailsPage = ({ match }: IUserDetailsPage) => {
                 Delete Account
               </Button>
             </div>
-          </div>
+          </section>
           {/* Delete End */}
         </div>
       </div>

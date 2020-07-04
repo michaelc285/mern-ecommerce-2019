@@ -42,6 +42,10 @@ import {
   USER_CONTACT_UPDATE,
   UPDATE_CONTACT_LOADING,
   UPDATE_CONTACT_SUCCESS,
+  UPDATE_ACCOUNT_STATUS_CLEAN,
+  UPDATE_ACCOUNT_STATUS_FAIL,
+  UPDATE_ACCOUNT_STATUS_LOADING,
+  UPDATE_ACCOUNT_STATUS_SUCCESS,
 } from "../types";
 
 // Load User and get access token
@@ -379,5 +383,36 @@ export const updateContactDetailsByUser = (body: object) => async (
 // Clear create user reducer state
 export const cleanUpdateContactDetailsState = () => (dispatch: Function) =>
   dispatch({ type: UPDATE_CONTACT_CLEAN });
+
+// --------------------------------------------------------------
+
+// Update Account Status by Admin
+export const updateAccountStatus = (
+  accountId: string,
+  status: boolean
+) => async (dispatch: Function, getState: Function) => {
+  try {
+    dispatch({ type: UPDATE_ACCOUNT_STATUS_LOADING });
+
+    const result = await axios.put(
+      `/api/users/status?id=${accountId}`,
+      { status },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${getState().auth.token}`,
+        },
+      }
+    );
+
+    dispatch({ type: UPDATE_ACCOUNT_STATUS_SUCCESS });
+  } catch (err) {
+    dispatch(returnErrors(err.response.data, err.response.status));
+    dispatch({ type: UPDATE_ACCOUNT_STATUS_FAIL, payload: err.response });
+  }
+};
+
+export const cleanUpdateAccountStatusState = () => (dispatch: Function) =>
+  dispatch({ type: UPDATE_ACCOUNT_STATUS_CLEAN });
 
 // --------------------------------------------------------------

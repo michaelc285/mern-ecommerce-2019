@@ -462,7 +462,6 @@ exports.editProfileByUser = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      data: user,
     });
     console.log(`Users: User ${req.user.userId} profile update success`.green);
     return;
@@ -473,6 +472,47 @@ exports.editProfileByUser = async (req, res) => {
     });
 
     console.log(`Users: Profile update fail Msg: ${err.message}`.red);
+    return;
+  }
+};
+
+/**
+ * @desc   Active status Switch
+ * @route  PUT /api/users/status:id
+ * @access Private (Admin)
+ */
+exports.updateAccountStatus = async (req, res) => {
+  try {
+    const userId = req.query.id;
+    const newStatus = req.body.status; // boolean
+
+    let user = null;
+    if (newStatus === true) {
+      user = await User.findOneAndUpdate(
+        { _id: userId },
+        { active: newStatus },
+        { new: true }
+      );
+    } else {
+      // If status === false token will also be revoke
+      user = await User.findOneAndUpdate(
+        { _id: userId },
+        { active: newStatus, token: null, accessToken: null },
+        { new: true }
+      );
+    }
+
+    res.status(200).json({
+      success: true,
+      user,
+    });
+  } catch (err) {
+    res.status(404).json({
+      success: false,
+      errors: [err.message],
+    });
+
+    console.log(`Users: status update fail Msg: ${err.message}`.red);
     return;
   }
 };

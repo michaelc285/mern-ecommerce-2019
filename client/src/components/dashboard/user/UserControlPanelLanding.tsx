@@ -1,9 +1,6 @@
 import React, { useEffect, useState, useMemo, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getUsers,
-  getUsersByFilter,
-} from "../../../context/actions/AuthAction";
+import { getUsers } from "../../../context/actions/AuthAction";
 import { RootState } from "../../../context/store";
 import { DateFormatter } from "../../../utils/Formatter";
 import { NavLink } from "react-router-dom";
@@ -110,10 +107,6 @@ const UserControlPanelLanding = () => {
   };
   const handleDialogIsClose = () => {
     setDialogIsOpen(false);
-  };
-
-  const search = () => {
-    dispatch(getUsersByFilter());
   };
 
   useEffect(() => {
