@@ -17,9 +17,10 @@ import {
   PRODUCT_CONTROL_PANEL,
   USER_CONTROL_PANEL,
   ROOT,
-  USER_DETAILS_PAGE,
+  USER_EDIT_PAGE,
   CREATE_ACCOUNT,
   USER_PROFILE,
+  PRODUCT_EDIT_PAGE,
 } from "./path";
 import { loadUser } from "./context/actions/AuthAction";
 import { ROLE_ADMIN, ROLE_GUEST, ROLE_USER } from "./context/types";
@@ -33,7 +34,7 @@ import MarketLanding from "./components/market/MarketLanding";
 import ProductCreate from "./components/dashboard/product/ProductCreate";
 import ProductDetailPage from "./components/market/productDetailPage/ProductDetailPage";
 import CartPage from "./components/cart/CartPage";
-import PurchaseHistoryUser from "./components/history/PurchaseHistoryUser";
+//import PurchaseHistoryUser from "./components/history/PurchaseHistoryUser";
 import PurchaseHistoryUser2 from "./components/history/PurchaseHistoryUser2";
 import ErrorPage from "./components/ErrorPage";
 import ProductControlPanelLanding from "./components/dashboard/product/ProductControlPanelLanding";
@@ -41,6 +42,7 @@ import UserControlPanelLanding from "./components/dashboard/user/UserControlPane
 import UserDetailsPage from "./components/dashboard/user/UserDetailsPage";
 import UserCreate from "./components/dashboard/user/UserCreate";
 import PersonalPage from "./components/auth/PersonalPage";
+import ProductEditPage from "./components/dashboard/product/ProductEditPage";
 
 const App = () => {
   const auth = useSelector((state: RootState) => state.auth);
@@ -71,7 +73,8 @@ const App = () => {
         <AppNavbar />
         <Switch>
           {/* Public Route */}
-          <Route path={ROOT} exact component={Home} />
+          {/* <Route path={ROOT} exact component={Home} /> */}
+          <Route path={ROOT} exact component={MarketLanding} />
           <Route path={MARKET_LANDING} exact component={MarketLanding} />
           <Route
             path={PRODUCT_DETAILS_PAGE}
@@ -127,7 +130,7 @@ const App = () => {
             isAuthenticated={isAuthenticated}
             role={role}
             authenticationPath={SIGN_IN}
-            path={USER_DETAILS_PAGE}
+            path={USER_EDIT_PAGE}
             component={UserDetailsPage}
           />
           <ProtectedRoute
@@ -159,6 +162,15 @@ const App = () => {
             authenticationPath={SIGN_IN}
             path={CREATE_PRODUCT}
             component={ProductCreate}
+          />
+          <ProtectedRoute
+            exact
+            adminRestrict
+            isAuthenticated={isAuthenticated}
+            role={role}
+            authenticationPath={SIGN_IN}
+            path={PRODUCT_EDIT_PAGE}
+            component={ProductEditPage}
           />
 
           {/* Page Not Found Route */}

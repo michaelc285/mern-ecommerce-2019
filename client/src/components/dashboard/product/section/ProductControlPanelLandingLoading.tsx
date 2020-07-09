@@ -66,6 +66,9 @@ const ProductControlPanelLandingLoading = () => {
                 Create Product
               </Button>
             </NavLink>
+            <Button variant="outlined" color="secondary" className="mr-3 ">
+              Filter
+            </Button>
           </div>
 
           {/* Content */}

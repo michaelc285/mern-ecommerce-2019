@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { NavLink } from "react-router-dom";
-import { CREATE_PRODUCT } from "../../../path";
+import { CREATE_PRODUCT, PRODUCT_CONTROL_PANEL } from "../../../path";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../../context/store";
 import { getProducts } from "../../../context/actions/ProductAction";
 import { DateFormatter, CurrencyFormatter } from "../../../utils/Formatter";
 import { deleteProductById } from "../../../context/actions/ProductAction";
 
+import ProdcutEditPage from "./ProductEditPage";
 // Componetns
 import ProductFilter from "../../market/filter/ProductFilter";
 import { Button, LinearProgress, Paper } from "@material-ui/core";
@@ -96,9 +97,11 @@ const tableRows = (products: IProduct[]) => {
       {/* Details End */}
       {/* Edit Button */}
       <td className="rounded-r text-center">
-        <button>
-          <EditIcon color="primary" />
-        </button>
+        <NavLink exact to={`${PRODUCT_CONTROL_PANEL}/${row._id}`}>
+          <button>
+            <EditIcon color="primary" />
+          </button>
+        </NavLink>
       </td>
       {/* Edit Button End */}
     </tr>
