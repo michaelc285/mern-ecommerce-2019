@@ -394,7 +394,7 @@ export const updateAccountStatus = (
   try {
     dispatch({ type: UPDATE_ACCOUNT_STATUS_LOADING });
 
-    const result = await axios.put(
+    await axios.put(
       `/api/users/status?id=${accountId}`,
       { status },
       {

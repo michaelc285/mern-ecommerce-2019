@@ -13,7 +13,6 @@ import {
   CART_UPDATE_SUCCESS,
   BUY_PROCESS_LOADING,
   BUY_PROCESS_CLEAN,
-  CART_CLEAN,
 } from "../types";
 import axios from "axios";
 import { IBills } from "../../types/interfaces";

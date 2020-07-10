@@ -5,7 +5,6 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
 } from "@material-ui/core";
 
@@ -26,7 +25,7 @@ const CustomDialog = ({
     return () => {
       handleClose();
     };
-  }, []);
+  }, [handleClose]);
 
   return (
     <React.Fragment>

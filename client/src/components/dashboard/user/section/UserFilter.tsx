@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import { getUsersByFilter } from "../../../../context/actions/AuthAction";
 import { useDispatch } from "react-redux";
 import {
@@ -25,7 +25,6 @@ const UserFilter = () => {
   const [searchTerm, setSearchTerm] = React.useState("");
   const [role, setRole] = React.useState({ admin: true, user: true });
   const [status, setStatus] = React.useState({ active: true, inactive: true });
-  const [value, setValue] = React.useState("");
 
   const handleSearchTerm = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);

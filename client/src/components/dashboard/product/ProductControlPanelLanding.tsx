@@ -5,9 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../../context/store";
 import { getProducts } from "../../../context/actions/ProductAction";
 import { DateFormatter, CurrencyFormatter } from "../../../utils/Formatter";
-import { deleteProductById } from "../../../context/actions/ProductAction";
 
-import ProdcutEditPage from "./ProductEditPage";
 // Componetns
 import ProductFilter from "../../market/filter/ProductFilter";
 import { Button, LinearProgress, Paper } from "@material-ui/core";

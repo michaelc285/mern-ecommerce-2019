@@ -27,7 +27,7 @@ import { ROLE_ADMIN, ROLE_GUEST, ROLE_USER } from "./context/types";
 // Components
 import AppNavbar from "./components/AppNavbar";
 import AppFooter from "./components/AppFooter";
-import Home from "./components/home/Home";
+//import Home from "./components/home/Home";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import MarketLanding from "./components/market/MarketLanding";
@@ -42,7 +42,7 @@ import UserControlPanelLanding from "./components/dashboard/user/UserControlPane
 import UserDetailsPage from "./components/dashboard/user/UserDetailsPage";
 import UserCreate from "./components/dashboard/user/UserCreate";
 import PersonalPage from "./components/auth/PersonalPage";
-import ProductEditPage from "./components/dashboard/product/ProductEditPage";
+import ProductEditPage from "./components/dashboard/product/productEditPage/ProductEditPage";
 
 const App = () => {
   const auth = useSelector((state: RootState) => state.auth);

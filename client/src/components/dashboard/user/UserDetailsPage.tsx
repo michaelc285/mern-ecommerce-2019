@@ -11,7 +11,6 @@ import {
   cleanDeleteUserState,
   cleanUpdateUserState,
   cleanUserDetailsState,
-  cleanUpdateAccountStatusState,
 } from "../../../context/actions/AuthAction";
 
 // Components
