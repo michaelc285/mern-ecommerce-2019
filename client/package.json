@@ -20,7 +20,7 @@
     "@types/uuid": "^7.0.3",
     "antd": "^4.3.3",
     "autoprefixer": "^9.8.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.2",
     "bootstrap": "^4.4.1",
     "material-table": "^1.59.0",
     "material-ui-dropzone": "^2.5.0",
